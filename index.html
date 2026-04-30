@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover">
 <meta name="theme-color" content="#2563eb">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Carvline — 拍 30 秒, AI 告訴你下次怎麼滑得更好</title>
-<meta name="description" content="拍一段你滑單板的影片, AI 立刻告訴你哪裡可以改。免費試用, USD $5 解鎖完整分析。">
+<title>Carvline — Your iPhone is a Snowboard Coach</title>
+<meta name="description" content="Upload a 30-second clip of your snowboarding. Get pro-coach-level feedback in seconds. Free to try, USD $5 to unlock the full breakdown.">
 <meta property="og:title" content="Carvline — Your iPhone is a Snowboard Coach">
-<meta property="og:description" content="拍 30 秒, AI 告訴你下次怎麼滑得更好。免費試用, USD $5 解鎖完整分析。">
+<meta property="og:description" content="Upload a 30-second clip. See exactly what to fix next time. Free to try.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://uncleshu827.github.io/carvline/">
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{-webkit-tap-highlight-color:transparent}
-body{font-family:'Inter','Noto Sans TC',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#0a0a0a;padding-bottom:env(safe-area-inset-bottom)}
+body{font-family:'Inter','Noto Sans TC','Noto Sans SC',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#0a0a0a;padding-bottom:env(safe-area-inset-bottom)}
 html{scroll-behavior:smooth}
 .accent{color:#2563eb}
 .btn-primary{background:#0a0a0a;color:#fff;transition:all .15s;min-height:44px}
@@ -42,7 +42,6 @@ details[open]>summary::after{content:'−'}
 .upload-zone:hover,.upload-zone:active{border-color:#2563eb;background:#f0f7ff}
 .upload-zone.drag{border-color:#2563eb;background:#dbeafe}
 .locked-blur{filter:blur(8px);user-select:none;pointer-events:none}
-/* Mobile-first refinements */
 @media (max-width:640px){
   .hero-h1{font-size:2.25rem;line-height:1.15}
   .hero-p{font-size:1.0625rem}
@@ -52,17 +51,14 @@ details[open]>summary::after{content:'−'}
   .pt-20{padding-top:3rem}
   .py-24{padding-top:3.5rem;padding-bottom:3.5rem}
   .py-20{padding-top:3rem;padding-bottom:3rem}
-  /* Disable hover transform on mobile (no hover state, just sticks) */
   .btn-primary:hover,.btn-accent:hover,.btn-secondary:hover{transform:none}
 }
-/* Sticky bottom CTA on mobile */
 .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e7eb;padding:0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));box-shadow:0 -4px 12px rgba(0,0,0,0.04);z-index:40;display:none}
 @media (max-width:640px){
   .sticky-cta{display:block}
   body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
 }
 .sticky-cta-inner{max-width:42rem;margin:0 auto}
-/* History panel */
 .history-panel{max-height:320px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .history-item{padding:0.75rem;border:1px solid #e5e7eb;border-radius:0.625rem;background:#fafafa;transition:all .15s}
 .history-item:hover{border-color:#2563eb;background:#f0f7ff}
@@ -70,13 +66,13 @@ details[open]>summary::after{content:'−'}
 .score-good{background:#dcfce7;color:#15803d}
 .score-mid{background:#fef3c7;color:#a16207}
 .score-low{background:#fee2e2;color:#b91c1c}
-/* Spinner more visible on mobile */
-@media (max-width:640px){
-  #processing{padding:2rem 1.25rem}
-}
-/* Better tap targets for FAQs */
+@media (max-width:640px){#processing{padding:2rem 1.25rem}}
 details summary{padding:0.5rem 0;min-height:44px;display:flex;align-items:center;flex-wrap:wrap}
 details summary::after{margin-left:auto}
+.lang-menu{position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid #e5e7eb;border-radius:0.5rem;box-shadow:0 8px 24px rgba(0,0,0,0.08);min-width:160px;z-index:60;overflow:hidden}
+.lang-menu button{display:block;width:100%;text-align:left;padding:0.625rem 0.875rem;font-size:0.875rem;background:transparent;border:none;cursor:pointer}
+.lang-menu button:hover{background:#f3f4f6}
+.lang-menu button.active{background:#eff6ff;color:#2563eb;font-weight:600}
 </style>
 </head>
 <body>
@@ -85,23 +81,30 @@ details summary::after{margin-left:auto}
 <div class="max-w-6xl mx-auto px-6 py-3 sm:py-4 flex items-center justify-between">
 <div class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center text-white font-bold text-sm">C</div><span class="font-semibold">Carvline</span></div>
 <div class="flex items-center gap-2">
-<button onclick="toggleHistory()" class="px-4 py-2 rounded-lg btn-secondary text-sm font-medium hidden sm:inline-flex items-center" id="history-btn-desktop">我的紀錄 <span id="history-count-desktop" class="ml-1 text-gray-400"></span></button>
-<a href="#try" class="nav-cta px-4 py-2 rounded-lg btn-primary text-sm font-medium">立即試用</a>
+<div class="relative">
+<button onclick="toggleLangMenu(event)" class="px-3 py-2 rounded-lg btn-secondary text-sm font-medium inline-flex items-center gap-1" id="lang-btn"><span id="lang-current-flag">🌐</span><span id="lang-current-label" class="hidden sm:inline">English</span><span class="text-xs">▾</span></button>
+<div id="lang-menu" class="lang-menu hidden">
+<button data-lang="en" onclick="setLanguage('en')">🇺🇸 English</button>
+<button data-lang="zh-TW" onclick="setLanguage('zh-TW')">🇹🇼 繁體中文</button>
+<button data-lang="zh-CN" onclick="setLanguage('zh-CN')">🇨🇳 简体中文</button>
+</div>
+</div>
+<button onclick="toggleHistory()" class="px-3 py-2 rounded-lg btn-secondary text-sm font-medium hidden sm:inline-flex items-center" id="history-btn-desktop"><span data-i18n="nav_history">My History</span> <span id="history-count-desktop" class="ml-1 text-gray-400"></span></button>
+<a href="#try" class="nav-cta px-4 py-2 rounded-lg btn-primary text-sm font-medium" data-i18n="nav_cta">Try It Now</a>
 </div>
 </div></nav>
 
-<!-- HISTORY PANEL (toggle from nav button) -->
 <div id="history-modal" class="hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" onclick="if(event.target===this)toggleHistory()">
 <div class="absolute inset-x-0 bottom-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl w-full sm:max-w-lg max-h-[85vh] overflow-hidden flex flex-col">
 <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
 <div>
-<div class="font-bold text-lg">📊 我的分析紀錄</div>
-<div class="text-xs text-gray-500" id="history-meta">本機 visitor_id 過去 30 天</div>
+<div class="font-bold text-lg" data-i18n="history_title">📊 My Analyses</div>
+<div class="text-xs text-gray-500" id="history-meta" data-i18n="history_meta">Past 30 days for this device</div>
 </div>
 <button onclick="toggleHistory()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xl">×</button>
 </div>
 <div class="flex-1 overflow-y-auto p-5" id="history-list">
-<div class="text-center text-gray-400 text-sm py-12">載入中...</div>
+<div class="text-center text-gray-400 text-sm py-12" data-i18n="loading">Loading…</div>
 </div>
 <div class="px-5 py-3 border-t border-gray-100 bg-gray-50 text-xs text-gray-500 flex-shrink-0">
 visitor_id: <code id="history-vid" class="text-[10px]"></code>
@@ -109,336 +112,828 @@ visitor_id: <code id="history-vid" class="text-[10px]"></code>
 </div>
 </div>
 
-<!-- DEMO MODAL (mode 1: record / mode 2: reel) -->
 <div id="demo-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" onclick="if(event.target===this)closeDemo()">
 <div class="absolute inset-x-0 bottom-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl w-full sm:max-w-md max-h-[92vh] overflow-hidden flex flex-col">
 <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
 <div>
 <div class="font-bold text-lg" id="demo-title">Demo</div>
-<div class="text-xs text-gray-500" id="demo-meta">這是預覽, 實際版本即將上線</div>
+<div class="text-xs text-gray-500" id="demo-meta" data-i18n="demo_meta">Preview only — coming soon</div>
 </div>
 <button onclick="closeDemo()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xl">×</button>
 </div>
 <div class="flex-1 overflow-y-auto" id="demo-body"></div>
 <div class="p-4 border-t border-gray-100 flex-shrink-0">
-<button onclick="joinWaitlist()" class="w-full px-5 py-3 rounded-lg btn-primary font-semibold text-sm">想要這個? 加入等候名單</button>
+<button onclick="joinWaitlist()" class="w-full px-5 py-3 rounded-lg btn-primary font-semibold text-sm" data-i18n="demo_waitlist_btn">Want this? Join the waitlist</button>
 </div>
 </div>
 </div>
 
 <section class="bg-snow"><div class="max-w-6xl mx-auto px-6 pt-20 pb-16 text-center">
-<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium mb-6"><span class="w-1.5 h-1.5 rounded-full bg-blue-600 pulse"></span>為亞洲滑手而生</div>
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium mb-6"><span class="w-1.5 h-1.5 rounded-full bg-blue-600 pulse"></span><span data-i18n="hero_badge">Built for snowboarders, anywhere</span></div>
 
-<h1 class="hero-h1 text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6">
-拍 30 秒,<br>
-看自己<br>
-<span class="accent">下次怎麼滑得更好</span>
+<h1 class="hero-h1 text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6" data-i18n-html="hero_h1">
+Film 30 seconds.<br>See exactly<br>
+<span class="accent">how to ride better next run.</span>
 </h1>
 
-<p class="hero-p text-lg md:text-xl text-gray-700 max-w-xl mx-auto mb-3 leading-relaxed">
-不用花 USD $300/小時請教練。<br>
-上傳一段你滑的影片, 立刻拿到專業教練等級的回饋。
+<p class="hero-p text-lg md:text-xl text-gray-700 max-w-xl mx-auto mb-3 leading-relaxed" data-i18n-html="hero_sub">
+Skip the USD $300/hour coach.<br>
+Upload a clip — get pro-level feedback in seconds.
 </p>
-<p class="text-sm text-gray-500 mb-10">單板為主 · 雙板也能用</p>
+<p class="text-sm text-gray-500 mb-10" data-i18n="hero_subnote">Snowboard-first · Skiers welcome</p>
 
 <div class="flex flex-col sm:flex-row gap-3 justify-center mb-12 sm:mb-16 max-w-md mx-auto sm:max-w-none">
-<a href="#try" class="px-7 py-4 sm:py-3.5 rounded-lg btn-primary font-semibold">立即試用 →</a>
-<a href="#how" class="px-7 py-4 sm:py-3.5 rounded-lg btn-secondary font-semibold">看怎麼用</a>
+<a href="#try" class="px-7 py-4 sm:py-3.5 rounded-lg btn-primary font-semibold" data-i18n="hero_cta_primary">Try It Now →</a>
+<a href="#how" class="px-7 py-4 sm:py-3.5 rounded-lg btn-secondary font-semibold" data-i18n="hero_cta_secondary">See how it works</a>
 </div>
 
 <div class="relative mx-auto max-w-xs sm:max-w-sm"><div class="bg-white rounded-3xl p-3 sm:p-5 shadow-2xl border border-gray-200"><div class="aspect-[9/16] rounded-2xl bg-gradient-to-br from-blue-50 to-slate-100 relative overflow-hidden">
 <svg class="absolute bottom-0 left-0 w-full" viewBox="0 0 400 200" preserveAspectRatio="none"><polygon points="0,200 80,100 150,140 220,60 290,120 360,80 400,130 400,200" fill="#cbd5e1"/><polygon points="0,200 60,140 130,160 200,110 270,150 340,120 400,160 400,200" fill="#94a3b8"/></svg>
 <svg class="absolute inset-0 w-full h-full" viewBox="0 0 200 350" preserveAspectRatio="xMidYMid meet"><circle cx="100" cy="80" r="12" class="skeleton-joint draw-anim"/><line x1="100" y1="92" x2="100" y2="180" class="skeleton-line draw-anim"/><line x1="100" y1="115" x2="65" y2="155" class="skeleton-line draw-anim"/><line x1="100" y1="115" x2="138" y2="148" class="skeleton-line draw-anim"/><circle cx="65" cy="155" r="5" class="skeleton-joint"/><circle cx="138" cy="148" r="5" class="skeleton-joint"/><circle cx="100" cy="180" r="6" class="skeleton-joint"/><line x1="100" y1="180" x2="78" y2="240" class="skeleton-line draw-anim"/><line x1="100" y1="180" x2="125" y2="245" class="skeleton-line draw-anim"/><circle cx="78" cy="240" r="5" class="skeleton-joint"/><circle cx="125" cy="245" r="5" class="skeleton-joint"/><line x1="78" y1="240" x2="65" y2="295" class="skeleton-line draw-anim"/><line x1="125" y1="245" x2="142" y2="298" class="skeleton-line draw-anim"/><line x1="50" y1="295" x2="155" y2="298" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/></svg>
-<div class="absolute top-3 left-3 right-3 flex justify-between gap-2"><div class="bg-white/90 backdrop-blur rounded-lg px-3 py-1.5 shadow-sm"><div class="text-[10px] text-gray-500">今日最高速</div><div class="font-bold text-sm">62 km/h</div></div><div class="bg-white/90 backdrop-blur rounded-lg px-3 py-1.5 shadow-sm"><div class="text-[10px] text-gray-500">比上次</div><div class="font-bold text-sm text-green-600">+12% ↑</div></div></div>
-<div class="absolute bottom-3 left-3 right-3 bg-white rounded-xl p-3 shadow-md border border-gray-100"><div class="flex items-start gap-2"><div class="w-5 h-5 rounded-full bg-amber-50 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-amber-600 text-xs font-bold">!</span></div><div><div class="font-semibold text-xs">後腳膝蓋可以再彎一點</div><div class="text-[11px] text-gray-500 mt-0.5">下次試試把重心往後移</div></div></div></div>
+<div class="absolute top-3 left-3 right-3 flex justify-between gap-2"><div class="bg-white/90 backdrop-blur rounded-lg px-3 py-1.5 shadow-sm"><div class="text-[10px] text-gray-500" data-i18n="phone_top_speed">Top speed today</div><div class="font-bold text-sm">62 km/h</div></div><div class="bg-white/90 backdrop-blur rounded-lg px-3 py-1.5 shadow-sm"><div class="text-[10px] text-gray-500" data-i18n="phone_vs_last">vs last time</div><div class="font-bold text-sm text-green-600">+12% ↑</div></div></div>
+<div class="absolute bottom-3 left-3 right-3 bg-white rounded-xl p-3 shadow-md border border-gray-100"><div class="flex items-start gap-2"><div class="w-5 h-5 rounded-full bg-amber-50 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-amber-600 text-xs font-bold">!</span></div><div><div class="font-semibold text-xs" data-i18n="phone_tip_title">Bend the rear knee a bit more</div><div class="text-[11px] text-gray-500 mt-0.5" data-i18n="phone_tip_sub">Shift weight slightly toward the rear next run</div></div></div></div>
 </div></div></div>
 </div></section>
 
-<!-- TRY IT NOW (T0 Free + T1 $5 funnel) -->
 <section id="try" class="section py-24 bg-blue-50/30"><div class="max-w-3xl mx-auto px-6">
 <div class="text-center mb-10">
-<h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-3">立即試用</h2>
-<p class="text-base sm:text-lg text-gray-700">上傳一段影片, 30 秒看到結果, <b>完全免費</b>。</p>
+<h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-3" data-i18n="try_h2">Try it now</h2>
+<p class="text-base sm:text-lg text-gray-700" data-i18n-html="try_sub">Upload a clip, get results in 30 seconds, <b>completely free</b>.</p>
 </div>
 
 <div id="upload-zone">
 <div class="upload-zone bg-white rounded-2xl p-10 sm:p-12 text-center" onclick="document.getElementById('file-input').click()">
 <input type="file" id="file-input" accept="video/*" class="hidden" onchange="analyzeVideo(this, 'free')">
 <div class="text-4xl sm:text-5xl mb-3">🎬</div>
-<div class="font-semibold text-lg sm:text-xl mb-2">上傳一段滑雪影片</div>
-<div class="text-sm text-gray-500">點這裡選擇 · 60 秒內</div>
+<div class="font-semibold text-lg sm:text-xl mb-2" data-i18n="upload_title">Upload a snowboard clip</div>
+<div class="text-sm text-gray-500" data-i18n="upload_sub">Tap here · 60 seconds or less</div>
 </div>
 </div>
 
 <div id="processing" class="hidden mt-6 bg-white rounded-2xl p-8 text-center">
 <div class="inline-block w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-<div class="font-semibold mb-1">分析中...</div>
-<div id="processing-text" class="text-sm text-gray-500">讀取影片...</div>
+<div class="font-semibold mb-1" data-i18n="processing_title">Analyzing…</div>
+<div id="processing-text" class="text-sm text-gray-500" data-i18n="processing_default">Reading your clip…</div>
 </div>
 
 <div id="result" class="hidden mt-6 bg-white rounded-2xl p-6 sm:p-8">
-<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-medium mb-4"><span>✓</span> 分析完成</div>
-<h3 class="text-xl sm:text-2xl font-bold mb-6">你的 3 個重點</h3>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-medium mb-4"><span>✓</span> <span data-i18n="result_done">Analysis complete</span></div>
+<h3 class="text-xl sm:text-2xl font-bold mb-6" data-i18n="result_h3">Your 3 takeaways</h3>
 
-<div id="free-results" class="space-y-3 mb-8">
-<!-- 真實 AI 結果會插入這裡 -->
-</div>
-
-<!-- DEEP RESULT (隱藏直到付費或解鎖) -->
+<div id="free-results" class="space-y-3 mb-8"></div>
 <div id="deep-results" class="hidden space-y-3 mb-8"></div>
 
-<!-- LOCKED PREMIUM CONTENT -->
 <div id="locked-prompt" class="border-2 border-blue-600 rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-blue-50 to-white relative">
 <div class="flex items-start justify-between gap-3 sm:gap-4 mb-4">
 <div class="flex-1 min-w-0">
-<div class="text-xs font-semibold accent uppercase tracking-wider mb-1">🔒 完整深度分析</div>
-<h4 class="text-lg sm:text-xl font-bold mb-1">解鎖 8 維度評分 + 練習建議</h4>
-<p class="text-xs sm:text-sm text-gray-600">看完整 stance / edge engagement / weight transfer 等 8 個面向, 加個人化下次練什麼</p>
+<div class="text-xs font-semibold accent uppercase tracking-wider mb-1" data-i18n="locked_eyebrow">🔒 Full deep analysis</div>
+<h4 class="text-lg sm:text-xl font-bold mb-1" data-i18n="locked_h4">Unlock 8-dimension scoring + drill plan</h4>
+<p class="text-xs sm:text-sm text-gray-600" data-i18n="locked_sub">Stance, edge engagement, weight transfer, and 5 more — plus a personalized next-session drill.</p>
 </div>
 <div class="text-right flex-shrink-0">
 <div class="text-2xl sm:text-3xl font-extrabold accent">$5</div>
-<div class="text-[10px] sm:text-xs text-gray-500">USD 一次性</div>
+<div class="text-[10px] sm:text-xs text-gray-500" data-i18n="locked_price_unit">USD · one-time</div>
 </div>
 </div>
 
-<button onclick="unlockDeep()" class="w-full py-3 rounded-lg btn-accent font-semibold">
-解鎖完整分析 — USD $5
-</button>
-<p class="text-[11px] sm:text-xs text-gray-500 text-center mt-3">透過 Stripe 信用卡安全付款 · 30 天退費</p>
+<button onclick="unlockDeep()" class="w-full py-3 rounded-lg btn-accent font-semibold" data-i18n="locked_btn">Unlock full analysis — USD $5</button>
+<p class="text-[11px] sm:text-xs text-gray-500 text-center mt-3" data-i18n="locked_pay_note">Secure card payment via Stripe · 30-day refund</p>
 </div>
 
-<button onclick="resetTry()" class="w-full mt-6 py-2.5 rounded-lg text-sm text-gray-500 hover:text-gray-900">
-↻ 試另一段影片
-</button>
+<button onclick="resetTry()" class="w-full mt-6 py-2.5 rounded-lg text-sm text-gray-500 hover:text-gray-900" data-i18n="reset_btn">↻ Try another clip</button>
 </div>
 
-<p class="text-center text-[11px] sm:text-xs text-gray-400 mt-6">影片 24 小時內自動刪除, 不分享給第三方</p>
+<p class="text-center text-[11px] sm:text-xs text-gray-400 mt-6" data-i18n="privacy_note">Clips auto-delete after 24 hours · never shared with third parties</p>
 
-<!-- Mobile-only: surface history below upload -->
 <div class="mt-8 sm:hidden">
 <button onclick="toggleHistory()" class="w-full py-3 rounded-lg btn-secondary text-sm font-medium" id="history-btn-mobile">
-📊 看我之前的分析 <span id="history-count-mobile" class="ml-1 text-gray-400"></span>
+<span data-i18n="history_btn_mobile">📊 See my past analyses</span> <span id="history-count-mobile" class="ml-1 text-gray-400"></span>
 </button>
 </div>
 </div></section>
 
 <section id="how" class="section py-20"><div class="max-w-5xl mx-auto px-6">
 <div class="text-center mb-14">
-<h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-3">三種用法, 看你哪天想做什麼</h2>
-<p class="text-base sm:text-lg text-gray-600">下板就能立刻看到結果</p>
+<h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-3" data-i18n="how_h2">Three ways to use it</h2>
+<p class="text-base sm:text-lg text-gray-600" data-i18n="how_sub">See results before you take your boots off</p>
 </div>
 
 <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
 
 <div class="card rounded-2xl p-6 sm:p-7 cursor-pointer hover:shadow-lg transition-shadow flex flex-col" onclick="openDemo('record')">
 <div class="text-3xl sm:text-4xl mb-4">🏂</div>
-<div class="text-xs font-semibold accent uppercase tracking-wider mb-2">今天滑了什麼</div>
-<h3 class="text-lg sm:text-xl font-bold mb-3">手機放口袋, 自動紀錄</h3>
-<p class="text-gray-600 text-sm leading-relaxed mb-4">完全不用操作。下纜車就看到:</p>
-<ul class="space-y-1.5 text-sm text-gray-700 mb-5">
-<li>· 你今天最高速幾公里</li>
-<li>· 切了幾次刃、幾次轉</li>
-<li>· 跳了多高、空中幾秒</li>
-<li>· 比上次進步多少 %</li>
+<div class="text-xs font-semibold accent uppercase tracking-wider mb-2" data-i18n="card1_eyebrow">What you rode today</div>
+<h3 class="text-lg sm:text-xl font-bold mb-3" data-i18n="card1_title">Phone in your pocket — auto-tracked</h3>
+<p class="text-gray-600 text-sm leading-relaxed mb-4" data-i18n="card1_desc">No setup. By the time you reach the lift, you'll see:</p>
+<ul class="space-y-1.5 text-sm text-gray-700 mb-5" data-i18n-list="card1_bullets">
+<li>· Your top speed today</li>
+<li>· Edge transitions, total turns</li>
+<li>· Air time and max jump height</li>
+<li>· How much you improved vs last run</li>
 </ul>
-<div class="mt-auto inline-flex items-center gap-1 text-sm font-medium accent">看 demo →</div>
+<div class="mt-auto inline-flex items-center gap-1 text-sm font-medium accent" data-i18n="see_demo">See demo →</div>
 </div>
 
 <div class="card rounded-2xl p-6 sm:p-7 cursor-pointer hover:shadow-lg transition-shadow flex flex-col" onclick="openDemo('reel')">
 <div class="text-3xl sm:text-4xl mb-4">🎬</div>
-<div class="text-xs font-semibold accent uppercase tracking-wider mb-2">朋友圈炫耀用</div>
-<h3 class="text-lg sm:text-xl font-bold mb-3">自動剪成 30 秒短片</h3>
-<p class="text-gray-600 text-sm leading-relaxed mb-4">把 GoPro 或手機影片丟進來:</p>
-<ul class="space-y-1.5 text-sm text-gray-700 mb-5">
-<li>· 自動找出最帥的片段</li>
-<li>· 加上速度、跳高數據</li>
-<li>· 直立 9:16 直接發 IG</li>
-<li>· 不用自己剪輯</li>
+<div class="text-xs font-semibold accent uppercase tracking-wider mb-2" data-i18n="card2_eyebrow">For the 'gram</div>
+<h3 class="text-lg sm:text-xl font-bold mb-3" data-i18n="card2_title">Auto-edit a 30-second highlight reel</h3>
+<p class="text-gray-600 text-sm leading-relaxed mb-4" data-i18n="card2_desc">Drop in your GoPro or phone footage:</p>
+<ul class="space-y-1.5 text-sm text-gray-700 mb-5" data-i18n-list="card2_bullets">
+<li>· Auto-detects the best clips</li>
+<li>· Speed and jump-height overlays</li>
+<li>· Vertical 9:16, ready for IG</li>
+<li>· No editing required</li>
 </ul>
-<div class="mt-auto inline-flex items-center gap-1 text-sm font-medium accent">看 demo →</div>
+<div class="mt-auto inline-flex items-center gap-1 text-sm font-medium accent" data-i18n="see_demo">See demo →</div>
 </div>
 
 <div class="card rounded-2xl p-6 sm:p-7 ring-2 ring-blue-600 relative sm:col-span-2 md:col-span-1 cursor-pointer hover:shadow-lg transition-shadow flex flex-col" onclick="document.getElementById('try').scrollIntoView({behavior:'smooth'})">
-<div class="absolute -top-3 right-6 px-3 py-0.5 rounded-full bg-blue-600 text-white text-xs font-bold">已上線</div>
+<div class="absolute -top-3 right-6 px-3 py-0.5 rounded-full bg-blue-600 text-white text-xs font-bold" data-i18n="card3_badge">Live now</div>
 <div class="text-3xl sm:text-4xl mb-4">👥</div>
-<div class="text-xs font-semibold accent uppercase tracking-wider mb-2">想變更強</div>
-<h3 class="text-lg sm:text-xl font-bold mb-3">朋友幫你拍, 立刻拿教練回饋</h3>
-<p class="text-gray-600 text-sm leading-relaxed mb-4">選一個動作 (像 S-turn), 朋友拍 15 秒:</p>
-<ul class="space-y-1.5 text-sm text-gray-700 mb-5">
-<li>· 30-45 秒給你 3 個重點</li>
-<li>· 哪裡做得好、哪裡要改</li>
-<li>· 對比示範影片</li>
-<li>· 兩支手機就夠</li>
+<div class="text-xs font-semibold accent uppercase tracking-wider mb-2" data-i18n="card3_eyebrow">Get better, faster</div>
+<h3 class="text-lg sm:text-xl font-bold mb-3" data-i18n="card3_title">Friend films you, AI coaches you</h3>
+<p class="text-gray-600 text-sm leading-relaxed mb-4" data-i18n="card3_desc">Pick a move (e.g. S-turn). Your friend films 15 s:</p>
+<ul class="space-y-1.5 text-sm text-gray-700 mb-5" data-i18n-list="card3_bullets">
+<li>· 3 takeaways in 30–45 seconds</li>
+<li>· What's working, what to fix</li>
+<li>· Side-by-side with reference clips</li>
+<li>· Two phones is all you need</li>
 </ul>
-<div class="mt-auto inline-flex items-center gap-1 text-sm font-medium accent">立即試用 →</div>
+<div class="mt-auto inline-flex items-center gap-1 text-sm font-medium accent" data-i18n="card3_cta">Try it now →</div>
 </div>
 
 </div></div></section>
 
 <section class="section py-20 bg-gray-50">
 <div class="max-w-3xl mx-auto px-6 text-center">
-<div class="text-5xl mb-6">🇯🇵</div>
-<h2 class="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-6">
-飛一趟日本 NT$50,000,<br>
-<span class="accent">回來不知道進步多少?</span>
+<div class="text-5xl mb-6">✈️</div>
+<h2 class="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-6" data-i18n-html="trip_h2">
+A USD $1,500 ski trip,<br>
+<span class="accent">and you have no idea if you got better.</span>
 </h2>
-<p class="text-base sm:text-lg text-gray-700 mb-3 leading-relaxed">
-Carvline 幫你比對「今年的你 vs 去年的你」。<br>
-回家就知道這趟值不值得。
+<p class="text-base sm:text-lg text-gray-700 mb-3 leading-relaxed" data-i18n-html="trip_sub">
+Carvline shows you "this year's you vs last year's you."<br>
+Come home knowing exactly how the trip moved the needle.
 </p>
-<div class="text-sm text-gray-500 mt-6">台灣 · 香港 · 新加坡 · 中國赴日單板族常用</div>
+<div class="text-sm text-gray-500 mt-6" data-i18n="trip_geo">Used by snowboarders flying into Japan, Korea, the Alps, and the Rockies</div>
 </div></section>
 
 <section id="pricing" class="section py-20"><div class="max-w-5xl mx-auto px-6">
 <div class="text-center mb-12">
-<h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-3">怎麼用, 怎麼付</h2>
-<p class="text-base sm:text-lg text-gray-600">先免費試, 喜歡再付 — 不滿意 30 天退費</p>
+<h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-3" data-i18n="pricing_h2">How it costs</h2>
+<p class="text-base sm:text-lg text-gray-600" data-i18n="pricing_sub">Try free first. Pay only if you like what you see — 30-day refund.</p>
 </div>
 
 <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
 
 <div class="card rounded-2xl p-5">
-<div class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">先試試</div>
-<div class="text-4xl font-extrabold mb-1">免費</div>
-<p class="text-sm text-gray-600 mb-4">每段影片 3 個 AI 重點</p>
-<ul class="space-y-1.5 text-sm text-gray-700 mb-5">
-<li>✓ 上傳影片立即看</li>
-<li>✓ 不用註冊</li>
-<li class="text-gray-400">— 不含完整評分</li>
+<div class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2" data-i18n="tier1_eyebrow">Try it</div>
+<div class="text-4xl font-extrabold mb-1" data-i18n="tier1_price">Free</div>
+<p class="text-sm text-gray-600 mb-4" data-i18n="tier1_desc">3 takeaways per clip</p>
+<ul class="space-y-1.5 text-sm text-gray-700 mb-5" data-i18n-list="tier1_bullets">
+<li>✓ Instant analysis</li>
+<li>✓ No sign-up</li>
+<li class="text-gray-400">— No full scoring</li>
 </ul>
-<a href="#try" class="block text-center w-full py-3 rounded-lg btn-secondary font-medium text-sm">立即試用</a>
+<a href="#try" class="block text-center w-full py-3 rounded-lg btn-secondary font-medium text-sm" data-i18n="tier1_cta">Try it now</a>
 </div>
 
 <div class="card rounded-2xl p-5 ring-2 ring-blue-600 relative">
-<div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-blue-600 text-white text-xs font-bold whitespace-nowrap">看完免費再付</div>
-<div class="text-xs font-semibold uppercase tracking-wider accent mb-2">深度分析</div>
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-blue-600 text-white text-xs font-bold whitespace-nowrap" data-i18n="tier2_badge">Pay after you see free</div>
+<div class="text-xs font-semibold uppercase tracking-wider accent mb-2" data-i18n="tier2_eyebrow">Deep analysis</div>
 <div class="flex items-baseline gap-1 mb-1"><span class="text-4xl font-extrabold">$5</span><span class="text-sm text-gray-500">USD</span></div>
-<p class="text-sm text-gray-600 mb-4">同一影片完整解鎖</p>
-<ul class="space-y-1.5 text-sm text-gray-700 mb-5">
-<li>✓ 8 維度評分</li>
+<p class="text-sm text-gray-600 mb-4" data-i18n="tier2_desc">Unlock the same clip, fully</p>
+<ul class="space-y-1.5 text-sm text-gray-700 mb-5" data-i18n-list="tier2_bullets">
+<li>✓ 8-dimension scoring</li>
 <li>✓ Skeleton overlay</li>
-<li>✓ 對比示範影片</li>
-<li>✓ 個人化練習計畫</li>
+<li>✓ Side-by-side with reference</li>
+<li>✓ Personalized drill plan</li>
 </ul>
-<a href="#try" class="block text-center w-full py-3 rounded-lg btn-accent font-semibold text-sm">先試免費版</a>
+<a href="#try" class="block text-center w-full py-3 rounded-lg btn-accent font-semibold text-sm" data-i18n="tier2_cta">Start with free</a>
 </div>
 
 <div class="card rounded-2xl p-5">
-<div class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">本季無限</div>
-<div class="flex items-baseline gap-1 mb-1"><span class="text-4xl font-extrabold">$25</span><span class="text-sm text-gray-500">/雪季</span></div>
-<p class="text-sm text-gray-600 mb-4">12-3 月無限分析</p>
-<ul class="space-y-1.5 text-sm text-gray-700 mb-5">
-<li>✓ 影片無限上傳</li>
-<li>✓ 全 8 個 drill</li>
-<li>✓ 跨 trip 比對</li>
-<li>✓ 朋友互拍評分</li>
+<div class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2" data-i18n="tier3_eyebrow">Whole season</div>
+<div class="flex items-baseline gap-1 mb-1"><span class="text-4xl font-extrabold">$25</span><span class="text-sm text-gray-500" data-i18n="tier3_price_unit">/season</span></div>
+<p class="text-sm text-gray-600 mb-4" data-i18n="tier3_desc">Unlimited clips Dec–Mar</p>
+<ul class="space-y-1.5 text-sm text-gray-700 mb-5" data-i18n-list="tier3_bullets">
+<li>✓ Unlimited uploads</li>
+<li>✓ All 8 drills</li>
+<li>✓ Cross-trip comparisons</li>
+<li>✓ Friend-pair scoring</li>
 </ul>
-<a href="#join" class="block text-center w-full py-3 rounded-lg btn-secondary font-medium text-sm">下季開放通知</a>
+<a href="#join" class="block text-center w-full py-3 rounded-lg btn-secondary font-medium text-sm" data-i18n="tier3_cta">Notify me next season</a>
 </div>
 
 <div class="card rounded-2xl p-5 bg-gradient-to-br from-amber-50 to-white border-amber-200">
-<div class="text-xs font-semibold uppercase tracking-wider text-amber-700 mb-2">早鳥終身</div>
+<div class="text-xs font-semibold uppercase tracking-wider text-amber-700 mb-2" data-i18n="tier4_eyebrow">Early bird · lifetime</div>
 <div class="flex items-baseline gap-2 mb-1"><span class="text-4xl font-extrabold">$25</span><span class="text-sm text-gray-400 line-through">$240</span></div>
-<p class="text-sm text-gray-600 mb-4">一次付費, 永遠能用 (限 100 名)</p>
-<ul class="space-y-1.5 text-sm text-gray-700 mb-5">
-<li>✓ 所有 Season 功能</li>
-<li>✓ 永久使用</li>
-<li>✓ 優先 beta 測試</li>
-<li>✓ 1-on-1 review (1 次)</li>
+<p class="text-sm text-gray-600 mb-4" data-i18n="tier4_desc">Pay once, ride forever (first 100)</p>
+<ul class="space-y-1.5 text-sm text-gray-700 mb-5" data-i18n-list="tier4_bullets">
+<li>✓ Everything in Season</li>
+<li>✓ Lifetime access</li>
+<li>✓ Early beta access</li>
+<li>✓ One 1-on-1 review</li>
 </ul>
-<a href="#join" class="block text-center w-full py-3 rounded-lg btn-primary font-semibold text-sm">搶名額 (剩 87)</a>
+<a href="#join" class="block text-center w-full py-3 rounded-lg btn-primary font-semibold text-sm" data-i18n="tier4_cta">Claim a slot (87 left)</a>
 </div>
 
 </div>
-<p class="text-center text-xs text-gray-500 mt-6">付款用 Stripe 信用卡安全處理 · 30 天內不滿意全額退費</p>
+<p class="text-center text-xs text-gray-500 mt-6" data-i18n="pricing_footnote">Secure card payment via Stripe · 30-day no-questions-asked refund</p>
 </div></section>
 
 <section id="join" class="section py-20 bg-gray-50"><div class="max-w-xl mx-auto px-6 text-center">
-<h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">先留 email, 等 Season + Lifetime 開放通知你</h2>
-<p class="text-gray-600 mb-8 text-sm sm:text-base">不會 spam · 一個月最多兩封 · 隨時退訂</p>
+<h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="waitlist_h2">Drop your email — we'll notify you when Season + Lifetime open</h2>
+<p class="text-gray-600 mb-8 text-sm sm:text-base" data-i18n="waitlist_sub">No spam · max 2 emails/month · unsubscribe anytime</p>
 <form id="waitlist-form" onsubmit="submitWaitlist(event)" class="flex flex-col sm:flex-row gap-2">
-<input type="email" name="email" placeholder="你的 email" class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-600 focus:outline-none text-sm" required>
-<button class="px-5 py-3 rounded-lg btn-primary font-semibold text-sm whitespace-nowrap">加入等候</button>
+<input type="email" name="email" id="waitlist-email-input" placeholder="your@email.com" class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-600 focus:outline-none text-sm" required>
+<button class="px-5 py-3 rounded-lg btn-primary font-semibold text-sm whitespace-nowrap" data-i18n="waitlist_btn">Join waitlist</button>
 </form>
 </div></section>
 
 <section class="section py-20"><div class="max-w-2xl mx-auto px-6">
-<h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-10 text-center">大家常問</h2>
-<div class="space-y-2">
-
-<details class="card rounded-xl px-5 py-4">
-<summary class="font-semibold">免費版可以無限上傳嗎?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">每天可以免費試 (每 IP 每天 2 次)。想看更深入的同一段分析, 升級 USD $5 解鎖即可。</p>
-</details>
-
-<details class="card rounded-xl px-5 py-4">
-<summary class="font-semibold">USD $5 包括什麼?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">同一段你已試的影片, 解鎖完整 8 維度評分 (stance / edge engagement / weight transfer / upper body / knee bend / arms balance / rhythm / finish) + 個人化下次練什麼建議。</p>
-</details>
-
-<details class="card rounded-xl px-5 py-4">
-<summary class="font-semibold">需要買額外裝備嗎?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">完全不用。你只要有 iPhone 12 以上就夠。「朋友幫你拍」模式需要兩支手機 (你的 + 朋友的)。</p>
-</details>
-
-<details class="card rounded-xl px-5 py-4">
-<summary class="font-semibold">單板和雙板都能用嗎?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">單板是我們的主場 (亞洲市場 70%+ 是單板)。雙板也支援, 會自動切換成 ski 對應的動作分析 (S-turn、雪杖時機、外側施壓)。</p>
-</details>
-
-<details class="card rounded-xl px-5 py-4">
-<summary class="font-semibold">AI 真的能看懂滑單板嗎?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">入門到中階滑手 70-85% 準確。先試免費版你就知道值不值 USD $5。準備比賽的職業選手, 還是建議找真人教練。</p>
-</details>
-
-<details class="card rounded-xl px-5 py-4">
-<summary class="font-semibold">我的影片資料安全嗎?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">影片只在你瀏覽器處理, 24 小時後自動刪除。我們不偷偷分享給第三方、不賣資料。你決定要不要公開。</p>
-</details>
-
-<details class="card rounded-xl px-5 py-4">
-<summary class="font-semibold">在哪裡看我之前的分析?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">右上角點「📊 我的紀錄」 (手機版在試用區下方)。我們用本機 visitor_id 認你, 不用註冊。換手機或清快取就會重新計算。</p>
-</details>
-
-<details class="card rounded-xl px-5 py-4">
-<summary class="font-semibold">Season $25 vs Lifetime $25 怎麼選?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">如果你只玩這個雪季 (1-3 趟)，Season 划算。如果你打算長期玩單板，搶 Lifetime 早鳥 (限 100 名, 正常價 USD $240) 最划算。</p>
-</details>
-
-<details class="card rounded-xl px-5 py-4">
-<summary class="font-semibold">退費政策?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">用了不滿意, 30 天內 email 我們, 全額退費, 不問理由。</p>
-</details>
-
-</div></div></section>
+<h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-10 text-center" data-i18n="faq_h2">Common questions</h2>
+<div class="space-y-2" id="faq-list"></div>
+</div></section>
 
 <footer class="section py-10"><div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
 <div class="flex items-center gap-2"><div class="w-7 h-7 rounded-lg bg-gray-900 flex items-center justify-center text-white font-bold text-xs">C</div><span class="font-semibold text-sm">Carvline</span></div>
-<div class="text-xs text-gray-500 text-center">© 2026 Carvline · 給每一個追求乾淨 carving line 的人</div>
+<div class="text-xs text-gray-500 text-center" data-i18n="footer">© 2026 Carvline · Built for everyone chasing a cleaner carving line</div>
 </div></footer>
 
-<!-- Sticky bottom CTA (mobile only) -->
 <div class="sticky-cta">
 <div class="sticky-cta-inner flex gap-2">
 <button onclick="toggleHistory()" class="px-3 py-3 rounded-lg btn-secondary text-sm font-medium flex-shrink-0">📊 <span id="history-count-sticky"></span></button>
-<a href="#try" class="flex-1 px-4 py-3 rounded-lg btn-primary text-sm font-semibold text-center">免費試 AI 分析 →</a>
+<a href="#try" class="flex-1 px-4 py-3 rounded-lg btn-primary text-sm font-semibold text-center" data-i18n="sticky_cta">Try it now →</a>
 </div>
 </div>
 
 <script>
 const WORKER_URL = 'https://carvline-ai.uncleshu827.workers.dev/';
+
+// ==========================================================================
+// i18n DICTIONARY (en / zh-TW / zh-CN)
+// ==========================================================================
+const STR = {
+  en: {
+    nav_history: 'My History',
+    nav_cta: 'Try It Now',
+    history_title: '📊 My Analyses',
+    history_meta: 'Past 30 days for this device',
+    loading: 'Loading…',
+    demo_meta: 'Preview only — coming soon',
+    demo_waitlist_btn: 'Want this? Join the waitlist',
+    hero_badge: 'Built for snowboarders, anywhere',
+    hero_h1: 'Film 30 seconds.<br>See exactly<br><span class="accent">how to ride better next run.</span>',
+    hero_sub: 'Skip the USD $300/hour coach.<br>Upload a clip — get pro-level feedback in seconds.',
+    hero_subnote: 'Snowboard-first · Skiers welcome',
+    hero_cta_primary: 'Try It Now →',
+    hero_cta_secondary: 'See how it works',
+    phone_top_speed: 'Top speed today',
+    phone_vs_last: 'vs last time',
+    phone_tip_title: 'Bend the rear knee a bit more',
+    phone_tip_sub: 'Shift weight slightly toward the rear next run',
+    try_h2: 'Try it now',
+    try_sub: 'Upload a clip, get results in 30 seconds, <b>completely free</b>.',
+    upload_title: 'Upload a snowboard clip',
+    upload_sub: 'Tap here · 60 seconds or less',
+    processing_title: 'Analyzing…',
+    processing_default: 'Reading your clip…',
+    proc_size: 'Clip size {x}MB',
+    proc_reading: 'Reading your riding…',
+    proc_reading_n: 'Reading {n}/{total}',
+    proc_uploading: 'Uploading…',
+    proc_analyzing: 'Analyzing (5–10 s)…',
+    proc_deep: 'Deep analysis (8 dimensions, 10–15 s)…',
+    result_done: 'Analysis complete',
+    result_h3: 'Your 3 takeaways',
+    locked_eyebrow: '🔒 Full deep analysis',
+    locked_h4: 'Unlock 8-dimension scoring + drill plan',
+    locked_sub: 'Stance, edge engagement, weight transfer, and 5 more — plus a personalized next-session drill.',
+    locked_price_unit: 'USD · one-time',
+    locked_btn: 'Unlock full analysis — USD $5',
+    locked_pay_note: 'Secure card payment via Stripe · 30-day refund',
+    reset_btn: '↻ Try another clip',
+    privacy_note: 'Clips auto-delete after 24 hours · never shared with third parties',
+    history_btn_mobile: '📊 See my past analyses',
+    how_h2: 'Three ways to use it',
+    how_sub: 'See results before you take your boots off',
+    card1_eyebrow: 'What you rode today',
+    card1_title: 'Phone in your pocket — auto-tracked',
+    card1_desc: 'No setup. By the time you reach the lift, you’ll see:',
+    card1_bullets: ['· Your top speed today','· Edge transitions, total turns','· Air time and max jump height','· How much you improved vs last run'],
+    card2_eyebrow: 'For the ‘gram',
+    card2_title: 'Auto-edit a 30-second highlight reel',
+    card2_desc: 'Drop in your GoPro or phone footage:',
+    card2_bullets: ['· Auto-detects the best clips','· Speed and jump-height overlays','· Vertical 9:16, ready for IG','· No editing required'],
+    card3_badge: 'Live now',
+    card3_eyebrow: 'Get better, faster',
+    card3_title: 'Friend films you, AI coaches you',
+    card3_desc: 'Pick a move (e.g. S-turn). Your friend films 15 s:',
+    card3_bullets: ['· 3 takeaways in 30–45 seconds','· What’s working, what to fix','· Side-by-side with reference clips','· Two phones is all you need'],
+    card3_cta: 'Try it now →',
+    see_demo: 'See demo →',
+    trip_h2: 'A USD $1,500 ski trip,<br><span class="accent">and you have no idea if you got better.</span>',
+    trip_sub: 'Carvline shows you "this year’s you vs last year’s you."<br>Come home knowing exactly how the trip moved the needle.',
+    trip_geo: 'Used by snowboarders flying into Japan, Korea, the Alps, and the Rockies',
+    pricing_h2: 'How it costs',
+    pricing_sub: 'Try free first. Pay only if you like what you see — 30-day refund.',
+    tier1_eyebrow: 'Try it', tier1_price: 'Free', tier1_desc: '3 takeaways per clip',
+    tier1_bullets: ['✓ Instant analysis','✓ No sign-up','— No full scoring'],
+    tier1_cta: 'Try it now',
+    tier2_badge: 'Pay after you see free', tier2_eyebrow: 'Deep analysis', tier2_desc: 'Unlock the same clip, fully',
+    tier2_bullets: ['✓ 8-dimension scoring','✓ Skeleton overlay','✓ Side-by-side with reference','✓ Personalized drill plan'],
+    tier2_cta: 'Start with free',
+    tier3_eyebrow: 'Whole season', tier3_price_unit: '/season', tier3_desc: 'Unlimited clips Dec–Mar',
+    tier3_bullets: ['✓ Unlimited uploads','✓ All 8 drills','✓ Cross-trip comparisons','✓ Friend-pair scoring'],
+    tier3_cta: 'Notify me next season',
+    tier4_eyebrow: 'Early bird · lifetime', tier4_desc: 'Pay once, ride forever (first 100)',
+    tier4_bullets: ['✓ Everything in Season','✓ Lifetime access','✓ Early beta access','✓ One 1-on-1 review'],
+    tier4_cta: 'Claim a slot (87 left)',
+    pricing_footnote: 'Secure card payment via Stripe · 30-day no-questions-asked refund',
+    waitlist_h2: 'Drop your email — we’ll notify you when Season + Lifetime open',
+    waitlist_sub: 'No spam · max 2 emails/month · unsubscribe anytime',
+    waitlist_email_placeholder: 'your@email.com',
+    waitlist_btn: 'Join waitlist',
+    waitlist_received: '✓ Got it! {email} is on the waitlist.',
+    faq_h2: 'Common questions',
+    faqs: [
+      ['Is the free version unlimited?','You get 2 free analyses per IP per day. Want a deeper read on the same clip? Upgrade for USD $5.'],
+      ['What does USD $5 include?','Unlocks the full 8-dimension breakdown of your already-tried clip — stance, edge engagement, weight transfer, upper body, knee bend, arms balance, rhythm, finish — plus a personalized drill for next session.'],
+      ['Do I need extra gear?','No. An iPhone 12+ (or any modern Android) is enough. The "Friend films you" mode needs two phones — yours and a friend’s.'],
+      ['Snowboard or skiing — both work?','Snowboard is our home turf and gets the most refined feedback. Skiing works too — the model auto-switches to ski-specific analysis (S-turns, pole timing, outside-ski pressure).'],
+      ['Can AI really judge snowboarding?','For beginner-to-intermediate riders, ~70–85% accuracy. Try the free version and decide if it’s worth USD $5. If you’re prepping for competition, hire a real coach.'],
+      ['Is my footage safe?','Clips are processed in your browser and auto-delete after 24 hours. We don’t share them with third parties or sell data. You decide whether to make any of it public.'],
+      ['Where do I see past analyses?','Tap "My History" top right (or below the upload area on mobile). We use a local visitor_id — no sign-up. Switching devices or clearing cache resets it.'],
+      ['Season $25 vs Lifetime $25 — which one?','Season makes sense if you ride 1–3 trips this winter. Lifetime (early-bird, first 100, normally USD $240) is the deal if you plan on riding for years.'],
+      ['Refund policy?','Email us within 30 days, full refund, no questions.'],
+    ],
+    footer: '© 2026 Carvline · Built for everyone chasing a cleaner carving line',
+    sticky_cta: 'Try it now →',
+    // demo modal — record
+    demo_record_title: 'Today’s ride',
+    demo_record_date: '2026 / 04 / 30 · Niseko',
+    demo_record_duration: 'You rode for 1 h 23 min',
+    demo_record_session: '5 lift rides · 4 different runs',
+    demo_record_stat_speed: 'Top speed', demo_record_stat_speed_unit: 'km/h', demo_record_speed_change: '+12% ↑ vs last time',
+    demo_record_stat_distance: 'Total distance', demo_record_stat_distance_unit: 'km', demo_record_descent: '1,840 m descended',
+    demo_record_stat_edges: 'Edge changes', demo_record_stat_edges_unit: 'changes', demo_record_edges_breakdown: 'heel 22 / toe 25',
+    demo_record_stat_jumps: 'Jumps', demo_record_stat_jumps_unit: 'jumps', demo_record_jumps_max: 'Max 0.8 m / 1.2 s air',
+    demo_record_per_run: 'Speed per run',
+    demo_record_run_label: 'Run {n}',
+    demo_record_week_label: 'This week',
+    demo_record_week_text: 'Top speed climbed from 55 to 62 km/h. Edge changes up 38% week over week. Toe-side carving improved noticeably.',
+    // demo modal — reel
+    demo_reel_title: 'Your 30-second reel',
+    demo_reel_progress: '0:08 / 0:30',
+    demo_reel_status: '● Auto-editing',
+    demo_reel_speed_label: 'SPEED',
+    demo_reel_jump_tag: 'JUMP 0.8 m',
+    demo_reel_slow_tag: '3× slow-mo',
+    demo_reel_caption_line1: 'Niseko · 2026.04.30',
+    demo_reel_caption_line2: '@your_ig · share now →',
+    demo_reel_format_note: '9:16 vertical · one tap to IG / TikTok',
+    demo_reel_clips_title: 'Highlights AI auto-detected',
+    demo_reel_clip1: 'Top speed 62 km/h',
+    demo_reel_clip1_meta: 'Run 3 · 0:42',
+    demo_reel_clip2: '1.2 s in the air · 0.8 m high',
+    demo_reel_clip2_meta: 'Run 2 · 1:18',
+    demo_reel_clip3: '8 linked edge changes',
+    demo_reel_clip3_meta: 'Run 4 · 0:15',
+    demo_reel_clip_dur_seconds: '{x} s',
+    // history rendering
+    hist_empty_title: 'No analyses yet',
+    hist_empty_sub: 'Upload your first clip to try it',
+    hist_empty_cta: 'Try it now',
+    hist_load_failed: 'Failed to load: {err}',
+    hist_network_err: 'Network error: {err}',
+    hist_count_label: '{n} entries · past 30 days',
+    hist_avg_label: 'Avg {x}/10',
+    hist_next_drill_prefix: 'Next drill: ',
+    // dimension labels (deep mode)
+    dim_stance: 'Stance', dim_edge_engagement: 'Edge engagement', dim_weight_transfer: 'Weight transfer',
+    dim_upper_body: 'Upper body', dim_knee_bend: 'Knee bend', dim_arms_balance: 'Arms & balance',
+    dim_rhythm: 'Rhythm', dim_finish: 'Finish',
+    next_drill_label: '🎯 Next drill',
+    // alerts
+    err_rate_free: 'Daily free quota exhausted ({n}/day) — try again tomorrow.',
+    err_rate_deep: 'Daily deep-analysis quota exhausted — try again tomorrow.',
+    err_analyze_fail: 'Analysis failed: {err}',
+    err_deep_fail: 'Deep analysis failed: {err}',
+    err_no_clip: 'Please upload a clip first.',
+    err_video_codec: 'Couldn’t read this video (unsupported codec?).',
+    err_video_too_long: 'Clip too long (3 min max).',
+    err_video_invalid: 'Invalid video duration.',
+    err_image_load: 'Couldn’t load image.',
+    waitlist_prompt_record: 'Drop your email — we’ll let you know when "auto-tracked riding" goes live:',
+    waitlist_prompt_reel: 'Drop your email — we’ll let you know when "auto-edit reel" goes live:',
+    waitlist_alert: 'Got it! We’ll notify you when it launches.',
+  },
+  'zh-TW': {
+    nav_history: '我的紀錄',
+    nav_cta: '立即試用',
+    history_title: '📊 我的分析紀錄',
+    history_meta: '本機過去 30 天',
+    loading: '載入中…',
+    demo_meta: '這是預覽, 實際版本即將上線',
+    demo_waitlist_btn: '想要這個? 加入等候名單',
+    hero_badge: '為全球滑手而生',
+    hero_h1: '拍 30 秒,<br>看自己<br><span class="accent">下次怎麼滑得更好</span>',
+    hero_sub: '不用花 USD $300/小時請教練。<br>上傳一段你滑的影片, 立刻拿到專業教練等級的回饋。',
+    hero_subnote: '單板為主 · 雙板也能用',
+    hero_cta_primary: '立即試用 →',
+    hero_cta_secondary: '看怎麼用',
+    phone_top_speed: '今日最高速',
+    phone_vs_last: '比上次',
+    phone_tip_title: '後腳膝蓋可以再彎一點',
+    phone_tip_sub: '下次試試把重心稍微往後移',
+    try_h2: '立即試用',
+    try_sub: '上傳一段影片, 30 秒看到結果, <b>完全免費</b>。',
+    upload_title: '上傳一段滑雪影片',
+    upload_sub: '點這裡選擇 · 60 秒內',
+    processing_title: '分析中…',
+    processing_default: '讀取影片…',
+    proc_size: '影片大小 {x}MB',
+    proc_reading: '讀取你的滑姿…',
+    proc_reading_n: '讀取中 {n}/{total}',
+    proc_uploading: '上傳中…',
+    proc_analyzing: '分析中 (約 5-10 秒)…',
+    proc_deep: '深入分析中 (8 維度, 約 10-15 秒)…',
+    result_done: '分析完成',
+    result_h3: '你的 3 個重點',
+    locked_eyebrow: '🔒 完整深度分析',
+    locked_h4: '解鎖 8 維度評分 + 練習建議',
+    locked_sub: '看完整 stance / edge engagement / weight transfer 等 8 個面向, 加個人化下次練什麼',
+    locked_price_unit: 'USD 一次性',
+    locked_btn: '解鎖完整分析 — USD $5',
+    locked_pay_note: '透過 Stripe 信用卡安全付款 · 30 天退費',
+    reset_btn: '↻ 試另一段影片',
+    privacy_note: '影片 24 小時內自動刪除, 不分享給第三方',
+    history_btn_mobile: '📊 看我之前的分析',
+    how_h2: '三種用法',
+    how_sub: '下板就能立刻看到結果',
+    card1_eyebrow: '今天滑了什麼',
+    card1_title: '手機放口袋, 自動紀錄',
+    card1_desc: '完全不用操作。下纜車就看到:',
+    card1_bullets: ['· 你今天最高速幾公里','· 切了幾次刃、幾次轉','· 跳了多高、空中幾秒','· 比上次進步多少 %'],
+    card2_eyebrow: '朋友圈炫耀用',
+    card2_title: '自動剪成 30 秒短片',
+    card2_desc: '把 GoPro 或手機影片丟進來:',
+    card2_bullets: ['· 自動找出最帥的片段','· 加上速度、跳高數據','· 直立 9:16 直接發 IG','· 不用自己剪輯'],
+    card3_badge: '已上線',
+    card3_eyebrow: '想變更強',
+    card3_title: '朋友幫你拍, 立刻拿教練回饋',
+    card3_desc: '選一個動作 (像 S-turn), 朋友拍 15 秒:',
+    card3_bullets: ['· 30-45 秒給你 3 個重點','· 哪裡做得好、哪裡要改','· 對比示範影片','· 兩支手機就夠'],
+    card3_cta: '立即試用 →',
+    see_demo: '看 demo →',
+    trip_h2: '飛一趟日本 USD $1,500,<br><span class="accent">回來不知道進步多少?</span>',
+    trip_sub: 'Carvline 幫你比對「今年的你 vs 去年的你」。<br>回家就知道這趟值不值得。',
+    trip_geo: '日本 · 韓國 · 阿爾卑斯 · 北美雪場常用',
+    pricing_h2: '怎麼用, 怎麼付',
+    pricing_sub: '先免費試, 喜歡再付 — 不滿意 30 天退費',
+    tier1_eyebrow: '先試試', tier1_price: '免費', tier1_desc: '每段影片 3 個重點',
+    tier1_bullets: ['✓ 上傳影片立即看','✓ 不用註冊','— 不含完整評分'],
+    tier1_cta: '立即試用',
+    tier2_badge: '看完免費再付', tier2_eyebrow: '深度分析', tier2_desc: '同一影片完整解鎖',
+    tier2_bullets: ['✓ 8 維度評分','✓ Skeleton overlay','✓ 對比示範影片','✓ 個人化練習計畫'],
+    tier2_cta: '先試免費版',
+    tier3_eyebrow: '本季無限', tier3_price_unit: '/雪季', tier3_desc: '12-3 月無限分析',
+    tier3_bullets: ['✓ 影片無限上傳','✓ 全 8 個 drill','✓ 跨 trip 比對','✓ 朋友互拍評分'],
+    tier3_cta: '下季開放通知',
+    tier4_eyebrow: '早鳥終身', tier4_desc: '一次付費, 永遠能用 (限 100 名)',
+    tier4_bullets: ['✓ 所有 Season 功能','✓ 永久使用','✓ 優先 beta 測試','✓ 1-on-1 review (1 次)'],
+    tier4_cta: '搶名額 (剩 87)',
+    pricing_footnote: '付款用 Stripe 信用卡安全處理 · 30 天內不滿意全額退費',
+    waitlist_h2: '先留 email, 等 Season + Lifetime 開放通知你',
+    waitlist_sub: '不會 spam · 一個月最多兩封 · 隨時退訂',
+    waitlist_email_placeholder: '你的 email',
+    waitlist_btn: '加入等候',
+    waitlist_received: '✓ 收到! {email} 已加入等候名單。',
+    faq_h2: '大家常問',
+    faqs: [
+      ['免費版可以無限上傳嗎?','每天可以免費試 (每 IP 每天 2 次)。想看更深入的同一段分析, 升級 USD $5 解鎖即可。'],
+      ['USD $5 包括什麼?','同一段你已試的影片, 解鎖完整 8 維度評分 (stance / edge engagement / weight transfer / upper body / knee bend / arms balance / rhythm / finish) + 個人化下次練什麼建議。'],
+      ['需要買額外裝備嗎?','完全不用。你只要有 iPhone 12 以上就夠。「朋友幫你拍」模式需要兩支手機 (你的 + 朋友的)。'],
+      ['單板和雙板都能用嗎?','單板是我們的主場 (亞洲市場 70%+ 是單板)。雙板也支援, 會自動切換成 ski 對應的動作分析 (S-turn、雪杖時機、外側施壓)。'],
+      ['AI 真的能看懂滑單板嗎?','入門到中階滑手 70-85% 準確。先試免費版你就知道值不值 USD $5。準備比賽的職業選手, 還是建議找真人教練。'],
+      ['我的影片資料安全嗎?','影片只在你瀏覽器處理, 24 小時後自動刪除。我們不偷偷分享給第三方、不賣資料。你決定要不要公開。'],
+      ['在哪裡看我之前的分析?','右上角點「我的紀錄」 (手機版在試用區下方)。我們用本機 visitor_id 認你, 不用註冊。換手機或清快取就會重新計算。'],
+      ['Season $25 vs Lifetime $25 怎麼選?','如果你只玩這個雪季 (1-3 趟), Season 划算。如果你打算長期玩單板, 搶 Lifetime 早鳥 (限 100 名, 正常價 USD $240) 最划算。'],
+      ['退費政策?','用了不滿意, 30 天內 email 我們, 全額退費, 不問理由。'],
+    ],
+    footer: '© 2026 Carvline · 給每一個追求乾淨 carving line 的人',
+    sticky_cta: '立即試用 →',
+    demo_record_title: '今日滑行紀錄',
+    demo_record_date: '2026 / 04 / 30 · 二世谷',
+    demo_record_duration: '滑了 1 小時 23 分',
+    demo_record_session: '5 趟纜車 · 4 條雪道',
+    demo_record_stat_speed: '最高速', demo_record_stat_speed_unit: 'km/h', demo_record_speed_change: '+12% ↑ 比上次',
+    demo_record_stat_distance: '總滑行', demo_record_stat_distance_unit: 'km', demo_record_descent: '海拔降 1,840m',
+    demo_record_stat_edges: '切刃', demo_record_stat_edges_unit: '次', demo_record_edges_breakdown: 'heel 22 / toe 25',
+    demo_record_stat_jumps: '跳躍', demo_record_stat_jumps_unit: '次', demo_record_jumps_max: '最高 0.8m / 1.2 秒',
+    demo_record_per_run: '每趟速度',
+    demo_record_run_label: '第 {n} 趟',
+    demo_record_week_label: '本週進步',
+    demo_record_week_text: '最高速從 55 km/h 提升到 62 km/h, 切刃次數比上週多 38%。toe-side 切刃進步明顯。',
+    demo_reel_title: '30 秒短片預覽',
+    demo_reel_progress: '0:08 / 0:30',
+    demo_reel_status: '● 自動剪輯中',
+    demo_reel_speed_label: 'SPEED',
+    demo_reel_jump_tag: 'JUMP 0.8m',
+    demo_reel_slow_tag: '3 倍慢動作',
+    demo_reel_caption_line1: '二世谷 · 2026.04.30',
+    demo_reel_caption_line2: '@your_ig · 立即分享 →',
+    demo_reel_format_note: '9:16 直立, 一鍵發 IG / TikTok',
+    demo_reel_clips_title: 'AI 自動偵測到的精彩片段',
+    demo_reel_clip1: '最高速 62 km/h',
+    demo_reel_clip1_meta: '第 3 趟 · 0:42',
+    demo_reel_clip2: '空中 1.2 秒 · 0.8m 高',
+    demo_reel_clip2_meta: '第 2 趟 · 1:18',
+    demo_reel_clip3: '連續切刃 8 次',
+    demo_reel_clip3_meta: '第 4 趟 · 0:15',
+    demo_reel_clip_dur_seconds: '{x} 秒',
+    hist_empty_title: '還沒有任何紀錄',
+    hist_empty_sub: '上傳第一段影片試試',
+    hist_empty_cta: '立即試用',
+    hist_load_failed: '載入失敗: {err}',
+    hist_network_err: '網路錯誤: {err}',
+    hist_count_label: '共 {n} 筆 · 過去 30 天',
+    hist_avg_label: '平均 {x}/10',
+    hist_next_drill_prefix: '下次練: ',
+    dim_stance: '站姿', dim_edge_engagement: '雪刃使用', dim_weight_transfer: '重心轉移',
+    dim_upper_body: '上半身姿態', dim_knee_bend: '膝蓋彎曲', dim_arms_balance: '手臂平衡',
+    dim_rhythm: '轉彎節奏', dim_finish: '收尾穩定',
+    next_drill_label: '🎯 下次練這個',
+    err_rate_free: '今日免費額度已用完 ({n}/天), 明天再來',
+    err_rate_deep: '今日深度分析額度已用完, 明天再來',
+    err_analyze_fail: '分析失敗: {err}',
+    err_deep_fail: '深度分析失敗: {err}',
+    err_no_clip: '請先上傳影片',
+    err_video_codec: '影片讀取失敗 (codec 不支援?)',
+    err_video_too_long: '影片太長 (限 3 分鐘內)',
+    err_video_invalid: '影片時長異常',
+    err_image_load: '圖片讀取失敗',
+    waitlist_prompt_record: '留個 email, 「自動紀錄」上線立刻通知你:',
+    waitlist_prompt_reel: '留個 email, 「自動剪 30 秒」上線立刻通知你:',
+    waitlist_alert: '已收到! 上線會立刻通知你。',
+  },
+  'zh-CN': {
+    nav_history: '我的记录',
+    nav_cta: '立即试用',
+    history_title: '📊 我的分析记录',
+    history_meta: '本机过去 30 天',
+    loading: '加载中…',
+    demo_meta: '这是预览, 实际版本即将上线',
+    demo_waitlist_btn: '想要这个? 加入等候名单',
+    hero_badge: '为全球滑手而生',
+    hero_h1: '拍 30 秒,<br>看自己<br><span class="accent">下次怎么滑得更好</span>',
+    hero_sub: '不用花 USD $300/小时请教练。<br>上传一段你滑的视频, 立刻拿到专业教练级别的反馈。',
+    hero_subnote: '单板为主 · 双板也能用',
+    hero_cta_primary: '立即试用 →',
+    hero_cta_secondary: '看怎么用',
+    phone_top_speed: '今日最高速',
+    phone_vs_last: '比上次',
+    phone_tip_title: '后腿膝盖可以再弯一点',
+    phone_tip_sub: '下次试试把重心稍微往后移',
+    try_h2: '立即试用',
+    try_sub: '上传一段视频, 30 秒看到结果, <b>完全免费</b>。',
+    upload_title: '上传一段滑雪视频',
+    upload_sub: '点这里选择 · 60 秒内',
+    processing_title: '分析中…',
+    processing_default: '读取视频…',
+    proc_size: '视频大小 {x}MB',
+    proc_reading: '读取你的滑姿…',
+    proc_reading_n: '读取中 {n}/{total}',
+    proc_uploading: '上传中…',
+    proc_analyzing: '分析中 (约 5-10 秒)…',
+    proc_deep: '深度分析中 (8 维度, 约 10-15 秒)…',
+    result_done: '分析完成',
+    result_h3: '你的 3 个重点',
+    locked_eyebrow: '🔒 完整深度分析',
+    locked_h4: '解锁 8 维度评分 + 练习建议',
+    locked_sub: '看完整 stance / edge engagement / weight transfer 等 8 个面向, 加个人化下次练什么',
+    locked_price_unit: 'USD 一次性',
+    locked_btn: '解锁完整分析 — USD $5',
+    locked_pay_note: '通过 Stripe 信用卡安全支付 · 30 天退款',
+    reset_btn: '↻ 试另一段视频',
+    privacy_note: '视频 24 小时内自动删除, 不分享给第三方',
+    history_btn_mobile: '📊 看我之前的分析',
+    how_h2: '三种用法',
+    how_sub: '下板就能立刻看到结果',
+    card1_eyebrow: '今天滑了什么',
+    card1_title: '手机放口袋, 自动记录',
+    card1_desc: '完全不用操作。下缆车就看到:',
+    card1_bullets: ['· 你今天最高速几公里','· 切了几次刃、几次转','· 跳了多高、空中几秒','· 比上次进步多少 %'],
+    card2_eyebrow: '朋友圈炫耀用',
+    card2_title: '自动剪成 30 秒短片',
+    card2_desc: '把 GoPro 或手机视频丢进来:',
+    card2_bullets: ['· 自动找出最帅的片段','· 加上速度、跳高数据','· 直立 9:16 直接发抖音','· 不用自己剪辑'],
+    card3_badge: '已上线',
+    card3_eyebrow: '想变更强',
+    card3_title: '朋友帮你拍, 立刻拿教练反馈',
+    card3_desc: '选一个动作 (像 S-turn), 朋友拍 15 秒:',
+    card3_bullets: ['· 30-45 秒给你 3 个重点','· 哪里做得好、哪里要改','· 对比示范视频','· 两支手机就够'],
+    card3_cta: '立即试用 →',
+    see_demo: '看 demo →',
+    trip_h2: '飞一趟日本 USD $1,500,<br><span class="accent">回来不知道进步多少?</span>',
+    trip_sub: 'Carvline 帮你对比「今年的你 vs 去年的你」。<br>回家就知道这趟值不值得。',
+    trip_geo: '日本 · 韩国 · 阿尔卑斯 · 北美雪场常用',
+    pricing_h2: '怎么用, 怎么付',
+    pricing_sub: '先免费试, 喜欢再付 — 不满意 30 天退款',
+    tier1_eyebrow: '先试试', tier1_price: '免费', tier1_desc: '每段视频 3 个重点',
+    tier1_bullets: ['✓ 上传视频立即看','✓ 不用注册','— 不含完整评分'],
+    tier1_cta: '立即试用',
+    tier2_badge: '看完免费再付', tier2_eyebrow: '深度分析', tier2_desc: '同一视频完整解锁',
+    tier2_bullets: ['✓ 8 维度评分','✓ Skeleton overlay','✓ 对比示范视频','✓ 个人化练习计划'],
+    tier2_cta: '先试免费版',
+    tier3_eyebrow: '整个雪季', tier3_price_unit: '/雪季', tier3_desc: '12-3 月无限分析',
+    tier3_bullets: ['✓ 视频无限上传','✓ 全 8 个 drill','✓ 跨行程对比','✓ 朋友互拍评分'],
+    tier3_cta: '下季开放通知',
+    tier4_eyebrow: '早鸟终身', tier4_desc: '一次付费, 永远能用 (限 100 名)',
+    tier4_bullets: ['✓ 所有 Season 功能','✓ 永久使用','✓ 优先 beta 测试','✓ 1-on-1 review (1 次)'],
+    tier4_cta: '抢名额 (剩 87)',
+    pricing_footnote: '通过 Stripe 信用卡安全支付 · 30 天内不满意全额退款',
+    waitlist_h2: '先留 email, 等 Season + Lifetime 开放通知你',
+    waitlist_sub: '不会 spam · 一个月最多两封 · 随时退订',
+    waitlist_email_placeholder: '你的 email',
+    waitlist_btn: '加入等候',
+    waitlist_received: '✓ 收到! {email} 已加入等候名单。',
+    faq_h2: '常见问题',
+    faqs: [
+      ['免费版可以无限上传吗?','每天可以免费试 (每 IP 每天 2 次)。想看更深入的同一段分析, 升级 USD $5 解锁即可。'],
+      ['USD $5 包括什么?','同一段你已试的视频, 解锁完整 8 维度评分 (stance / edge engagement / weight transfer / upper body / knee bend / arms balance / rhythm / finish) + 个人化下次练什么建议。'],
+      ['需要买额外装备吗?','完全不用。你只要有 iPhone 12 以上就够。「朋友帮你拍」模式需要两支手机 (你的 + 朋友的)。'],
+      ['单板和双板都能用吗?','单板是我们的主场 (亚洲市场 70%+ 是单板)。双板也支持, 会自动切换成 ski 对应的动作分析 (S-turn、雪杖时机、外侧施压)。'],
+      ['AI 真的能看懂滑单板吗?','入门到中阶滑手 70-85% 准确。先试免费版你就知道值不值 USD $5。准备比赛的职业选手, 还是建议找真人教练。'],
+      ['我的视频数据安全吗?','视频只在你浏览器处理, 24 小时后自动删除。我们不偷偷分享给第三方、不卖数据。你决定要不要公开。'],
+      ['在哪里看我之前的分析?','右上角点「我的记录」(手机版在试用区下方)。我们用本机 visitor_id 识别你, 不用注册。换手机或清缓存就会重新计算。'],
+      ['Season $25 vs Lifetime $25 怎么选?','如果你只玩这个雪季 (1-3 趟), Season 划算。如果你打算长期玩单板, 抢 Lifetime 早鸟 (限 100 名, 正常价 USD $240) 最划算。'],
+      ['退款政策?','用了不满意, 30 天内 email 我们, 全额退款, 不问理由。'],
+    ],
+    footer: '© 2026 Carvline · 给每一个追求干净 carving line 的人',
+    sticky_cta: '立即试用 →',
+    demo_record_title: '今日滑行记录',
+    demo_record_date: '2026 / 04 / 30 · 二世谷',
+    demo_record_duration: '滑了 1 小时 23 分',
+    demo_record_session: '5 趟缆车 · 4 条雪道',
+    demo_record_stat_speed: '最高速', demo_record_stat_speed_unit: 'km/h', demo_record_speed_change: '+12% ↑ 比上次',
+    demo_record_stat_distance: '总滑行', demo_record_stat_distance_unit: 'km', demo_record_descent: '海拔降 1,840m',
+    demo_record_stat_edges: '切刃', demo_record_stat_edges_unit: '次', demo_record_edges_breakdown: 'heel 22 / toe 25',
+    demo_record_stat_jumps: '跳跃', demo_record_stat_jumps_unit: '次', demo_record_jumps_max: '最高 0.8m / 1.2 秒',
+    demo_record_per_run: '每趟速度',
+    demo_record_run_label: '第 {n} 趟',
+    demo_record_week_label: '本周进步',
+    demo_record_week_text: '最高速从 55 km/h 提升到 62 km/h, 切刃次数比上周多 38%。toe-side 切刃进步明显。',
+    demo_reel_title: '30 秒短片预览',
+    demo_reel_progress: '0:08 / 0:30',
+    demo_reel_status: '● 自动剪辑中',
+    demo_reel_speed_label: 'SPEED',
+    demo_reel_jump_tag: 'JUMP 0.8m',
+    demo_reel_slow_tag: '3 倍慢动作',
+    demo_reel_caption_line1: '二世谷 · 2026.04.30',
+    demo_reel_caption_line2: '@your_ig · 立即分享 →',
+    demo_reel_format_note: '9:16 直立, 一键发抖音 / 小红书',
+    demo_reel_clips_title: 'AI 自动检测到的精彩片段',
+    demo_reel_clip1: '最高速 62 km/h',
+    demo_reel_clip1_meta: '第 3 趟 · 0:42',
+    demo_reel_clip2: '空中 1.2 秒 · 0.8m 高',
+    demo_reel_clip2_meta: '第 2 趟 · 1:18',
+    demo_reel_clip3: '连续切刃 8 次',
+    demo_reel_clip3_meta: '第 4 趟 · 0:15',
+    demo_reel_clip_dur_seconds: '{x} 秒',
+    hist_empty_title: '还没有任何记录',
+    hist_empty_sub: '上传第一段视频试试',
+    hist_empty_cta: '立即试用',
+    hist_load_failed: '加载失败: {err}',
+    hist_network_err: '网络错误: {err}',
+    hist_count_label: '共 {n} 笔 · 过去 30 天',
+    hist_avg_label: '平均 {x}/10',
+    hist_next_drill_prefix: '下次练: ',
+    dim_stance: '站姿', dim_edge_engagement: '雪刃使用', dim_weight_transfer: '重心转移',
+    dim_upper_body: '上半身姿态', dim_knee_bend: '膝盖弯曲', dim_arms_balance: '手臂平衡',
+    dim_rhythm: '转弯节奏', dim_finish: '收尾稳定',
+    next_drill_label: '🎯 下次练这个',
+    err_rate_free: '今日免费额度已用完 ({n}/天), 明天再来',
+    err_rate_deep: '今日深度分析额度已用完, 明天再来',
+    err_analyze_fail: '分析失败: {err}',
+    err_deep_fail: '深度分析失败: {err}',
+    err_no_clip: '请先上传视频',
+    err_video_codec: '视频读取失败 (codec 不支持?)',
+    err_video_too_long: '视频太长 (限 3 分钟内)',
+    err_video_invalid: '视频时长异常',
+    err_image_load: '图片读取失败',
+    waitlist_prompt_record: '留个 email, 「自动记录」上线立刻通知你:',
+    waitlist_prompt_reel: '留个 email, 「自动剪 30 秒」上线立刻通知你:',
+    waitlist_alert: '已收到! 上线会立刻通知你。',
+  },
+};
+
+// ==========================================================================
+// LANGUAGE DETECTION + i18n APPLY
+// ==========================================================================
+const LANG_LABELS = { en: 'English', 'zh-TW': '繁體中文', 'zh-CN': '简体中文' };
+const LANG_FLAGS = { en: '🇺🇸', 'zh-TW': '🇹🇼', 'zh-CN': '🇨🇳' };
+
+function detectInitialLanguage() {
+  const stored = localStorage.getItem('cv_lang');
+  if (stored && STR[stored]) return stored;
+  const nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+  if (nav.startsWith('zh-tw') || nav.startsWith('zh-hk') || nav.startsWith('zh-mo') || nav.startsWith('zh-hant')) return 'zh-TW';
+  if (nav.startsWith('zh-cn') || nav.startsWith('zh-sg') || nav.startsWith('zh-hans')) return 'zh-CN';
+  if (nav.startsWith('zh')) return 'zh-CN';
+  return 'en';
+}
+
+let currentLang = detectInitialLanguage();
+function t(key, vars) {
+  const dict = STR[currentLang] || STR.en;
+  let v = dict[key];
+  if (v == null) v = STR.en[key];
+  if (typeof v === 'string' && vars) {
+    return v.replace(/\{(\w+)\}/g, (_, k) => (vars[k] != null ? vars[k] : ''));
+  }
+  return v;
+}
+
+function applyI18n() {
+  document.documentElement.lang = currentLang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const v = t(key);
+    if (typeof v === 'string') el.textContent = v;
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    const v = t(key);
+    if (typeof v === 'string') el.innerHTML = v;
+  });
+  document.querySelectorAll('[data-i18n-list]').forEach(el => {
+    const key = el.getAttribute('data-i18n-list');
+    const v = t(key);
+    if (Array.isArray(v)) {
+      el.innerHTML = v.map(item => `<li>${escapeHtml(item)}</li>`).join('');
+    }
+  });
+  // Special-cased
+  const emailInput = document.getElementById('waitlist-email-input');
+  if (emailInput) emailInput.placeholder = t('waitlist_email_placeholder');
+  // Update lang button label
+  document.getElementById('lang-current-flag').textContent = LANG_FLAGS[currentLang] || '🌐';
+  document.getElementById('lang-current-label').textContent = LANG_LABELS[currentLang] || 'English';
+  // Mark active in menu
+  document.querySelectorAll('#lang-menu button').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-lang') === currentLang);
+  });
+  // Render FAQs (depends on current language)
+  renderFaqs();
+}
+
+function renderFaqs() {
+  const list = document.getElementById('faq-list');
+  if (!list) return;
+  const faqs = t('faqs') || [];
+  list.innerHTML = faqs.map(([q, a]) => `
+<details class="card rounded-xl px-5 py-4">
+  <summary class="font-semibold">${escapeHtml(q)}</summary>
+  <p class="text-gray-600 mt-3 text-sm leading-relaxed">${escapeHtml(a)}</p>
+</details>`).join('');
+}
+
+function setLanguage(lang) {
+  if (!STR[lang]) return;
+  currentLang = lang;
+  localStorage.setItem('cv_lang', lang);
+  applyI18n();
+  document.getElementById('lang-menu').classList.add('hidden');
+}
+
+function toggleLangMenu(ev) {
+  if (ev) ev.stopPropagation();
+  const m = document.getElementById('lang-menu');
+  m.classList.toggle('hidden');
+}
+document.addEventListener('click', e => {
+  const m = document.getElementById('lang-menu');
+  const btn = document.getElementById('lang-btn');
+  if (!m || m.classList.contains('hidden')) return;
+  if (!m.contains(e.target) && !btn.contains(e.target)) m.classList.add('hidden');
+});
+
+// ==========================================================================
+// VISITOR ID + STATE
+// ==========================================================================
 let visitorId = localStorage.getItem('cv_visitor_id');
 if (!visitorId) {
   visitorId = (crypto.randomUUID && crypto.randomUUID()) || ('vid-' + Date.now() + '-' + Math.random().toString(36).slice(2,10));
   localStorage.setItem('cv_visitor_id', visitorId);
 }
+let currentFrames = null;
 
-let currentFrames = null; // 暫存抽出的 frames, 給 deep mode 重用
-
-// ========================
-// HISTORY PANEL
-// ========================
+// ==========================================================================
+// HISTORY
+// ==========================================================================
 function toggleHistory() {
   const m = document.getElementById('history-modal');
   if (m.classList.contains('hidden')) {
@@ -449,49 +944,134 @@ function toggleHistory() {
   }
 }
 
-// === DEMO MODAL (preview-only mockups for upcoming features) ===
+async function loadHistory() {
+  document.getElementById('history-vid').textContent = visitorId;
+  const list = document.getElementById('history-list');
+  list.innerHTML = `<div class="text-center text-gray-400 text-sm py-12">${t('loading')}</div>`;
+  try {
+    const r = await fetch(WORKER_URL + 'history?visitor_id=' + encodeURIComponent(visitorId));
+    const data = await r.json();
+    if (!data.ok) {
+      list.innerHTML = `<div class="text-center text-gray-400 text-sm py-12">${escapeHtml(t('hist_load_failed', { err: data.error || 'unknown' }))}</div>`;
+      return;
+    }
+    renderHistory(data.items || []);
+    document.getElementById('history-meta').textContent = t('hist_count_label', { n: (data.items || []).length });
+  } catch (e) {
+    list.innerHTML = `<div class="text-center text-gray-400 text-sm py-12">${escapeHtml(t('hist_network_err', { err: e.message }))}</div>`;
+  }
+}
+
+function renderHistory(items) {
+  const list = document.getElementById('history-list');
+  if (items.length === 0) {
+    list.innerHTML = `<div class="text-center py-12">
+      <div class="text-4xl mb-3">🏂</div>
+      <div class="font-semibold text-gray-700 mb-1">${escapeHtml(t('hist_empty_title'))}</div>
+      <div class="text-sm text-gray-500 mb-5">${escapeHtml(t('hist_empty_sub'))}</div>
+      <button onclick="toggleHistory();document.getElementById('try').scrollIntoView({behavior:'smooth'})" class="px-5 py-2.5 rounded-lg btn-primary text-sm font-semibold">${escapeHtml(t('hist_empty_cta'))}</button>
+    </div>`;
+    return;
+  }
+  list.innerHTML = items.map(item => {
+    const d = new Date(item.created_at);
+    const dateStr = d.toLocaleDateString(currentLang, { month: 'numeric', day: 'numeric' }) + ' ' + d.toLocaleTimeString(currentLang, { hour: '2-digit', minute: '2-digit' });
+    let summary = '';
+    let scoreHtml = '';
+    try {
+      const r = JSON.parse(item.result_json || '{}');
+      if (item.mode === 'free') {
+        summary = (r.fix || r.ok || r.good || '').slice(0, 80);
+      } else {
+        const dims = ['stance', 'edge_engagement', 'weight_transfer', 'upper_body', 'knee_bend', 'arms_balance', 'rhythm', 'finish'];
+        const scores = dims.map(k => r[k]?.score).filter(s => s != null);
+        if (scores.length) {
+          const avg = (scores.reduce((a,b)=>a+b,0) / scores.length).toFixed(1);
+          const cls = avg >= 7 ? 'score-good' : avg >= 5 ? 'score-mid' : 'score-low';
+          scoreHtml = `<span class="score-pill ${cls}">${escapeHtml(t('hist_avg_label', { x: avg }))}</span>`;
+        }
+        summary = r.next_drill ? (t('hist_next_drill_prefix') + r.next_drill).slice(0, 80) : '';
+      }
+    } catch (e) { summary = ''; }
+    const modeBadge = item.mode === 'deep'
+      ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-semibold">DEEP</span>'
+      : '<span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-semibold">FREE</span>';
+    return `<div class="history-item mb-2">
+      <div class="flex items-center justify-between mb-1.5 gap-2">
+        <div class="flex items-center gap-2 min-w-0">${modeBadge}<span class="text-xs text-gray-500">${dateStr}</span></div>
+        ${scoreHtml}
+      </div>
+      ${summary ? `<div class="text-sm text-gray-700 leading-snug">${escapeHtml(summary)}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+async function preloadHistoryCount() {
+  try {
+    const r = await fetch(WORKER_URL + 'history?visitor_id=' + encodeURIComponent(visitorId) + '&count_only=1');
+    const data = await r.json();
+    if (data.ok && data.count > 0) {
+      const txt = '(' + data.count + ')';
+      ['history-count-desktop','history-count-mobile','history-count-sticky'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = txt;
+      });
+    }
+  } catch (e) {}
+}
+
+// ==========================================================================
+// DEMO MODAL
+// ==========================================================================
+let lastDemoKind = null;
 function closeDemo() {
   document.getElementById('demo-modal').classList.add('hidden');
 }
 function openDemo(kind) {
+  lastDemoKind = kind;
   const titleEl = document.getElementById('demo-title');
   const body = document.getElementById('demo-body');
   if (kind === 'record') {
-    titleEl.textContent = '今日滑行紀錄';
+    titleEl.textContent = t('demo_record_title');
+    const runs = [58, 62, 55, 49, 42];
     body.innerHTML = `
 <div class="px-5 py-5 bg-gradient-to-br from-blue-50 to-slate-50">
-  <div class="text-xs text-gray-500 mb-1">2026 / 04 / 30 · 二世谷</div>
-  <div class="text-2xl font-extrabold mb-1">滑了 1 小時 23 分</div>
-  <div class="text-sm text-gray-600">5 趟纜車 · 4 條雪道</div>
+  <div class="text-xs text-gray-500 mb-1">${escapeHtml(t('demo_record_date'))}</div>
+  <div class="text-2xl font-extrabold mb-1">${escapeHtml(t('demo_record_duration'))}</div>
+  <div class="text-sm text-gray-600">${escapeHtml(t('demo_record_session'))}</div>
 </div>
 <div class="grid grid-cols-2 gap-px bg-gray-100">
   <div class="bg-white p-4">
-    <div class="text-xs text-gray-500 mb-1">最高速</div>
-    <div class="text-2xl font-bold">62 <span class="text-sm font-medium text-gray-500">km/h</span></div>
-    <div class="text-xs text-green-600 font-medium mt-1">+12% ↑ 比上次</div>
+    <div class="text-xs text-gray-500 mb-1">${escapeHtml(t('demo_record_stat_speed'))}</div>
+    <div class="text-2xl font-bold">62 <span class="text-sm font-medium text-gray-500">${escapeHtml(t('demo_record_stat_speed_unit'))}</span></div>
+    <div class="text-xs text-green-600 font-medium mt-1">${escapeHtml(t('demo_record_speed_change'))}</div>
   </div>
   <div class="bg-white p-4">
-    <div class="text-xs text-gray-500 mb-1">總滑行</div>
-    <div class="text-2xl font-bold">12.3 <span class="text-sm font-medium text-gray-500">km</span></div>
-    <div class="text-xs text-gray-500 mt-1">海拔降 1,840m</div>
+    <div class="text-xs text-gray-500 mb-1">${escapeHtml(t('demo_record_stat_distance'))}</div>
+    <div class="text-2xl font-bold">12.3 <span class="text-sm font-medium text-gray-500">${escapeHtml(t('demo_record_stat_distance_unit'))}</span></div>
+    <div class="text-xs text-gray-500 mt-1">${escapeHtml(t('demo_record_descent'))}</div>
   </div>
   <div class="bg-white p-4">
-    <div class="text-xs text-gray-500 mb-1">切刃</div>
-    <div class="text-2xl font-bold">47 <span class="text-sm font-medium text-gray-500">次</span></div>
-    <div class="text-xs text-gray-500 mt-1">heel 22 / toe 25</div>
+    <div class="text-xs text-gray-500 mb-1">${escapeHtml(t('demo_record_stat_edges'))}</div>
+    <div class="text-2xl font-bold">47 <span class="text-sm font-medium text-gray-500">${escapeHtml(t('demo_record_stat_edges_unit'))}</span></div>
+    <div class="text-xs text-gray-500 mt-1">${escapeHtml(t('demo_record_edges_breakdown'))}</div>
   </div>
   <div class="bg-white p-4">
-    <div class="text-xs text-gray-500 mb-1">跳躍</div>
-    <div class="text-2xl font-bold">3 <span class="text-sm font-medium text-gray-500">次</span></div>
-    <div class="text-xs text-gray-500 mt-1">最高 0.8m / 1.2 秒</div>
+    <div class="text-xs text-gray-500 mb-1">${escapeHtml(t('demo_record_stat_jumps'))}</div>
+    <div class="text-2xl font-bold">3 <span class="text-sm font-medium text-gray-500">${escapeHtml(t('demo_record_stat_jumps_unit'))}</span></div>
+    <div class="text-xs text-gray-500 mt-1">${escapeHtml(t('demo_record_jumps_max'))}</div>
   </div>
 </div>
 <div class="p-5 bg-white">
-  <div class="text-sm font-semibold mb-3">每趟速度</div>
+  <div class="text-sm font-semibold mb-3">${escapeHtml(t('demo_record_per_run'))}</div>
   <div class="space-y-2.5">
-    ${[58,62,55,49,42].map((v,i)=>`
+    ${runs.map((v,i)=>`
     <div class="flex items-center gap-3">
-      <div class="text-xs text-gray-500 w-12">第 ${i+1} 趟</div>
+      <div class="text-xs text-gray-500 w-14">${escapeHtml(t('demo_record_run_label', { n: i+1 }))}</div>
       <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
         <div class="h-full bg-blue-500 rounded-full" style="width:${(v/62*100).toFixed(0)}%"></div>
       </div>
@@ -500,166 +1080,85 @@ function openDemo(kind) {
   </div>
 </div>
 <div class="p-5 bg-blue-50/40">
-  <div class="text-xs text-gray-500 mb-2">本週進步</div>
-  <div class="text-sm font-medium leading-relaxed">最高速從 55 km/h 提升到 62 km/h, 切刃次數比上週多 38%。toe-side 切刃進步明顯。</div>
+  <div class="text-xs text-gray-500 mb-2">${escapeHtml(t('demo_record_week_label'))}</div>
+  <div class="text-sm font-medium leading-relaxed">${escapeHtml(t('demo_record_week_text'))}</div>
 </div>`;
   } else if (kind === 'reel') {
-    titleEl.textContent = '30 秒短片預覽';
+    titleEl.textContent = t('demo_reel_title');
     body.innerHTML = `
 <div class="p-5 bg-gradient-to-b from-slate-50 to-white">
   <div class="mx-auto" style="max-width:240px">
     <div class="aspect-[9/16] rounded-2xl shadow-2xl border-4 border-gray-900 relative overflow-hidden bg-gradient-to-b from-blue-200 via-slate-300 to-slate-500">
       <svg class="absolute bottom-0 left-0 w-full" viewBox="0 0 400 200" preserveAspectRatio="none"><polygon points="0,200 80,100 150,140 220,60 290,120 360,80 400,130 400,200" fill="rgba(255,255,255,0.5)"/></svg>
       <div class="absolute top-3 left-3 right-3 flex items-start justify-between">
-        <div class="bg-black/60 backdrop-blur text-white rounded-md px-2 py-1 text-[10px] font-semibold">0:08 / 0:30</div>
-        <div class="bg-red-500 text-white rounded-md px-2 py-1 text-[10px] font-bold animate-pulse">● 自動剪輯中</div>
+        <div class="bg-black/60 backdrop-blur text-white rounded-md px-2 py-1 text-[10px] font-semibold">${escapeHtml(t('demo_reel_progress'))}</div>
+        <div class="bg-red-500 text-white rounded-md px-2 py-1 text-[10px] font-bold animate-pulse">${escapeHtml(t('demo_reel_status'))}</div>
       </div>
       <div class="absolute top-1/3 right-3 bg-white/90 backdrop-blur rounded-lg px-2.5 py-1.5 shadow">
-        <div class="text-[9px] text-gray-500 leading-none">SPEED</div>
+        <div class="text-[9px] text-gray-500 leading-none">${escapeHtml(t('demo_reel_speed_label'))}</div>
         <div class="text-base font-extrabold leading-tight">58<span class="text-[10px] font-medium ml-0.5">km/h</span></div>
       </div>
       <div class="absolute bottom-20 left-3 right-3 flex gap-2">
-        <div class="bg-blue-600 text-white rounded-lg px-2 py-1 text-[10px] font-bold shadow">JUMP 0.8m</div>
-        <div class="bg-amber-500 text-white rounded-lg px-2 py-1 text-[10px] font-bold shadow">3 倍慢動作</div>
+        <div class="bg-blue-600 text-white rounded-lg px-2 py-1 text-[10px] font-bold shadow">${escapeHtml(t('demo_reel_jump_tag'))}</div>
+        <div class="bg-amber-500 text-white rounded-lg px-2 py-1 text-[10px] font-bold shadow">${escapeHtml(t('demo_reel_slow_tag'))}</div>
       </div>
       <div class="absolute bottom-3 left-3 right-3">
         <div class="bg-black/70 backdrop-blur text-white rounded-lg p-2.5">
-          <div class="text-[10px] font-bold">二世谷 · 2026.04.30</div>
-          <div class="text-[10px] opacity-80">@your_ig · 立即分享 →</div>
+          <div class="text-[10px] font-bold">${escapeHtml(t('demo_reel_caption_line1'))}</div>
+          <div class="text-[10px] opacity-80">${escapeHtml(t('demo_reel_caption_line2'))}</div>
         </div>
       </div>
       <div class="absolute bottom-1 left-3 right-3 h-1 bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-white w-[27%] rounded-full"></div></div>
     </div>
-    <div class="mt-3 text-center text-xs text-gray-500">9:16 直立, 一鍵發 IG / 抖音</div>
+    <div class="mt-3 text-center text-xs text-gray-500">${escapeHtml(t('demo_reel_format_note'))}</div>
   </div>
 </div>
 <div class="p-5 bg-white border-t">
-  <div class="text-sm font-semibold mb-3">AI 自動偵測到的精彩片段</div>
+  <div class="text-sm font-semibold mb-3">${escapeHtml(t('demo_reel_clips_title'))}</div>
   <div class="space-y-2 text-sm">
-    <div class="flex items-center gap-3 p-2.5 rounded-lg bg-gray-50"><div class="w-1 h-8 bg-blue-500 rounded-full"></div><div class="flex-1"><div class="font-medium">最高速 62 km/h</div><div class="text-xs text-gray-500">第 3 趟 · 0:42</div></div><div class="text-xs text-gray-400">3 秒</div></div>
-    <div class="flex items-center gap-3 p-2.5 rounded-lg bg-gray-50"><div class="w-1 h-8 bg-amber-500 rounded-full"></div><div class="flex-1"><div class="font-medium">空中 1.2 秒 · 0.8m 高</div><div class="text-xs text-gray-500">第 2 趟 · 1:18</div></div><div class="text-xs text-gray-400">5 秒</div></div>
-    <div class="flex items-center gap-3 p-2.5 rounded-lg bg-gray-50"><div class="w-1 h-8 bg-green-500 rounded-full"></div><div class="flex-1"><div class="font-medium">連續切刃 8 次</div><div class="text-xs text-gray-500">第 4 趟 · 0:15</div></div><div class="text-xs text-gray-400">8 秒</div></div>
+    <div class="flex items-center gap-3 p-2.5 rounded-lg bg-gray-50"><div class="w-1 h-8 bg-blue-500 rounded-full"></div><div class="flex-1"><div class="font-medium">${escapeHtml(t('demo_reel_clip1'))}</div><div class="text-xs text-gray-500">${escapeHtml(t('demo_reel_clip1_meta'))}</div></div><div class="text-xs text-gray-400">${escapeHtml(t('demo_reel_clip_dur_seconds', { x: 3 }))}</div></div>
+    <div class="flex items-center gap-3 p-2.5 rounded-lg bg-gray-50"><div class="w-1 h-8 bg-amber-500 rounded-full"></div><div class="flex-1"><div class="font-medium">${escapeHtml(t('demo_reel_clip2'))}</div><div class="text-xs text-gray-500">${escapeHtml(t('demo_reel_clip2_meta'))}</div></div><div class="text-xs text-gray-400">${escapeHtml(t('demo_reel_clip_dur_seconds', { x: 5 }))}</div></div>
+    <div class="flex items-center gap-3 p-2.5 rounded-lg bg-gray-50"><div class="w-1 h-8 bg-green-500 rounded-full"></div><div class="flex-1"><div class="font-medium">${escapeHtml(t('demo_reel_clip3'))}</div><div class="text-xs text-gray-500">${escapeHtml(t('demo_reel_clip3_meta'))}</div></div><div class="text-xs text-gray-400">${escapeHtml(t('demo_reel_clip_dur_seconds', { x: 8 }))}</div></div>
   </div>
 </div>`;
   }
   document.getElementById('demo-modal').classList.remove('hidden');
 }
+
 function joinWaitlist() {
-  const email = prompt('留個 email, 上線立刻通知你:');
+  const promptKey = lastDemoKind === 'reel' ? 'waitlist_prompt_reel' : 'waitlist_prompt_record';
+  const email = prompt(t(promptKey));
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
-  fetch(WORKER_URL + '/waitlist', {
+  fetch(WORKER_URL + 'waitlist', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, visitor_id: visitorId, source: 'demo_modal' })
+    body: JSON.stringify({ email, visitor_id: visitorId, source: 'demo_' + (lastDemoKind || 'unknown') })
   }).catch(()=>{});
-  alert('已收到! 上線會立刻通知你。');
+  alert(t('waitlist_alert'));
   closeDemo();
 }
 
-async function loadHistory() {
-  document.getElementById('history-vid').textContent = visitorId;
-  const list = document.getElementById('history-list');
-  list.innerHTML = '<div class="text-center text-gray-400 text-sm py-12">載入中...</div>';
-  try {
-    const r = await fetch(WORKER_URL + 'history?visitor_id=' + encodeURIComponent(visitorId));
-    const data = await r.json();
-    if (!data.ok) {
-      list.innerHTML = '<div class="text-center text-gray-400 text-sm py-12">載入失敗: ' + (data.error || 'unknown') + '</div>';
-      return;
-    }
-    renderHistory(data.items || []);
-    document.getElementById('history-meta').textContent = '共 ' + (data.items?.length || 0) + ' 筆 · 過去 30 天';
-  } catch (e) {
-    list.innerHTML = '<div class="text-center text-gray-400 text-sm py-12">網路錯誤: ' + e.message + '</div>';
-  }
-}
-
-function renderHistory(items) {
-  const list = document.getElementById('history-list');
-  if (items.length === 0) {
-    list.innerHTML = '<div class="text-center py-12">' +
-      '<div class="text-4xl mb-3">🏂</div>' +
-      '<div class="font-semibold text-gray-700 mb-1">還沒有任何紀錄</div>' +
-      '<div class="text-sm text-gray-500 mb-5">上傳第一段影片試試 AI 分析</div>' +
-      '<button onclick="toggleHistory();document.getElementById(\'try\').scrollIntoView({behavior:\'smooth\'})" class="px-5 py-2.5 rounded-lg btn-primary text-sm font-semibold">立即試用</button>' +
-      '</div>';
-    return;
-  }
-  list.innerHTML = items.map(item => {
-    const d = new Date(item.created_at);
-    const dateStr = d.toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric' }) + ' ' + d.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
-    let summary = '';
-    let scoreHtml = '';
-    try {
-      const r = JSON.parse(item.result_json || '{}');
-      if (item.mode === 'free') {
-        summary = (r.fix || r.ok || r.good || '').slice(0, 60);
-      } else {
-        const dims = ['stance', 'edge_engagement', 'weight_transfer', 'upper_body', 'knee_bend', 'arms_balance', 'rhythm', 'finish'];
-        const scores = dims.map(d => r[d]?.score).filter(s => s != null);
-        if (scores.length) {
-          const avg = (scores.reduce((a,b)=>a+b,0) / scores.length).toFixed(1);
-          const cls = avg >= 7 ? 'score-good' : avg >= 5 ? 'score-mid' : 'score-low';
-          scoreHtml = '<span class="score-pill ' + cls + '">平均 ' + avg + '/10</span>';
-        }
-        summary = r.next_drill ? ('下次練: ' + r.next_drill).slice(0, 60) : '';
-      }
-    } catch (e) { summary = '(無法解析)'; }
-
-    const modeBadge = item.mode === 'deep'
-      ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-semibold">DEEP</span>'
-      : '<span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-semibold">FREE</span>';
-
-    return '<div class="history-item mb-2">' +
-      '<div class="flex items-center justify-between mb-1.5 gap-2">' +
-        '<div class="flex items-center gap-2 min-w-0">' + modeBadge + '<span class="text-xs text-gray-500">' + dateStr + '</span></div>' +
-        scoreHtml +
-      '</div>' +
-      (summary ? '<div class="text-sm text-gray-700 leading-snug">' + escapeHtml(summary) + '</div>' : '') +
-    '</div>';
-  }).join('');
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-// 載入頁面時先 fetch 一次, 把次數秀在按鈕
-async function preloadHistoryCount() {
-  try {
-    const r = await fetch(WORKER_URL + 'history?visitor_id=' + encodeURIComponent(visitorId) + '&count_only=1');
-    const data = await r.json();
-    if (data.ok && data.count != null && data.count > 0) {
-      const t = '(' + data.count + ')';
-      document.getElementById('history-count-desktop').textContent = t;
-      document.getElementById('history-count-mobile').textContent = t;
-      document.getElementById('history-count-sticky').textContent = t;
-    }
-  } catch (e) { /* silent */ }
-}
-
-// ========================
-// WAITLIST
-// ========================
+// ==========================================================================
+// WAITLIST FORM
+// ==========================================================================
 async function submitWaitlist(ev) {
   ev.preventDefault();
   const form = ev.target;
   const email = form.email.value.trim();
   if (!email) return;
-  // 樂觀 UI: 立即顯示成功 (即使 API 失敗也不阻塞)
-  form.outerHTML = '<div class="p-4 rounded-lg bg-green-50 text-green-700 text-sm">✓ 收到! ' + escapeHtml(email) + ' 已加入等候名單。</div>';
+  form.outerHTML = `<div class="p-4 rounded-lg bg-green-50 text-green-700 text-sm">${escapeHtml(t('waitlist_received', { email }))}</div>`;
   try {
     await fetch(WORKER_URL + 'waitlist', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, visitor_id: visitorId, source: 'website' })
     });
-  } catch (e) { /* silent */ }
+  } catch (e) {}
 }
 
-// ========================
+// ==========================================================================
 // VIDEO FRAME EXTRACTION
-// ========================
+// ==========================================================================
 async function extractFrames(file, count, onProgress) {
   return new Promise((resolve, reject) => {
     const video = document.createElement('video');
@@ -675,14 +1174,14 @@ async function extractFrames(file, count, onProgress) {
 
     video.addEventListener('error', () => {
       cleanup();
-      reject(new Error('影片讀取失敗 (codec 不支援?)'));
+      reject(new Error(t('err_video_codec')));
     }, { once: true });
 
     video.addEventListener('loadedmetadata', async () => {
       try {
         const duration = video.duration;
-        if (!duration || !isFinite(duration)) throw new Error('影片時長異常');
-        if (duration > 180) throw new Error('影片太長 (限 3 分鐘內)');
+        if (!duration || !isFinite(duration)) throw new Error(t('err_video_invalid'));
+        if (duration > 180) throw new Error(t('err_video_too_long'));
 
         const canvas = document.createElement('canvas');
         const vw = video.videoWidth || 640;
@@ -701,12 +1200,12 @@ async function extractFrames(file, count, onProgress) {
             const finish = (err) => {
               if (done) return;
               done = true;
-              clearTimeout(t);
+              clearTimeout(tm);
               video.removeEventListener('seeked', onSeek);
               err ? j(err) : r();
             };
             const onSeek = () => finish();
-            const t = setTimeout(() => finish(new Error('seek timeout frame ' + (i+1))), 20000);
+            const tm = setTimeout(() => finish(new Error('seek timeout frame ' + (i+1))), 20000);
             video.addEventListener('seeked', onSeek);
             try { video.currentTime = time; } catch (e) { finish(e); }
           });
@@ -714,7 +1213,7 @@ async function extractFrames(file, count, onProgress) {
           ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
           const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
           frames.push(dataUrl.split(',')[1]);
-          if (onProgress) onProgress('讀取中 ' + (i+1) + '/' + count);
+          if (onProgress) onProgress(t('proc_reading_n', { n: i+1, total: count }));
         }
         cleanup();
         resolve(frames);
@@ -726,69 +1225,9 @@ async function extractFrames(file, count, onProgress) {
   });
 }
 
-// ========================
-// IMAGES UPLOAD (PRIMARY)
-// ========================
-async function analyzeImages(input) {
-  if (!input.files || input.files.length === 0) return;
-  const files = Array.from(input.files).slice(0, 6);
-  if (files.length < 1) { alert('請至少選 1 張照片'); return; }
-
-  document.getElementById('upload-zone').classList.add('hidden');
-  const proc = document.getElementById('processing');
-  const procText = document.getElementById('processing-text');
-  proc.classList.remove('hidden');
-
-  try {
-    procText.textContent = '處理 ' + files.length + ' 張照片...';
-    const frames = await Promise.all(files.map(f => fileToCompressedBase64(f)));
-    currentFrames = frames;
-    procText.textContent = '分析中... (約 5-10 秒)';
-
-    const response = await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ frames, mode: 'free', visitor_id: visitorId })
-    });
-    const data = await response.json();
-    if (response.status === 429) throw new Error('今日免費額度已用完 (' + (data.limit||2) + '/天), 明天再來');
-    if (!data.ok) throw new Error(data.error || JSON.stringify(data));
-
-    renderResult(data.result, 'free');
-    proc.classList.add('hidden');
-    document.getElementById('result').classList.remove('hidden');
-    preloadHistoryCount(); // 更新次數
-  } catch (e) {
-    proc.classList.add('hidden');
-    document.getElementById('upload-zone').classList.remove('hidden');
-    alert('分析失敗: ' + e.message);
-  }
-}
-
-async function fileToCompressedBase64(file) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const maxDim = 1280;
-      const scale = Math.min(maxDim / img.width, maxDim / img.height, 1);
-      canvas.width = Math.round(img.width * scale);
-      canvas.height = Math.round(img.height * scale);
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      URL.revokeObjectURL(url);
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-      resolve(dataUrl.split(',')[1]);
-    };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('圖片讀取失敗')); };
-    img.src = url;
-  });
-}
-
-// ========================
-// VIDEO UPLOAD (SECONDARY)
-// ========================
+// ==========================================================================
+// VIDEO ANALYSIS
+// ==========================================================================
 async function analyzeVideo(input) {
   if (!input.files || !input.files[0]) return;
   const file = input.files[0];
@@ -797,26 +1236,25 @@ async function analyzeVideo(input) {
   const proc = document.getElementById('processing');
   const procText = document.getElementById('processing-text');
   proc.classList.remove('hidden');
-  const setStep = (n, total, msg) => { procText.textContent = '步驟 ' + n + '/' + total + ': ' + msg; };
+  const setStep = (n, total, msg) => { procText.textContent = `${n}/${total} · ${msg}`; };
 
   try {
-    setStep(1, 4, '影片大小 ' + (file.size / 1048576).toFixed(1) + 'MB');
+    setStep(1, 4, t('proc_size', { x: (file.size / 1048576).toFixed(1) }));
     await new Promise(r => setTimeout(r, 300));
 
-    setStep(2, 4, '讀取你的滑姿...');
+    setStep(2, 4, t('proc_reading'));
     const frames = await extractFrames(file, 3, (msg) => setStep(2, 4, msg));
     currentFrames = frames;
 
-    setStep(3, 4, '上傳中...');
-
+    setStep(3, 4, t('proc_uploading'));
     const response = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ frames, mode: 'free', visitor_id: visitorId })
+      body: JSON.stringify({ frames, mode: 'free', visitor_id: visitorId, language: currentLang })
     });
-    setStep(4, 4, '分析中 (約 5-10 秒)...');
+    setStep(4, 4, t('proc_analyzing'));
     const data = await response.json();
-    if (response.status === 429) throw new Error('今日免費額度已用完 (' + (data.limit||2) + '/天), 明天再來');
+    if (response.status === 429) throw new Error(t('err_rate_free', { n: data.limit || 2 }));
     if (!data.ok) throw new Error(data.error || JSON.stringify(data));
 
     renderResult(data.result, 'free');
@@ -826,23 +1264,24 @@ async function analyzeVideo(input) {
   } catch (e) {
     proc.classList.add('hidden');
     document.getElementById('upload-zone').classList.remove('hidden');
-    alert('分析失敗: ' + e.message + '\n\n如果是 iPhone, 試試底下「改用照片」選項');
+    alert(t('err_analyze_fail', { err: e.message }));
   }
 }
 
-// ========================
+// ==========================================================================
 // RESULT RENDERING
-// ========================
+// ==========================================================================
 function renderResult(result, mode) {
   if (mode === 'free') {
     const free = document.getElementById('free-results');
     free.innerHTML = '';
     const items = [
-      { type: 'good', icon: '✓', label: result.good || '節奏不錯', bg: 'bg-green-50/30 border-green-200', iconBg: 'bg-green-100', iconColor: 'text-green-700' },
-      { type: 'ok', icon: '!', label: result.ok || '可再加強', bg: 'bg-amber-50/30 border-amber-200', iconBg: 'bg-amber-100', iconColor: 'text-amber-700' },
-      { type: 'fix', icon: '×', label: result.fix || '建議修正', bg: 'bg-red-50/30 border-red-200', iconBg: 'bg-red-100', iconColor: 'text-red-700' },
+      { key: 'good', icon: '✓', label: result.good || '', bg: 'bg-green-50/30 border-green-200', iconBg: 'bg-green-100', iconColor: 'text-green-700' },
+      { key: 'ok', icon: '!', label: result.ok || '', bg: 'bg-amber-50/30 border-amber-200', iconBg: 'bg-amber-100', iconColor: 'text-amber-700' },
+      { key: 'fix', icon: '×', label: result.fix || '', bg: 'bg-red-50/30 border-red-200', iconBg: 'bg-red-100', iconColor: 'text-red-700' },
     ];
     items.forEach(it => {
+      if (!it.label) return;
       const div = document.createElement('div');
       div.className = `card rounded-xl p-4 flex items-start gap-3 ${it.bg}`;
       div.innerHTML = `<div class="w-8 h-8 rounded-full ${it.iconBg} flex items-center justify-center flex-shrink-0"><span class="${it.iconColor} font-bold">${it.icon}</span></div><div class="min-w-0 flex-1"><div class="font-semibold text-sm sm:text-base">${escapeHtml(it.label)}</div></div>`;
@@ -854,7 +1293,6 @@ function renderResult(result, mode) {
     const deep = document.getElementById('deep-results');
     deep.innerHTML = '';
     const dimensions = ['stance', 'edge_engagement', 'weight_transfer', 'upper_body', 'knee_bend', 'arms_balance', 'rhythm', 'finish'];
-    const labels = { stance: '站姿', edge_engagement: '雪刃使用', weight_transfer: '重心轉移', upper_body: '上半身姿態', knee_bend: '膝蓋彎曲', arms_balance: '手臂平衡', rhythm: '轉彎節奏', finish: '收尾穩定' };
 
     const grid = document.createElement('div');
     grid.className = 'grid grid-cols-2 gap-2 sm:gap-3 mb-6';
@@ -866,7 +1304,7 @@ function renderResult(result, mode) {
       const color = score >= 8 ? 'green' : score >= 5 ? 'amber' : 'red';
       const card = document.createElement('div');
       card.className = `card rounded-xl p-3 sm:p-4 border-${color}-200 bg-${color}-50/20`;
-      card.innerHTML = `<div class="flex items-baseline justify-between mb-1"><div class="font-semibold text-xs sm:text-sm">${labels[d]}</div><div class="text-xl sm:text-2xl font-extrabold text-${color}-600">${score}<span class="text-xs text-gray-400">/10</span></div></div><div class="text-[11px] sm:text-xs text-gray-600 leading-relaxed">${escapeHtml(adv)}</div>`;
+      card.innerHTML = `<div class="flex items-baseline justify-between mb-1"><div class="font-semibold text-xs sm:text-sm">${escapeHtml(t('dim_' + d))}</div><div class="text-xl sm:text-2xl font-extrabold text-${color}-600">${score}<span class="text-xs text-gray-400">/10</span></div></div><div class="text-[11px] sm:text-xs text-gray-600 leading-relaxed">${escapeHtml(adv)}</div>`;
       grid.appendChild(card);
     });
     deep.appendChild(grid);
@@ -874,7 +1312,7 @@ function renderResult(result, mode) {
     if (result.next_drill) {
       const next = document.createElement('div');
       next.className = 'border-2 border-blue-600 rounded-xl p-4 bg-blue-50';
-      next.innerHTML = `<div class="text-xs font-semibold accent uppercase tracking-wider mb-1">🎯 下次練這個</div><div class="text-sm">${escapeHtml(result.next_drill)}</div>`;
+      next.innerHTML = `<div class="text-xs font-semibold accent uppercase tracking-wider mb-1">${escapeHtml(t('next_drill_label'))}</div><div class="text-sm">${escapeHtml(result.next_drill)}</div>`;
       deep.appendChild(next);
     }
 
@@ -884,23 +1322,22 @@ function renderResult(result, mode) {
 }
 
 async function unlockDeep() {
-  if (!currentFrames) { alert('請先上傳影片'); return; }
+  if (!currentFrames) { alert(t('err_no_clip')); return; }
 
   const proc = document.getElementById('processing');
   const procText = document.getElementById('processing-text');
   document.getElementById('result').classList.add('hidden');
   proc.classList.remove('hidden');
-  procText.textContent = '深入分析中 (8 維度, 約 10-15 秒)...';
+  procText.textContent = t('proc_deep');
 
   try {
-    // TODO: 串 Stripe 後加入付款流程; 目前直接做 deep 分析測試 PMF
     const response = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ frames: currentFrames, mode: 'deep', visitor_id: visitorId })
+      body: JSON.stringify({ frames: currentFrames, mode: 'deep', visitor_id: visitorId, language: currentLang })
     });
     const data = await response.json();
-    if (response.status === 429) throw new Error('今日深度分析額度已用完, 明天再來');
+    if (response.status === 429) throw new Error(t('err_rate_deep'));
     if (!data.ok) throw new Error(data.error || JSON.stringify(data));
 
     renderResult(data.result, 'deep');
@@ -910,7 +1347,7 @@ async function unlockDeep() {
   } catch (e) {
     proc.classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
-    alert('深度分析失敗: ' + e.message);
+    alert(t('err_deep_fail', { err: e.message }));
   }
 }
 
@@ -918,20 +1355,20 @@ function resetTry(){
   document.getElementById('result').classList.add('hidden');
   document.getElementById('upload-zone').classList.remove('hidden');
   document.getElementById('file-input').value = '';
-  document.getElementById('image-input').value = '';
   document.getElementById('locked-prompt').classList.remove('hidden');
   document.getElementById('deep-results').classList.add('hidden');
   currentFrames = null;
 }
 
-// ESC closes history modal
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && !document.getElementById('history-modal').classList.contains('hidden')) {
-    toggleHistory();
+  if (e.key === 'Escape') {
+    if (!document.getElementById('history-modal').classList.contains('hidden')) toggleHistory();
+    if (!document.getElementById('demo-modal').classList.contains('hidden')) closeDemo();
   }
 });
 
 // Init
+applyI18n();
 preloadHistoryCount();
 </script>
 </body></html>
