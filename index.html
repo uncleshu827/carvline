@@ -10,12 +10,7 @@
 <meta property="og:title" content="Carvline — Your iPhone is a Snowboard Coach">
 <meta property="og:description" content="Upload a 30-second clip. See exactly what to fix next time. Free to try.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://carvlineai.com/">
-<link rel="canonical" href="https://carvlineai.com/">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
-<link rel="manifest" href="/site.webmanifest">
+<meta property="og:url" content="https://uncleshu827.github.io/carvline/">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -58,12 +53,6 @@ details[open]>summary::after{content:'−'}
   .py-20{padding-top:3rem;padding-bottom:3rem}
   .btn-primary:hover,.btn-accent:hover,.btn-secondary:hover{transform:none}
 }
-.sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e7eb;padding:0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));box-shadow:0 -4px 12px rgba(0,0,0,0.04);z-index:40;display:none}
-@media (max-width:640px){
-  .sticky-cta{display:block}
-  body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
-}
-.sticky-cta-inner{max-width:42rem;margin:0 auto}
 .history-panel{max-height:320px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .history-item{padding:0.75rem;border:1px solid #e5e7eb;border-radius:0.625rem;background:#fafafa;transition:all .15s}
 .history-item:hover{border-color:#2563eb;background:#f0f7ff}
@@ -95,7 +84,7 @@ details summary::after{margin-left:auto}
 </div>
 </div>
 <button onclick="toggleHistory()" class="px-3 py-2 rounded-lg btn-secondary text-sm font-medium hidden sm:inline-flex items-center" id="history-btn-desktop"><span data-i18n="nav_history">My History</span> <span id="history-count-desktop" class="ml-1 text-gray-400"></span></button>
-<a href="#try" class="nav-cta px-4 py-2 rounded-lg btn-primary text-sm font-medium inline-flex items-center" data-i18n="nav_cta">Try It Now</a>
+<a href="#try" class="nav-cta px-4 py-2 rounded-lg btn-primary text-sm font-medium" data-i18n="nav_cta">Try It Now</a>
 </div>
 </div></nav>
 
@@ -366,13 +355,6 @@ Come home knowing exactly how the trip moved the needle.
 <div class="flex items-center gap-2"><div class="w-7 h-7 rounded-lg bg-gray-900 flex items-center justify-center text-white font-bold text-xs">C</div><span class="font-semibold text-sm">Carvline</span></div>
 <div class="text-xs text-gray-500 text-center" data-i18n="footer">© 2026 Carvline · Built for everyone chasing a cleaner carving line</div>
 </div></footer>
-
-<div class="sticky-cta">
-<div class="sticky-cta-inner flex gap-2">
-<button onclick="toggleHistory()" class="px-3 py-3 rounded-lg btn-secondary text-sm font-medium flex-shrink-0">📊 <span id="history-count-sticky"></span></button>
-<a href="#try" class="flex-1 px-4 py-3 rounded-lg btn-primary text-sm font-semibold text-center" data-i18n="sticky_cta">Try it now →</a>
-</div>
-</div>
 
 <script>
 const WORKER_URL = 'https://carvline-ai.uncleshu827.workers.dev/';
@@ -1021,7 +1003,7 @@ async function preloadHistoryCount() {
     const data = await r.json();
     if (data.ok && data.count > 0) {
       const txt = '(' + data.count + ')';
-      ['history-count-desktop','history-count-mobile','history-count-sticky'].forEach(id => {
+      ['history-count-desktop','history-count-mobile'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.textContent = txt;
       });
