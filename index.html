@@ -53,13 +53,23 @@ details[open]>summary::after{content:'−'}
   .btn-primary:hover,.btn-accent:hover,.btn-secondary:hover{transform:none}
 }
 .history-panel{max-height:320px;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.history-item{padding:0.875rem;border:1px solid #e5e7eb;border-radius:0.625rem;background:#fff;transition:border-color .15s}
-.history-item:hover{border-color:#cbd5e1}
-.history-item>summary{padding:0;min-height:auto;display:block;flex-wrap:initial;list-style:none}
+.history-item{position:relative;padding:0.875rem 2.5rem 0.875rem 0.875rem;border:1px solid #e5e7eb;border-radius:0.75rem;background:#fff;transition:border-color .15s,box-shadow .15s}
+.history-item:hover{border-color:#cbd5e1;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.history-item[open]{border-color:#2563eb;box-shadow:0 4px 16px rgba(37,99,235,.08)}
+.history-item>summary{padding:0;min-height:auto;display:block;flex-wrap:initial;list-style:none;cursor:pointer}
 .history-item>summary::-webkit-details-marker{display:none}
-.history-item>summary::after{content:'⌄';float:none;position:absolute;right:0.875rem;top:0.875rem;font-size:1rem;color:#9ca3af;transition:transform .2s}
-.history-item[open]>summary::after{content:'⌄';transform:rotate(180deg)}
-.history-item{position:relative;padding-right:2.5rem}
+.history-item>summary::after{content:'⌄';float:none;position:absolute;right:0.875rem;top:0.875rem;font-size:1.25rem;color:#9ca3af;transition:transform .25s ease;line-height:1}
+.history-item[open]>summary::after{transform:rotate(180deg);color:#2563eb}
+.history-item[open] .hist-summary-line{display:none}
+/* Dim card with progress bar */
+.dim-card{position:relative;border-radius:0.625rem;padding:0.625rem 0.75rem 0.75rem;background:#fff;border:1px solid #e5e7eb;overflow:hidden}
+.dim-card-bar{position:absolute;left:0;top:0;height:3px;background:linear-gradient(90deg,currentColor 0%,currentColor 100%);transition:width .3s ease}
+.dim-card-good{color:#10b981}
+.dim-card-mid{color:#f59e0b}
+.dim-card-low{color:#ef4444}
+.dim-card-good{border-color:#a7f3d0;background:#f0fdf4}
+.dim-card-mid{border-color:#fde68a;background:#fffbeb}
+.dim-card-low{border-color:#fecaca;background:#fef2f2}
 .score-pill{display:inline-block;padding:0.125rem 0.5rem;border-radius:9999px;font-size:0.6875rem;font-weight:600}
 .score-good{background:#dcfce7;color:#15803d}
 .score-mid{background:#fef3c7;color:#a16207}
@@ -511,6 +521,10 @@ const STR = {
     hist_no_deep_yet: 'No deep analysis yet — upload again and unlock for USD $1.',
     hist_no_content: 'No content available.',
     hist_next_drill_prefix: 'Next drill: ',
+    hist_overall_label: 'Overall · level / terrain',
+    hist_quick_takeaways: 'Quick takeaways',
+    hist_8dim_breakdown: '8-dimension breakdown',
+    hist_unable_to_score: 'Couldn\'t analyze',
     // dimension labels (deep mode)
     dim_stance: 'Stance', dim_edge_engagement: 'Edge engagement', dim_weight_transfer: 'Weight transfer',
     dim_upper_body: 'Upper body', dim_knee_bend: 'Knee bend', dim_arms_balance: 'Arms & balance',
@@ -668,6 +682,10 @@ const STR = {
     hist_no_deep_yet: '還沒做深度分析 — 重新上傳並解鎖 USD $1。',
     hist_no_content: '沒有內容。',
     hist_next_drill_prefix: '下次練: ',
+    hist_overall_label: '整體分數 · 等級 / 地形',
+    hist_quick_takeaways: '快速重點',
+    hist_8dim_breakdown: '8 維度評分',
+    hist_unable_to_score: '無法分析',
     dim_stance: '站姿', dim_edge_engagement: '雪刃使用', dim_weight_transfer: '重心轉移',
     dim_upper_body: '上半身姿態', dim_knee_bend: '膝蓋彎曲', dim_arms_balance: '手臂平衡',
     dim_rhythm: '轉彎節奏', dim_finish: '收尾穩定',
@@ -823,6 +841,10 @@ const STR = {
     hist_no_deep_yet: '还没做深度分析 — 重新上传并解锁 USD $1。',
     hist_no_content: '没有内容。',
     hist_next_drill_prefix: '下次练: ',
+    hist_overall_label: '整体分数 · 等级 / 地形',
+    hist_quick_takeaways: '快速重点',
+    hist_8dim_breakdown: '8 维度评分',
+    hist_unable_to_score: '无法分析',
     dim_stance: '站姿', dim_edge_engagement: '雪刃使用', dim_weight_transfer: '重心转移',
     dim_upper_body: '上半身姿态', dim_knee_bend: '膝盖弯曲', dim_arms_balance: '手臂平衡',
     dim_rhythm: '转弯节奏', dim_finish: '收尾稳定',
@@ -1056,14 +1078,42 @@ function renderHistoryGroup(g, idx) {
 
   // Expanded body
   let expandedHtml = '';
+
+  // === Score overview header (if deep exists) ===
+  if (deepData && !deepData.unable_to_score) {
+    const dims = ['stance','edge_engagement','weight_transfer','upper_body','knee_bend','arms_balance','rhythm','finish'];
+    const scores = dims.map(k => deepData[k]?.score).filter(s => s != null);
+    if (scores.length) {
+      const avg = (scores.reduce((a,b)=>a+b,0) / scores.length).toFixed(1);
+      const avgColor = avg >= 7 ? '#10b981' : avg >= 5 ? '#f59e0b' : '#ef4444';
+      const meta = [];
+      if (deepData.skill_level && deepData.skill_level !== 'unknown') meta.push(deepData.skill_level.replace(/_/g,' '));
+      if (deepData.terrain) meta.push(deepData.terrain);
+      expandedHtml += `<div class="flex items-center gap-3 mb-4 p-3 rounded-xl bg-gradient-to-br from-slate-50 to-white border border-gray-100">
+        <div class="flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center" style="background:${avgColor}20;color:${avgColor}">
+          <div class="text-center"><div class="text-lg font-extrabold leading-none">${avg}</div><div class="text-[9px] font-semibold opacity-70">/ 10</div></div>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs text-gray-500 mb-0.5">${escapeHtml(t('hist_overall_label'))}</div>
+          <div class="text-sm font-semibold text-gray-800 capitalize" style="word-break:break-word">${meta.length ? meta.join(' · ') : '—'}</div>
+        </div>
+      </div>`;
+    }
+  }
+
+  // === Free 3 takeaways ===
   if (freeData && (freeData.good || freeData.ok || freeData.fix)) {
-    expandedHtml += `<div class="space-y-2 mb-3">
-      ${freeData.good ? `<div class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><div class="text-sm text-gray-800 flex-1" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(freeData.good)}</div></div>` : ''}
-      ${freeData.ok ? `<div class="flex items-start gap-2"><span class="text-amber-600 font-bold mt-0.5">!</span><div class="text-sm text-gray-800 flex-1" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(freeData.ok)}</div></div>` : ''}
-      ${freeData.fix ? `<div class="flex items-start gap-2"><span class="text-red-600 font-bold mt-0.5">×</span><div class="text-sm text-gray-800 flex-1" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(freeData.fix)}</div></div>` : ''}
+    expandedHtml += `<div class="mb-4">
+      <div class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">${escapeHtml(t('hist_quick_takeaways'))}</div>
+      <div class="space-y-2">
+        ${freeData.good ? `<div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-green-50/40"><span class="w-5 h-5 rounded-full bg-green-100 text-green-700 font-bold flex items-center justify-center flex-shrink-0 text-xs">✓</span><div class="text-sm text-gray-800 flex-1 leading-snug" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(freeData.good)}</div></div>` : ''}
+        ${freeData.ok ? `<div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-amber-50/40"><span class="w-5 h-5 rounded-full bg-amber-100 text-amber-700 font-bold flex items-center justify-center flex-shrink-0 text-xs">!</span><div class="text-sm text-gray-800 flex-1 leading-snug" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(freeData.ok)}</div></div>` : ''}
+        ${freeData.fix ? `<div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-red-50/40"><span class="w-5 h-5 rounded-full bg-red-100 text-red-700 font-bold flex items-center justify-center flex-shrink-0 text-xs">×</span><div class="text-sm text-gray-800 flex-1 leading-snug" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(freeData.fix)}</div></div>` : ''}
+      </div>
     </div>`;
   }
 
+  // === 8-dimension scoring grid ===
   if (deepData && !deepData.unable_to_score) {
     const dims = [
       ['stance', t('dim_stance')],['edge_engagement', t('dim_edge_engagement')],
@@ -1076,24 +1126,38 @@ function renderHistoryGroup(g, idx) {
       if (!dim) return '';
       const score = dim.score || 0;
       const adv = dim.advice || '';
-      const color = score >= 8 ? 'green' : score >= 5 ? 'amber' : 'red';
-      return `<div class="rounded-lg p-2.5 border border-${color}-200 bg-${color}-50/30">
-        <div class="flex items-baseline justify-between mb-0.5">
+      const tone = score >= 8 ? 'good' : score >= 5 ? 'mid' : 'low';
+      return `<div class="dim-card dim-card-${tone}">
+        <div class="dim-card-bar" style="width:${score*10}%"></div>
+        <div class="flex items-baseline justify-between mb-1.5 mt-0.5">
           <div class="text-[11px] font-semibold text-gray-700">${escapeHtml(label)}</div>
-          <div class="text-base font-extrabold text-${color}-600">${score}<span class="text-[10px] text-gray-400">/10</span></div>
+          <div class="text-lg font-extrabold leading-none" style="color:currentColor">${score}<span class="text-[10px] text-gray-400 font-medium">/10</span></div>
         </div>
         <div class="text-[11px] text-gray-600 leading-snug" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(adv)}</div>
       </div>`;
     }).join('');
-    expandedHtml += `<div class="grid grid-cols-2 gap-2 mb-3">${dimsHtml}</div>`;
+    expandedHtml += `<div class="mb-4">
+      <div class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">${escapeHtml(t('hist_8dim_breakdown'))}</div>
+      <div class="grid grid-cols-2 gap-2">${dimsHtml}</div>
+    </div>`;
+
     if (deepData.next_drill) {
-      expandedHtml += `<div class="border-2 border-blue-600 rounded-xl p-3 bg-blue-50/60">
-        <div class="text-[10px] font-semibold accent uppercase tracking-wider mb-1">${escapeHtml(t('next_drill_label'))}</div>
-        <div class="text-sm text-gray-800 leading-relaxed" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(deepData.next_drill)}</div>
+      expandedHtml += `<div class="rounded-xl p-4 bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-md">
+        <div class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest opacity-90 mb-2">${escapeHtml(t('next_drill_label'))}</div>
+        <div class="text-[15px] leading-relaxed font-medium" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(deepData.next_drill)}</div>
       </div>`;
     }
   } else if (g.free && !g.deep) {
-    expandedHtml += `<div class="text-xs text-gray-500 mt-2 italic">${escapeHtml(t('hist_no_deep_yet'))}</div>`;
+    expandedHtml += `<div class="rounded-xl p-4 border-2 border-dashed border-blue-300 bg-blue-50/40 text-center">
+      <div class="text-2xl mb-2">🔓</div>
+      <div class="text-sm font-medium text-gray-700 mb-3">${escapeHtml(t('hist_no_deep_yet'))}</div>
+    </div>`;
+  } else if (deepData && deepData.unable_to_score) {
+    expandedHtml += `<div class="rounded-xl p-4 border border-amber-200 bg-amber-50/40">
+      <div class="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">${escapeHtml(t('hist_unable_to_score'))}</div>
+      <div class="text-sm text-gray-700 leading-relaxed mb-2" style="word-break:break-word">${escapeHtml(deepData.reason || '')}</div>
+      ${deepData.retry_tip ? `<div class="text-xs text-gray-600 italic" style="word-break:break-word">${escapeHtml(deepData.retry_tip)}</div>` : ''}
+    </div>`;
   }
 
   return `<details class="history-item mb-2">
@@ -1105,7 +1169,7 @@ function renderHistoryGroup(g, idx) {
         </div>
         ${badge}
       </div>
-      ${summary ? `<div class="text-sm text-gray-700 leading-snug" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(summary)}</div>` : ''}
+      ${summary ? `<div class="hist-summary-line text-sm text-gray-700 leading-snug" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(summary)}</div>` : ''}
     </summary>
     <div class="mt-3 pt-3 border-t border-gray-100">${expandedHtml || `<div class="text-xs text-gray-400 italic">${escapeHtml(t('hist_no_content'))}</div>`}</div>
   </details>`;
