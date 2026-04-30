@@ -98,6 +98,8 @@ details summary::after{margin-left:auto}
 <button data-lang="en" onclick="setLanguage('en')">English</button>
 <button data-lang="zh-TW" onclick="setLanguage('zh-TW')">繁體中文</button>
 <button data-lang="zh-CN" onclick="setLanguage('zh-CN')">简体中文</button>
+<button data-lang="ja" onclick="setLanguage('ja')">日本語</button>
+<button data-lang="ko" onclick="setLanguage('ko')">한국어</button>
 </div>
 </div>
 <button onclick="toggleHistory()" class="btn-nav btn-secondary hidden sm:inline-flex" id="history-btn-desktop"><span data-i18n="nav_history">My History</span> <span id="history-count-desktop" class="ml-1 text-gray-400"></span></button>
@@ -403,6 +405,7 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 <footer class="section py-10"><div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
 <div class="flex items-center gap-2"><div class="w-7 h-7 rounded-lg bg-gray-900 flex items-center justify-center text-white font-bold text-xs">C</div><span class="font-semibold text-sm">Carvline</span></div>
 <div class="text-xs text-gray-500 text-center" data-i18n="footer">© 2026 Carvline · Built for everyone chasing a cleaner carving line</div>
+<div class="flex items-center gap-4 text-xs text-gray-500"><a href="/privacy.html" class="hover:text-gray-900" data-i18n="footer_privacy">Privacy</a><a href="/terms.html" class="hover:text-gray-900" data-i18n="footer_terms">Terms</a></div>
 </div></footer>
 
 <script>
@@ -521,6 +524,8 @@ const STR = {
       ['Refund policy?','Email us within 30 days, full refund, no questions.'],
     ],
     footer: '© 2026 Carvline · Built for everyone chasing a cleaner carving line',
+    footer_privacy: 'Privacy',
+    footer_terms: 'Terms',
     sticky_cta: 'Try it now →',
     // demo modal — record
     demo_record_title: 'Today’s ride',
@@ -697,6 +702,8 @@ const STR = {
       ['退費政策？','用了不滿意，30 天內 email 我們，全額退費，不問理由。'],
     ],
     footer: '© 2026 Carvline · 給每一個追求乾淨 carving line 的人',
+    footer_privacy: '隱私',
+    footer_terms: '條款',
     sticky_cta: '立即試用 →',
     demo_record_title: '今日滑行紀錄',
     demo_record_date: '2026 / 04 / 30 · 二世谷',
@@ -868,6 +875,8 @@ const STR = {
       ['退款政策？','用了不满意，30 天内 email 我们，全额退款，不问理由。'],
     ],
     footer: '© 2026 Carvline · 给每一个追求干净 carving line 的人',
+    footer_privacy: '隐私',
+    footer_terms: '条款',
     sticky_cta: '立即试用 →',
     demo_record_title: '今日滑行记录',
     demo_record_date: '2026 / 04 / 30 · 二世谷',
@@ -930,13 +939,349 @@ const STR = {
     waitlist_prompt_reel: '留个 email, 「自动剪 30 秒」上线立刻通知你：',
     waitlist_alert: '已收到！上线会立刻通知你。',
   },
+  ja: {
+    nav_history: '履歴',
+    nav_cta: '今すぐ試す',
+    history_title: '📊 分析履歴',
+    history_meta: 'この端末の過去30日',
+    loading: '読み込み中…',
+    demo_meta: 'プレビューのみ — 近日公開',
+    demo_waitlist_btn: '使ってみたい？順番待ちに登録',
+    hero_badge: 'ニセコ・白馬・龍平・ウィスラーへ向かうスノーボーダーへ',
+    hero_h1: 'この旅、USD $1,500も使った。<br><span class="accent">本当に上達した？</span>',
+    hero_sub: '30秒のクリップをアップロード。今回の上達ポイントと、<br>次回までに直すべきことが分かります。',
+    hero_subnote: '無料プレビュー · USD $1で完全分析',
+    hero_cta_primary: 'クリップをアップロード →',
+    hero_cta_secondary: 'サンプル分析を見る',
+    hero_trust: 'スノーボーダーが、スノーボーダーのために · 登録不要 · 動画は24時間で自動削除',
+    phone_overall: '総合スコア · レベル / 地形',
+    phone_dim_edge: 'エッジング',
+    phone_dim_weight: '荷重移動',
+    phone_dim_rhythm: 'リズム',
+    phone_dim_arms: '腕',
+    phone_next_drill_label: '🎯 次の練習',
+    phone_next_drill_text: '中級バーン10本、ガーランド。前肩を谷側へ、ヒールエッジを1秒キープ',
+    steps_h2: '使い方',
+    steps_sub: 'アップロードからプロコーチ級フィードバックまで30秒',
+    step1_title: '30秒のクリップをアップ',
+    step1_desc: '友達に撮ってもらった？今朝のGoPro映像？スマホから30秒の滑りをドラッグするだけ。',
+    step2_title: '無料で3つの重要ポイントを確認',
+    step2_desc: '良かった点、調整点、すぐ直すべき点。身体部位ごとに具体的に。約10秒で完了。',
+    step3_title: '完全分析を解除 — USD $1',
+    step3_desc: '8項目スコア＋次回セッション用のパーソナライズドリル。リフト券より安い。',
+    try_h2: '今すぐ試す',
+    try_sub: 'クリップをアップロード、30秒で結果、<b>完全無料</b>。',
+    upload_title: 'スノーボードクリップをアップロード',
+    upload_sub: 'タップして選択 · 60秒以内',
+    processing_title: '分析中…',
+    processing_default: 'クリップを読み込み中…',
+    proc_size: 'クリップサイズ {x}MB',
+    proc_reading: '滑りを読み取り中…',
+    proc_reading_n: '読み取り中 {n}/{total}',
+    proc_uploading: 'アップロード中…',
+    proc_analyzing: '分析中（5〜10秒）…',
+    proc_deep: '詳細分析中（8項目、10〜15秒）…',
+    proc_verify: '支払いを確認中…',
+    err_already_unlocked: 'この解除は既に使用済みです。新しいクリップをアップロードしてもう一度ご購入ください。',
+    err_paid_no_frames: '支払いを受領しましたが、クリップデータが見つかりません（キャッシュクリア？）。再アップロードしてください — 解除権は保持されます。',
+    result_done: '分析完了',
+    result_h3: 'あなたの3つの重要ポイント',
+    locked_eyebrow: '🔒 完全詳細分析',
+    locked_h4: '8項目スコア＋ドリルプランを解除',
+    locked_sub: 'スタンス、エッジング、荷重移動など8項目 — さらに次回用のパーソナライズドリル付き。',
+    locked_price_unit: 'USD · 一回限り',
+    locked_btn: '完全分析を解除 — USD $1',
+    locked_pay_note: 'Stripeで安全にカード決済 · 30日返金保証',
+    reset_btn: '↻ 別のクリップを試す',
+    privacy_note: 'クリップは24時間で自動削除 · 第三者と共有しません',
+    history_btn_mobile: '📊 過去の分析を見る',
+    how_h2: '3つの使い方',
+    how_sub: 'ブーツを脱ぐ前に結果が見れる',
+    card1_eyebrow: '今日の滑り',
+    card1_title: 'ポケットに入れて自動記録',
+    card1_desc: '操作不要。リフトに着く頃にはこれが見れます：',
+    card1_bullets: ['· 今日の最高速度','· エッジ切替回数、総ターン数','· 滞空時間と最高ジャンプ','· 前回比でどれだけ上達したか'],
+    card2_eyebrow: 'IG用に',
+    card2_title: '30秒ハイライトリールを自動編集',
+    card2_desc: 'GoProやスマホ映像をドロップ：',
+    card2_bullets: ['· ベストクリップを自動検出','· 速度・ジャンプ高オーバーレイ','· 縦9:16、IG即投稿','· 編集不要'],
+    card3_badge: '公開中',
+    card3_eyebrow: 'もっと上手く、早く',
+    card3_title: '友達が撮影、AIがコーチング',
+    card3_desc: '動作を選んで（例：S-turn）、友達が15秒撮影：',
+    card3_bullets: ['· 30〜45秒で3つの重要ポイント','· 良い点、直す点','· リファレンスクリップと並列比較','· スマホ2台でOK'],
+    card3_cta: '今すぐ試す →',
+    see_demo: 'デモを見る →',
+    pricing_h2: '料金',
+    pricing_sub: 'まず無料で試す。気に入ったら払う — 30日返金保証',
+    tier1_eyebrow: 'お試し', tier1_price: '無料', tier1_desc: 'クリップごとに3つの重要ポイント',
+    tier1_bullets: ['✓ 即座に分析','✓ 登録不要','— フルスコアなし'],
+    tier1_cta: '今すぐ試す',
+    tier2_badge: '無料を見てから払う', tier2_eyebrow: '詳細分析', tier2_desc: '同じクリップを完全解除',
+    tier2_bullets: ['✓ 8項目スコア','✓ Skeleton overlay','✓ リファレンスと並列比較','✓ パーソナライズドリル'],
+    tier2_cta: '無料から始める',
+    tier3_eyebrow: 'シーズン無制限', tier3_price_unit: '/シーズン', tier3_desc: '12〜3月、無制限分析',
+    tier3_bullets: ['✓ アップロード無制限','✓ 全8ドリル','✓ 旅をまたいだ比較','✓ 友達ペアスコア'],
+    tier3_cta: '次シーズン公開時に通知',
+    tier4_eyebrow: '早期 · 永久', tier4_desc: '一度払えば永久（先着100名）',
+    tier4_bullets: ['✓ シーズン全機能','✓ 永久利用','✓ 早期ベータアクセス','✓ 1対1レビュー1回'],
+    tier4_cta: '枠を確保（残87）',
+    pricing_footnote: 'Stripeで安全にカード決済 · 30日無条件返金',
+    waitlist_h2: 'メールを残してください — シーズン＋永久プラン公開時に通知します',
+    waitlist_sub: 'スパムなし · 月最大2通 · いつでも解除可',
+    waitlist_email_placeholder: 'your@email.com',
+    waitlist_btn: '順番待ちに登録',
+    waitlist_received: '✓ 受領しました！{email}を順番待ちに登録しました。',
+    faq_h2: 'よくある質問',
+    faqs: [
+      ['無料版は無制限ですか？','はい、好きなだけ試せます。無料版は3つの重要ポイントを表示。8項目フル分析が必要なら、USD $1で解除。'],
+      ['USD $1で何が含まれますか？','試したクリップの完全な8項目スコア（スタンス／エッジング／荷重移動／上半身／膝／腕／リズム／フィニッシュ）＋次回セッション用のパーソナライズドリル。'],
+      ['追加の機材は必要？','不要。iPhone 12以降があればOK。「友達が撮影」モードはスマホ2台必要。'],
+      ['スノーボードとスキー両方？','スノーボードがメインで最も精緻なフィードバック。スキーも対応 — モデルが自動切替してスキー特有の分析を行います（S-turn、ストックタイミング、外スキー荷重）。'],
+      ['AIは本当にスノーボードを判定できる？','初〜中級者で約70〜85%の精度。無料版でUSD $1の価値があるか判断できます。競技準備中なら本物のコーチを推奨。'],
+      ['動画データは安全？','クリップはブラウザ内で処理し、24時間で自動削除。第三者と共有もデータ販売もしません。公開するかはあなた次第。'],
+      ['過去の分析はどこで見れる？','右上の「履歴」をタップ（モバイルではアップロード欄の下）。ローカルvisitor_idで識別 — 登録不要。端末変更やキャッシュクリアでリセットされます。'],
+      ['シーズン$25 vs 永久$25？','このシーズン1〜3回滑るならシーズンが妥当。長期プランなら永久（先着100、通常USD $240）が断然お得。'],
+      ['返金ポリシー？','30日以内にメールください、全額返金、理由不問。'],
+    ],
+    footer: '© 2026 Carvline · クリーンなカービングラインを追求する全ての人へ',
+    footer_privacy: 'プライバシー',
+    footer_terms: '利用規約',
+    demo_record_title: '今日の滑行記録',
+    demo_record_date: '2026 / 04 / 30 · ニセコ',
+    demo_record_duration: '滑った時間 1時間23分',
+    demo_record_session: 'リフト5本 · コース4本',
+    demo_record_stat_speed: '最高速度', demo_record_stat_speed_unit: 'km/h', demo_record_speed_change: '+12% ↑ 前回比',
+    demo_record_stat_distance: '総滑行距離', demo_record_stat_distance_unit: 'km', demo_record_descent: '標高差1,840m',
+    demo_record_stat_edges: 'エッジ切替', demo_record_stat_edges_unit: '回', demo_record_edges_breakdown: 'heel 22 / toe 25',
+    demo_record_stat_jumps: 'ジャンプ', demo_record_stat_jumps_unit: '回', demo_record_jumps_max: '最高 0.8m / 1.2秒',
+    demo_record_per_run: 'ラン別速度',
+    demo_record_run_label: '{n}本目',
+    demo_record_week_label: '今週の上達',
+    demo_record_week_text: '最高速度が55から62 km/hに上昇。エッジ切替回数は先週比38%増。toe-sideカービングが顕著に改善。',
+    demo_reel_title: '30秒リールプレビュー',
+    demo_reel_progress: '0:08 / 0:30',
+    demo_reel_status: '● 自動編集中',
+    demo_reel_speed_label: 'SPEED',
+    demo_reel_jump_tag: 'JUMP 0.8m',
+    demo_reel_slow_tag: '3倍スロー',
+    demo_reel_caption_line1: 'ニセコ · 2026.04.30',
+    demo_reel_caption_line2: '@your_ig · 今すぐ共有 →',
+    demo_reel_format_note: '9:16縦型、IG/TikTok即投稿',
+    demo_reel_clips_title: 'AIが自動検出したハイライト',
+    demo_reel_clip1: '最高速度 62 km/h',
+    demo_reel_clip1_meta: '3本目 · 0:42',
+    demo_reel_clip2: '滞空1.2秒 · 0.8m',
+    demo_reel_clip2_meta: '2本目 · 1:18',
+    demo_reel_clip3: '連続エッジ切替8回',
+    demo_reel_clip3_meta: '4本目 · 0:15',
+    demo_reel_clip_dur_seconds: '{x}秒',
+    hist_empty_title: 'まだ分析がありません',
+    hist_empty_sub: '最初のクリップをアップロード',
+    hist_empty_cta: '今すぐ試す',
+    hist_load_failed: '読み込み失敗：{err}',
+    hist_network_err: 'ネットワークエラー：{err}',
+    hist_count_label: '{n}件 · 過去30日',
+    hist_avg_label: '平均 {x}/10',
+    hist_free_only: '無料のみ',
+    hist_no_deep_yet: 'まだ詳細分析なし — 再アップロードしてUSD $1で解除。',
+    hist_no_content: 'コンテンツなし。',
+    hist_next_drill_prefix: '次の練習：',
+    hist_overall_label: '総合スコア · レベル / 地形',
+    hist_quick_takeaways: '重要ポイント',
+    hist_8dim_breakdown: '8項目スコア',
+    hist_unable_to_score: '分析不可',
+    dim_stance: 'スタンス', dim_edge_engagement: 'エッジング', dim_weight_transfer: '荷重移動',
+    dim_upper_body: '上半身', dim_knee_bend: '膝', dim_arms_balance: '腕とバランス',
+    dim_rhythm: 'リズム', dim_finish: 'フィニッシュ',
+    next_drill_label: '🎯 次の練習',
+    err_rate_busy: 'サーバー混雑中、しばらくしてからお試しください。',
+    err_analyze_fail: '分析失敗：{err}',
+    err_deep_fail: '詳細分析失敗：{err}',
+    err_no_clip: 'まずクリップをアップロードしてください',
+    err_video_codec: '動画読み込み失敗（codec非対応？）',
+    err_video_too_long: 'クリップが長すぎます（最大3分）',
+    err_video_invalid: '動画の長さが不正です',
+    err_image_load: '画像読み込み失敗',
+    waitlist_prompt_record: 'メールを残してください、「自動記録」公開時に通知します：',
+    waitlist_prompt_reel: 'メールを残してください、「30秒自動編集」公開時に通知します：',
+    waitlist_alert: '受領しました！公開時にすぐ通知します。',
+  },
+  ko: {
+    nav_history: '내 기록',
+    nav_cta: '바로 사용해보기',
+    history_title: '📊 내 분석 기록',
+    history_meta: '이 기기 지난 30일',
+    loading: '불러오는 중…',
+    demo_meta: '미리보기 — 곧 출시',
+    demo_waitlist_btn: '관심있나요? 대기자 명단 등록',
+    hero_badge: '니세코·하쿠바·용평·휘슬러로 가는 스노보더를 위해',
+    hero_h1: '이번 여행에 USD $1,500 썼는데,<br><span class="accent">정말 실력이 늘었나요?</span>',
+    hero_sub: '30초 클립을 업로드하세요. 이번에 좋아진 점과<br>다음 여행 전에 고쳐야 할 점을 알려드립니다.',
+    hero_subnote: '무료 미리보기 · USD $1로 완전 분석 잠금 해제',
+    hero_cta_primary: '클립 업로드 →',
+    hero_cta_secondary: '샘플 분석 보기',
+    hero_trust: '스노보더가, 스노보더를 위해 · 가입 불필요 · 24시간 후 자동 삭제',
+    phone_overall: '종합 점수 · 레벨 / 지형',
+    phone_dim_edge: '엣지 사용',
+    phone_dim_weight: '체중 이동',
+    phone_dim_rhythm: '리듬',
+    phone_dim_arms: '팔',
+    phone_next_drill_label: '🎯 다음 연습',
+    phone_next_drill_text: '레드 코스 10번 garlands. 앞 어깨는 산 아래로, 뒤꿈치 엣지 1초 유지.',
+    steps_h2: '사용 방법',
+    steps_sub: '업로드부터 코치급 피드백까지 30초',
+    step1_title: '30초 클립 업로드',
+    step1_desc: '친구가 찍어줬나요? 오늘 아침 GoPro 영상? 폰에서 30초 라이딩 영상을 끌어다 놓으세요.',
+    step2_title: '3가지 핵심 포인트 무료 보기',
+    step2_desc: '잘한 점, 조정할 점, 즉시 고칠 점. 신체 부위별로 구체적으로. 약 10초.',
+    step3_title: '전체 분석 잠금 해제 — USD $1',
+    step3_desc: '8가지 항목 점수 + 다음 세션을 위한 맞춤 드릴. 곤돌라 티켓보다 저렴.',
+    try_h2: '바로 사용해보기',
+    try_sub: '클립 업로드, 30초 후 결과, <b>완전 무료</b>.',
+    upload_title: '스노보드 클립 업로드',
+    upload_sub: '여기를 탭 · 60초 이내',
+    processing_title: '분석 중…',
+    processing_default: '클립 읽는 중…',
+    proc_size: '클립 크기 {x}MB',
+    proc_reading: '라이딩 분석 중…',
+    proc_reading_n: '읽는 중 {n}/{total}',
+    proc_uploading: '업로드 중…',
+    proc_analyzing: '분석 중 (5–10초)…',
+    proc_deep: '심층 분석 중 (8가지 항목, 10–15초)…',
+    proc_verify: '결제 확인 중…',
+    err_already_unlocked: '이 잠금 해제는 이미 사용되었습니다. 새 클립을 업로드하고 다시 결제해주세요.',
+    err_paid_no_frames: '결제는 확인되었지만 클립 데이터를 찾을 수 없습니다 (캐시 삭제?). 다시 업로드하시면 해제 권한은 유지됩니다.',
+    result_done: '분석 완료',
+    result_h3: '당신의 3가지 핵심 포인트',
+    locked_eyebrow: '🔒 전체 심층 분석',
+    locked_h4: '8가지 항목 점수 + 드릴 플랜 잠금 해제',
+    locked_sub: '스탠스, 엣지 사용, 체중 이동 외 5개 항목 — 게다가 다음 세션 맞춤 드릴.',
+    locked_price_unit: 'USD · 1회 결제',
+    locked_btn: '전체 분석 잠금 해제 — USD $1',
+    locked_pay_note: 'Stripe 카드 안전 결제 · 30일 환불',
+    reset_btn: '↻ 다른 클립 시도',
+    privacy_note: '클립은 24시간 후 자동 삭제 · 제3자와 공유하지 않음',
+    history_btn_mobile: '📊 이전 분석 보기',
+    how_h2: '3가지 사용 방법',
+    how_sub: '부츠를 벗기 전에 결과 확인',
+    card1_eyebrow: '오늘의 라이딩',
+    card1_title: '주머니에 넣고 자동 기록',
+    card1_desc: '조작 불필요. 리프트 도착 전에 확인 가능:',
+    card1_bullets: ['· 오늘의 최고 속도','· 엣지 전환 횟수, 총 턴','· 공중 시간과 최대 점프','· 이전 대비 향상도'],
+    card2_eyebrow: 'SNS용',
+    card2_title: '30초 하이라이트 자동 편집',
+    card2_desc: 'GoPro나 폰 영상을 끌어 놓으세요:',
+    card2_bullets: ['· 베스트 클립 자동 감지','· 속도·점프 높이 오버레이','· 세로 9:16, IG 즉시 업로드','· 편집 불필요'],
+    card3_badge: '서비스 중',
+    card3_eyebrow: '더 빠르게, 더 잘',
+    card3_title: '친구가 찍고, AI가 코칭',
+    card3_desc: '동작 선택 (예: S-turn). 친구가 15초 촬영:',
+    card3_bullets: ['· 30–45초 후 3가지 핵심 포인트','· 잘된 점, 고칠 점','· 레퍼런스 클립과 나란히 비교','· 폰 2대면 충분'],
+    card3_cta: '바로 사용해보기 →',
+    see_demo: '데모 보기 →',
+    pricing_h2: '요금',
+    pricing_sub: '먼저 무료로 시도. 마음에 들면 결제 — 30일 환불 보장',
+    tier1_eyebrow: '시도', tier1_price: '무료', tier1_desc: '클립당 3가지 핵심 포인트',
+    tier1_bullets: ['✓ 즉시 분석','✓ 가입 불필요','— 전체 점수 미포함'],
+    tier1_cta: '바로 사용해보기',
+    tier2_badge: '무료 보고 결제', tier2_eyebrow: '심층 분석', tier2_desc: '같은 클립 완전 잠금 해제',
+    tier2_bullets: ['✓ 8가지 항목 점수','✓ Skeleton overlay','✓ 레퍼런스와 비교','✓ 맞춤 드릴 플랜'],
+    tier2_cta: '무료부터 시작',
+    tier3_eyebrow: '시즌 무제한', tier3_price_unit: '/시즌', tier3_desc: '12–3월 무제한 분석',
+    tier3_bullets: ['✓ 무제한 업로드','✓ 8개 드릴 전체','✓ 여행 간 비교','✓ 친구 페어 점수'],
+    tier3_cta: '다음 시즌 알림',
+    tier4_eyebrow: '얼리버드 · 평생', tier4_desc: '한번 결제, 평생 사용 (선착순 100명)',
+    tier4_bullets: ['✓ 시즌 전 기능','✓ 평생 액세스','✓ 베타 우선 액세스','✓ 1:1 리뷰 1회'],
+    tier4_cta: '자리 확보 (87 남음)',
+    pricing_footnote: 'Stripe 카드 안전 결제 · 30일 무조건 환불',
+    waitlist_h2: '이메일을 남겨주세요 — Season + Lifetime 출시 시 알려드립니다',
+    waitlist_sub: '스팸 없음 · 월 최대 2회 · 언제든 해지',
+    waitlist_email_placeholder: 'your@email.com',
+    waitlist_btn: '대기자 등록',
+    waitlist_received: '✓ 접수했습니다! {email}을 대기자 명단에 추가했습니다.',
+    faq_h2: '자주 묻는 질문',
+    faqs: [
+      ['무료 버전은 무제한인가요?','네, 원하는 만큼 시도할 수 있습니다. 무료는 3가지 핵심 포인트를 보여줍니다. 어떤 클립의 8가지 항목 분석이 필요하면 USD $1로 잠금 해제.'],
+      ['USD $1에 무엇이 포함되나요?','이미 시도한 클립의 완전한 8가지 항목 점수 (스탠스 / 엣지 사용 / 체중 이동 / 상체 / 무릎 / 팔 / 리듬 / 마무리) + 다음 세션 맞춤 드릴.'],
+      ['추가 장비가 필요한가요?','불필요. iPhone 12 이상이면 충분. "친구 촬영" 모드는 폰 2대 (본인 + 친구) 필요.'],
+      ['스노보드와 스키 둘 다 가능?','스노보드가 메인이고 가장 정교한 피드백. 스키도 지원 — 자동으로 스키 분석으로 전환 (S-turn, 폴 타이밍, 외측 스키 압력).'],
+      ['AI가 정말 스노보드를 판단할 수 있나요?','초중급자 약 70–85% 정확도. 무료 버전을 시도해보고 USD $1의 가치가 있는지 판단하세요. 대회 준비 중이면 실제 코치를 추천.'],
+      ['동영상 데이터는 안전한가요?','클립은 브라우저에서 처리되고 24시간 후 자동 삭제. 제3자와 공유하지 않고 데이터를 판매하지 않습니다.'],
+      ['이전 분석은 어디에서 볼 수 있나요?','우측 상단 "내 기록" 탭 (모바일은 업로드 영역 아래). 로컬 visitor_id로 식별 — 가입 불필요. 기기 변경이나 캐시 삭제 시 재설정.'],
+      ['Season $25 vs Lifetime $25 어느 것?','이번 시즌만 1–3회 라이딩이면 Season이 합리적. 장기 계획이라면 Lifetime 얼리버드 (선착 100, 정가 USD $240)가 가장 이득.'],
+      ['환불 정책?','30일 이내 이메일 주시면 전액 환불, 이유 불문.'],
+    ],
+    footer: '© 2026 Carvline · 깨끗한 carving line을 추구하는 모든 사람을 위해',
+    footer_privacy: '개인정보',
+    footer_terms: '약관',
+    demo_record_title: '오늘의 라이딩 기록',
+    demo_record_date: '2026 / 04 / 30 · 니세코',
+    demo_record_duration: '1시간 23분 라이딩',
+    demo_record_session: '리프트 5회 · 4개 코스',
+    demo_record_stat_speed: '최고 속도', demo_record_stat_speed_unit: 'km/h', demo_record_speed_change: '+12% ↑ 이전 대비',
+    demo_record_stat_distance: '총 라이딩', demo_record_stat_distance_unit: 'km', demo_record_descent: '고도차 1,840m',
+    demo_record_stat_edges: '엣지 전환', demo_record_stat_edges_unit: '회', demo_record_edges_breakdown: 'heel 22 / toe 25',
+    demo_record_stat_jumps: '점프', demo_record_stat_jumps_unit: '회', demo_record_jumps_max: '최고 0.8m / 1.2초',
+    demo_record_per_run: '런별 속도',
+    demo_record_run_label: '{n}회',
+    demo_record_week_label: '이번 주 향상',
+    demo_record_week_text: '최고 속도가 55에서 62 km/h로 향상. 엣지 전환 횟수 지난주 대비 38% 증가. toe-side carving이 눈에 띄게 발전.',
+    demo_reel_title: '30초 릴 미리보기',
+    demo_reel_progress: '0:08 / 0:30',
+    demo_reel_status: '● 자동 편집 중',
+    demo_reel_speed_label: 'SPEED',
+    demo_reel_jump_tag: 'JUMP 0.8m',
+    demo_reel_slow_tag: '3배 슬로우',
+    demo_reel_caption_line1: '니세코 · 2026.04.30',
+    demo_reel_caption_line2: '@your_ig · 즉시 공유 →',
+    demo_reel_format_note: '9:16 세로, IG/TikTok 즉시 업로드',
+    demo_reel_clips_title: 'AI가 자동 감지한 하이라이트',
+    demo_reel_clip1: '최고 속도 62 km/h',
+    demo_reel_clip1_meta: '3회차 · 0:42',
+    demo_reel_clip2: '공중 1.2초 · 0.8m 높이',
+    demo_reel_clip2_meta: '2회차 · 1:18',
+    demo_reel_clip3: '연속 엣지 전환 8회',
+    demo_reel_clip3_meta: '4회차 · 0:15',
+    demo_reel_clip_dur_seconds: '{x}초',
+    hist_empty_title: '아직 기록이 없습니다',
+    hist_empty_sub: '첫 클립을 업로드하세요',
+    hist_empty_cta: '바로 사용해보기',
+    hist_load_failed: '불러오기 실패: {err}',
+    hist_network_err: '네트워크 오류: {err}',
+    hist_count_label: '{n}개 · 지난 30일',
+    hist_avg_label: '평균 {x}/10',
+    hist_free_only: '무료만',
+    hist_no_deep_yet: '아직 심층 분석 없음 — 다시 업로드하고 USD $1로 잠금 해제.',
+    hist_no_content: '내용 없음.',
+    hist_next_drill_prefix: '다음 연습: ',
+    hist_overall_label: '종합 점수 · 레벨 / 지형',
+    hist_quick_takeaways: '핵심 포인트',
+    hist_8dim_breakdown: '8가지 항목 점수',
+    hist_unable_to_score: '분석 불가',
+    dim_stance: '스탠스', dim_edge_engagement: '엣지 사용', dim_weight_transfer: '체중 이동',
+    dim_upper_body: '상체', dim_knee_bend: '무릎', dim_arms_balance: '팔과 균형',
+    dim_rhythm: '리듬', dim_finish: '마무리',
+    next_drill_label: '🎯 다음 연습',
+    err_rate_busy: '서버 혼잡, 잠시 후 다시 시도해주세요.',
+    err_analyze_fail: '분석 실패: {err}',
+    err_deep_fail: '심층 분석 실패: {err}',
+    err_no_clip: '먼저 클립을 업로드하세요',
+    err_video_codec: '영상 읽기 실패 (codec 미지원?)',
+    err_video_too_long: '클립이 너무 깁니다 (최대 3분)',
+    err_video_invalid: '영상 길이가 비정상',
+    err_image_load: '이미지 읽기 실패',
+    waitlist_prompt_record: '이메일을 남겨주세요, "자동 기록" 출시 시 알려드립니다:',
+    waitlist_prompt_reel: '이메일을 남겨주세요, "자동 편집 30초" 출시 시 알려드립니다:',
+    waitlist_alert: '접수했습니다! 출시 시 즉시 알려드립니다.',
+  },
 };
 
 // ==========================================================================
 // LANGUAGE DETECTION + i18n APPLY
 // ==========================================================================
-const LANG_LABELS = { en: 'English', 'zh-TW': '繁體中文', 'zh-CN': '简体中文' };
-const LANG_SHORT = { en: 'EN', 'zh-TW': '繁中', 'zh-CN': '简中' };
+const LANG_LABELS = { en: 'English', 'zh-TW': '繁體中文', 'zh-CN': '简体中文', ja: '日本語', ko: '한국어' };
+const LANG_SHORT = { en: 'EN', 'zh-TW': '繁中', 'zh-CN': '简中', ja: '日本', ko: '한국' };
 
 function detectInitialLanguage() {
   const stored = localStorage.getItem('cv_lang');
@@ -945,6 +1290,8 @@ function detectInitialLanguage() {
   if (nav.startsWith('zh-tw') || nav.startsWith('zh-hk') || nav.startsWith('zh-mo') || nav.startsWith('zh-hant')) return 'zh-TW';
   if (nav.startsWith('zh-cn') || nav.startsWith('zh-sg') || nav.startsWith('zh-hans')) return 'zh-CN';
   if (nav.startsWith('zh')) return 'zh-CN';
+  if (nav.startsWith('ja')) return 'ja';
+  if (nav.startsWith('ko')) return 'ko';
   return 'en';
 }
 
@@ -1472,6 +1819,7 @@ async function extractFrames(file, count, onProgress) {
 async function analyzeVideo(input) {
   if (!input.files || !input.files[0]) return;
   const file = input.files[0];
+  track('upload_start', { size_mb: +(file.size / 1048576).toFixed(2), type: file.type });
 
   document.getElementById('upload-zone').classList.add('hidden');
   const proc = document.getElementById('processing');
@@ -1507,6 +1855,7 @@ async function analyzeVideo(input) {
     }
 
     currentAnalysisId = data.analysis_id || null;
+    track('free_shown', { analysis_id: currentAnalysisId, skill_level: data.result?.skill_level, unable_to_score: !!data.result?.unable_to_score });
     renderResult(data.result, 'free');
     proc.classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
@@ -1619,6 +1968,7 @@ const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/28E4gB9Zp5jmdy325R7EQ02';
 // On return Stripe sends ?unlock=success&session_id=cs_xxx → we verify + run deep mode.
 function unlockDeep() {
   if (!currentFrames || currentFrames.length === 0) { alert(t('err_no_clip')); return; }
+  track('unlock_clicked', { analysis_id: currentAnalysisId });
   try {
     localStorage.setItem('cv_pending_frames', JSON.stringify(currentFrames));
     localStorage.setItem('cv_pending_lang', currentLang);
@@ -1739,6 +2089,7 @@ async function handleStripeReturn() {
     const ad = await ar.json();
     if (!ad.ok) throw new Error(ad.error || 'deep analysis failed');
 
+    track('payment_completed', { session_id: sessionId, amount_cents: vd.amount_cents, currency: vd.currency });
     currentFrames = frames; // restore so resetTry works
     renderResult(ad.result, 'deep');
     proc.classList.add('hidden');
@@ -1774,9 +2125,47 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// ==========================================================================
+// FUNNEL EVENT TRACKING — fire-and-forget POST to /event
+// ==========================================================================
+const _utmCache = (() => {
+  try {
+    const cached = JSON.parse(localStorage.getItem('cv_utm') || 'null');
+    if (cached && cached.t > Date.now() - 30 * 86400000) return cached.params;
+  } catch (e) {}
+  // Read from URL on first load + cache 30 days
+  const p = new URLSearchParams(window.location.search);
+  const params = {};
+  ['utm_source','utm_medium','utm_campaign','utm_content'].forEach(k => { if (p.get(k)) params[k] = p.get(k); });
+  if (Object.keys(params).length) {
+    try { localStorage.setItem('cv_utm', JSON.stringify({ t: Date.now(), params })); } catch (e) {}
+  }
+  return params;
+})();
+function track(eventType, metadata) {
+  try {
+    const body = {
+      event_type: eventType,
+      visitor_id: visitorId,
+      url: window.location.pathname + window.location.search,
+      referrer: document.referrer || null,
+      ..._utmCache,
+      metadata: metadata || null
+    };
+    // Use sendBeacon if available (survives page unload), fall back to fetch
+    const json = JSON.stringify(body);
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(WORKER_URL + 'event', new Blob([json], { type: 'application/json' }));
+    } else {
+      fetch(WORKER_URL + 'event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: json, keepalive: true }).catch(()=>{});
+    }
+  } catch (e) {}
+}
+
 // Init
 applyI18n();
 preloadHistoryCount();
+track('page_view', { lang: currentLang });
 handleStripeReturn(); // If we just came back from Stripe with ?unlock=success&session_id=xxx, kick off verify + deep flow
 </script>
 </body></html>
