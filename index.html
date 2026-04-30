@@ -82,11 +82,27 @@ AI 告訴你<br>
 <p class="text-lg text-gray-700">AI 會抽 3 個關鍵 frame 給你 3 個重點, <b>完全免費</b>。深入想看再付 USD $5。</p>
 </div>
 
-<div id="upload-zone" class="upload-zone bg-white rounded-2xl p-10 text-center" onclick="document.getElementById('file-input').click()">
+<div id="upload-zone">
+<!-- Primary: Photo upload (works on all devices) -->
+<div class="upload-zone bg-white rounded-2xl p-8 text-center mb-3" onclick="document.getElementById('image-input').click()">
+<input type="file" id="image-input" accept="image/*" multiple class="hidden" onchange="analyzeImages(this)">
+<div class="text-3xl mb-2">📸</div>
+<div class="font-semibold text-lg mb-1">上傳 3-6 張單板動作照片</div>
+<div class="text-sm text-gray-500">推薦 · 從相簿選關鍵姿勢截圖, 任何手機都穩</div>
+</div>
+
+<!-- Secondary: Video upload (may timeout on iOS HEVC) -->
+<details class="bg-white rounded-2xl border border-gray-200">
+<summary class="font-medium text-sm text-gray-600 px-4 py-3 cursor-pointer hover:bg-gray-50">
+🎬 或上傳影片 (實驗中, iPhone HEVC 可能不穩)
+</summary>
+<div class="upload-zone bg-gray-50 m-4 rounded-xl p-6 text-center" onclick="document.getElementById('file-input').click()">
 <input type="file" id="file-input" accept="video/*" class="hidden" onchange="analyzeVideo(this, 'free')">
-<svg class="w-12 h-12 mx-auto text-blue-500 mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-<div class="font-semibold text-lg mb-1">點擊或拖曳影片上傳</div>
-<div class="text-sm text-gray-500">支援 MP4, MOV · 最長 60 秒 · iPhone / GoPro 都可</div>
+<div class="text-2xl mb-2">▶</div>
+<div class="text-sm font-medium mb-1">點擊上傳影片</div>
+<div class="text-xs text-gray-500">MP4 / MOV · 60 秒內 · 桌面 Chrome 較穩</div>
+</div>
+</details>
 </div>
 
 <div id="processing" class="hidden mt-6 bg-white rounded-2xl p-8 text-center">
@@ -402,6 +418,61 @@ async function extractFrames(file, count) {
         video.addEventListener('canplay', start, { once: true });
       }
     }, 5000);
+  });
+}
+
+async function analyzeImages(input) {
+  if (!input.files || input.files.length === 0) return;
+  const files = Array.from(input.files).slice(0, 6);
+  if (files.length < 1) { alert('請至少選 1 張照片'); return; }
+
+  document.getElementById('upload-zone').classList.add('hidden');
+  const proc = document.getElementById('processing');
+  const procText = document.getElementById('processing-text');
+  proc.classList.remove('hidden');
+
+  try {
+    procText.textContent = '處理 ' + files.length + ' 張照片...';
+    const frames = await Promise.all(files.map(f => fileToCompressedBase64(f)));
+    currentFrames = frames;
+    procText.textContent = '送 Claude Vision 分析中...';
+
+    const response = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ frames, mode: 'free', visitor_id: visitorId })
+    });
+    const data = await response.json();
+    if (!data.ok) throw new Error(data.error || JSON.stringify(data));
+
+    renderResult(data.result, 'free');
+    proc.classList.add('hidden');
+    document.getElementById('result').classList.remove('hidden');
+  } catch (e) {
+    proc.classList.add('hidden');
+    document.getElementById('upload-zone').classList.remove('hidden');
+    alert('分析失敗: ' + e.message);
+  }
+}
+
+async function fileToCompressedBase64(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxDim = 1280;
+      const scale = Math.min(maxDim / img.width, maxDim / img.height, 1);
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      resolve(dataUrl.split(',')[1]);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('圖片讀取失敗')); };
+    img.src = url;
   });
 }
 
