@@ -219,6 +219,29 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 <div id="free-results" class="space-y-3 mb-8"></div>
 <div id="deep-results" class="hidden space-y-3 mb-8"></div>
 
+<!-- Feedback widget (shown after analysis renders) -->
+<div id="feedback-widget" class="hidden mt-8 mb-6 p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-gray-200">
+<div class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3" data-i18n="fb_heading">Help us improve</div>
+<div class="font-semibold text-base mb-4" data-i18n="fb_q_overall">How accurate was this analysis?</div>
+<div class="grid grid-cols-3 gap-2 mb-5">
+<button onclick="submitFeedback('overall', 'fully_correct')" class="fb-btn px-3 py-2 rounded-lg border border-gray-300 hover:border-green-500 hover:bg-green-50 text-sm font-medium" data-fb-key="overall:fully_correct"><span data-i18n="fb_fully">✓ Fully accurate</span></button>
+<button onclick="submitFeedback('overall', 'partial')" class="fb-btn px-3 py-2 rounded-lg border border-gray-300 hover:border-amber-500 hover:bg-amber-50 text-sm font-medium" data-fb-key="overall:partial"><span data-i18n="fb_partial">~ Partly right</span></button>
+<button onclick="submitFeedback('overall', 'wrong')" class="fb-btn px-3 py-2 rounded-lg border border-gray-300 hover:border-red-500 hover:bg-red-50 text-sm font-medium" data-fb-key="overall:wrong"><span data-i18n="fb_wrong">× Off the mark</span></button>
+</div>
+
+<div class="font-semibold text-base mb-3" data-i18n="fb_q_level">What's your actual level?</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
+<button onclick="submitFeedback('self_level', 'beginner_static')" class="fb-btn px-2 py-2 rounded-lg border border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-xs font-medium" data-fb-key="self_level:beginner_static" data-i18n="fb_lvl_beginner_static">Just learning to stand</button>
+<button onclick="submitFeedback('self_level', 'beginner_turning')" class="fb-btn px-2 py-2 rounded-lg border border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-xs font-medium" data-fb-key="self_level:beginner_turning" data-i18n="fb_lvl_beginner_turning">Falling leaf, no S-turns yet</button>
+<button onclick="submitFeedback('self_level', 'intermediate_linking')" class="fb-btn px-2 py-2 rounded-lg border border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-xs font-medium" data-fb-key="self_level:intermediate_linking" data-i18n="fb_lvl_intermediate_linking">Linking S-turns, skidded</button>
+<button onclick="submitFeedback('self_level', 'intermediate_carving')" class="fb-btn px-2 py-2 rounded-lg border border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-xs font-medium" data-fb-key="self_level:intermediate_carving" data-i18n="fb_lvl_intermediate_carving">Carving, sometimes wobbly</button>
+<button onclick="submitFeedback('self_level', 'advanced')" class="fb-btn px-2 py-2 rounded-lg border border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-xs font-medium" data-fb-key="self_level:advanced" data-i18n="fb_lvl_advanced">Advanced / switch / park</button>
+</div>
+
+<div class="text-xs text-gray-500" data-i18n="fb_thanks_note">Your honest feedback trains the AI to be better for everyone.</div>
+<div id="feedback-thanks" class="hidden mt-3 p-3 rounded-lg bg-green-50 text-green-700 text-sm font-medium" data-i18n="fb_thanks">Thanks! Your feedback helps the AI improve for everyone.</div>
+</div>
+
 <div id="locked-prompt" class="border-2 border-blue-600 rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-blue-50 to-white relative">
 <div class="flex items-start justify-between gap-3 sm:gap-4 mb-4">
 <div class="flex-1 min-w-0">
@@ -592,6 +615,19 @@ const STR = {
     waitlist_prompt_record: 'Drop your email — we’ll let you know when "auto-tracked riding" goes live:',
     waitlist_prompt_reel: 'Drop your email — we’ll let you know when "auto-edit reel" goes live:',
     waitlist_alert: 'Got it! We’ll notify you when it launches.',
+    fb_heading: 'Help us improve',
+    fb_q_overall: 'How accurate was this analysis?',
+    fb_fully: '✓ Fully accurate',
+    fb_partial: '~ Partly right',
+    fb_wrong: '× Off the mark',
+    fb_q_level: "What's your actual level?",
+    fb_lvl_beginner_static: 'Just learning to stand',
+    fb_lvl_beginner_turning: 'Falling leaf, no S-turns yet',
+    fb_lvl_intermediate_linking: 'Linking S-turns, skidded',
+    fb_lvl_intermediate_carving: 'Carving, sometimes wobbly',
+    fb_lvl_advanced: 'Advanced / switch / park',
+    fb_thanks_note: 'Your honest feedback trains the AI to be better for everyone.',
+    fb_thanks: 'Thanks! Your feedback helps the AI improve for everyone.',
   },
   'zh-TW': {
     nav_history: '我的紀錄',
@@ -765,6 +801,19 @@ const STR = {
     waitlist_prompt_record: '留個 email, 「自動紀錄」上線立刻通知你：',
     waitlist_prompt_reel: '留個 email, 「自動剪 30 秒」上線立刻通知你：',
     waitlist_alert: '已收到！上線會立刻通知你。',
+    fb_heading: '幫我們進步',
+    fb_q_overall: '這次分析準確嗎？',
+    fb_fully: '✓ 完全準確',
+    fb_partial: '~ 部分對',
+    fb_wrong: '× 不準',
+    fb_q_level: '你實際 level 是？',
+    fb_lvl_beginner_static: '剛在練站姿',
+    fb_lvl_beginner_turning: '會落葉飄但還不會 S 轉',
+    fb_lvl_intermediate_linking: '會連 S 但有滑刃',
+    fb_lvl_intermediate_carving: '會 carving 但不穩',
+    fb_lvl_advanced: '進階 / switch / 玩 park',
+    fb_thanks_note: '你的誠實 feedback 會讓 AI 對所有人都更準。',
+    fb_thanks: '謝謝！你的 feedback 會讓 AI 對所有人都更準。',
   },
   'zh-CN': {
     nav_history: '我的记录',
@@ -938,6 +987,19 @@ const STR = {
     waitlist_prompt_record: '留个 email, 「自动记录」上线立刻通知你：',
     waitlist_prompt_reel: '留个 email, 「自动剪 30 秒」上线立刻通知你：',
     waitlist_alert: '已收到！上线会立刻通知你。',
+    fb_heading: '帮我们进步',
+    fb_q_overall: '这次分析准确吗？',
+    fb_fully: '✓ 完全准确',
+    fb_partial: '~ 部分对',
+    fb_wrong: '× 不准',
+    fb_q_level: '你实际 level 是？',
+    fb_lvl_beginner_static: '刚在练站姿',
+    fb_lvl_beginner_turning: '会落叶飘但还不会 S 转',
+    fb_lvl_intermediate_linking: '会连 S 但有滑刃',
+    fb_lvl_intermediate_carving: '会 carving 但不稳',
+    fb_lvl_advanced: '进阶 / switch / 玩 park',
+    fb_thanks_note: '你的诚实 feedback 会让 AI 对所有人都更准。',
+    fb_thanks: '谢谢！你的 feedback 会让 AI 对所有人都更准。',
   },
   ja: {
     nav_history: '履歴',
@@ -1106,6 +1168,19 @@ const STR = {
     waitlist_prompt_record: 'メールを残してください、「自動記録」公開時に通知します：',
     waitlist_prompt_reel: 'メールを残してください、「30秒自動編集」公開時に通知します：',
     waitlist_alert: '受領しました！公開時にすぐ通知します。',
+    fb_heading: '改善にご協力ください',
+    fb_q_overall: 'この分析の精度は？',
+    fb_fully: '✓ 完璧',
+    fb_partial: '~ 部分的に正しい',
+    fb_wrong: '× ズレてる',
+    fb_q_level: 'あなたの実際のレベルは？',
+    fb_lvl_beginner_static: 'スタンス練習中',
+    fb_lvl_beginner_turning: 'ファリングリーフ、S-turn未習得',
+    fb_lvl_intermediate_linking: 'S-turn可、滑刃あり',
+    fb_lvl_intermediate_carving: 'カービング可、不安定',
+    fb_lvl_advanced: '上級 / switch / park',
+    fb_thanks_note: '正直なフィードバックがAIをより精緻にします。',
+    fb_thanks: 'ありがとうございます！フィードバックがみんなのためのAI改善に役立ちます。',
   },
   ko: {
     nav_history: '내 기록',
@@ -1274,6 +1349,19 @@ const STR = {
     waitlist_prompt_record: '이메일을 남겨주세요, "자동 기록" 출시 시 알려드립니다:',
     waitlist_prompt_reel: '이메일을 남겨주세요, "자동 편집 30초" 출시 시 알려드립니다:',
     waitlist_alert: '접수했습니다! 출시 시 즉시 알려드립니다.',
+    fb_heading: '개선에 도움 주세요',
+    fb_q_overall: '이 분석은 정확했나요?',
+    fb_fully: '✓ 완전 정확',
+    fb_partial: '~ 부분적 정확',
+    fb_wrong: '× 빗나감',
+    fb_q_level: '당신의 실제 레벨은?',
+    fb_lvl_beginner_static: '스탠스 연습 중',
+    fb_lvl_beginner_turning: '낙엽주행, S-turn 아직',
+    fb_lvl_intermediate_linking: 'S-turn 가능, 사이드 슬립',
+    fb_lvl_intermediate_carving: '카빙 가능, 불안정',
+    fb_lvl_advanced: '고급 / switch / 파크',
+    fb_thanks_note: '솔직한 피드백이 AI를 모두에게 더 정확하게 만듭니다.',
+    fb_thanks: '감사합니다! 당신의 피드백이 AI 개선에 도움이 됩니다.',
   },
 };
 
@@ -1912,6 +2000,13 @@ async function redeemPendingUnlock(sessionId) {
 // RESULT RENDERING
 // ==========================================================================
 function renderResult(result, mode) {
+  // Show feedback widget + reset its state on every new render
+  const fbw = document.getElementById('feedback-widget');
+  if (fbw) {
+    fbw.classList.remove('hidden');
+    document.getElementById('feedback-thanks')?.classList.add('hidden');
+    fbw.querySelectorAll('.fb-btn').forEach(b => { b.classList.remove('ring-2','ring-blue-600','bg-blue-50'); b.style.opacity = '1'; });
+  }
   if (mode === 'free') {
     const free = document.getElementById('free-results');
     free.innerHTML = '';
@@ -2142,6 +2237,32 @@ const _utmCache = (() => {
   }
   return params;
 })();
+// === Feedback submission ===
+function submitFeedback(advice_key, rating) {
+  if (!currentAnalysisId) return;
+  // Toggle: if same button is already selected, no-op (user already chose)
+  const sel = document.querySelector(`.fb-btn[data-fb-key="${advice_key}:${rating}"]`);
+  // Visual: highlight selected, fade siblings in same group
+  document.querySelectorAll(`.fb-btn[data-fb-key^="${advice_key}:"]`).forEach(b => {
+    b.classList.remove('ring-2', 'ring-blue-600', 'bg-blue-50');
+    b.style.opacity = '0.5';
+  });
+  if (sel) { sel.classList.add('ring-2', 'ring-blue-600', 'bg-blue-50'); sel.style.opacity = '1'; }
+  // Show thanks
+  const thanks = document.getElementById('feedback-thanks');
+  if (thanks) thanks.classList.remove('hidden');
+  // POST
+  const body = { analysis_id: currentAnalysisId, visitor_id: visitorId, advice_key, rating };
+  if (advice_key === 'self_level') body.self_reported_level = rating;
+  fetch(WORKER_URL + 'feedback', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    keepalive: true
+  }).catch(()=>{});
+  track('feedback_submitted', { advice_key, rating });
+}
+
 function track(eventType, metadata) {
   try {
     const body = {
