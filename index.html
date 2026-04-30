@@ -2,22 +2,28 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Carvline — 拍 30 秒, AI 告訴你下次怎麼滑得更好</title>
 <meta name="description" content="拍一段你滑單板的影片, AI 立刻告訴你哪裡可以改。免費試用, USD $5 解鎖完整分析。">
 <meta property="og:title" content="Carvline — Your iPhone is a Snowboard Coach">
 <meta property="og:description" content="拍 30 秒, AI 告訴你下次怎麼滑得更好。免費試用, USD $5 解鎖完整分析。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://uncleshu827.github.io/carvline/">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-body{font-family:'Inter','Noto Sans TC',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#0a0a0a}
+*{-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter','Noto Sans TC',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#0a0a0a;padding-bottom:env(safe-area-inset-bottom)}
+html{scroll-behavior:smooth}
 .accent{color:#2563eb}
-.btn-primary{background:#0a0a0a;color:#fff;transition:all .15s}
-.btn-primary:hover{background:#2563eb;transform:translateY(-1px)}
-.btn-secondary{background:#fff;color:#0a0a0a;border:1px solid #d1d5db;transition:all .15s}
-.btn-secondary:hover{border-color:#0a0a0a}
-.btn-accent{background:#2563eb;color:#fff;transition:all .15s}
-.btn-accent:hover{background:#1d4ed8;transform:translateY(-1px)}
+.btn-primary{background:#0a0a0a;color:#fff;transition:all .15s;min-height:44px}
+.btn-primary:hover,.btn-primary:active{background:#2563eb;transform:translateY(-1px)}
+.btn-secondary{background:#fff;color:#0a0a0a;border:1px solid #d1d5db;transition:all .15s;min-height:44px}
+.btn-secondary:hover,.btn-secondary:active{border-color:#0a0a0a}
+.btn-accent{background:#2563eb;color:#fff;transition:all .15s;min-height:44px}
+.btn-accent:hover,.btn-accent:active{background:#1d4ed8;transform:translateY(-1px)}
 .card{background:#fff;border:1px solid #e5e7eb;transition:all .2s}
 .card:hover{border-color:#d1d5db;box-shadow:0 4px 24px rgba(0,0,0,.04)}
 .section{border-top:1px solid #f0f0f0}
@@ -32,41 +38,98 @@ details>summary{list-style:none;cursor:pointer}
 details>summary::-webkit-details-marker{display:none}
 details>summary::after{content:'+';float:right;font-size:1.5rem;line-height:1;color:#737373}
 details[open]>summary::after{content:'−'}
-.upload-zone{border:2px dashed #d1d5db;transition:all .2s;cursor:pointer}
-.upload-zone:hover{border-color:#2563eb;background:#f0f7ff}
+.upload-zone{border:2px dashed #d1d5db;transition:all .2s;cursor:pointer;min-height:140px}
+.upload-zone:hover,.upload-zone:active{border-color:#2563eb;background:#f0f7ff}
 .upload-zone.drag{border-color:#2563eb;background:#dbeafe}
 .locked-blur{filter:blur(8px);user-select:none;pointer-events:none}
+/* Mobile-first refinements */
+@media (max-width:640px){
+  .hero-h1{font-size:2.25rem;line-height:1.15}
+  .hero-p{font-size:1.0625rem}
+  .nav-cta{padding:0.5rem 0.875rem;font-size:0.8125rem}
+  .upload-zone{padding:1.5rem 1rem;min-height:160px}
+  .px-6{padding-left:1.25rem;padding-right:1.25rem}
+  .pt-20{padding-top:3rem}
+  .py-24{padding-top:3.5rem;padding-bottom:3.5rem}
+  .py-20{padding-top:3rem;padding-bottom:3rem}
+  /* Disable hover transform on mobile (no hover state, just sticks) */
+  .btn-primary:hover,.btn-accent:hover,.btn-secondary:hover{transform:none}
+}
+/* Sticky bottom CTA on mobile */
+.sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e7eb;padding:0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));box-shadow:0 -4px 12px rgba(0,0,0,0.04);z-index:40;display:none}
+@media (max-width:640px){
+  .sticky-cta{display:block}
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+}
+.sticky-cta-inner{max-width:42rem;margin:0 auto}
+/* History panel */
+.history-panel{max-height:320px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.history-item{padding:0.75rem;border:1px solid #e5e7eb;border-radius:0.625rem;background:#fafafa;transition:all .15s}
+.history-item:hover{border-color:#2563eb;background:#f0f7ff}
+.score-pill{display:inline-block;padding:0.125rem 0.5rem;border-radius:9999px;font-size:0.6875rem;font-weight:600}
+.score-good{background:#dcfce7;color:#15803d}
+.score-mid{background:#fef3c7;color:#a16207}
+.score-low{background:#fee2e2;color:#b91c1c}
+/* Spinner more visible on mobile */
+@media (max-width:640px){
+  #processing{padding:2rem 1.25rem}
+}
+/* Better tap targets for FAQs */
+details summary{padding:0.5rem 0;min-height:44px;display:flex;align-items:center;flex-wrap:wrap}
+details summary::after{margin-left:auto}
 </style>
 </head>
 <body>
 
-<nav class="border-b border-gray-100 sticky top-0 bg-white/80 backdrop-blur-md z-50">
-<div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+<nav class="border-b border-gray-100 sticky top-0 bg-white/90 backdrop-blur-md z-50">
+<div class="max-w-6xl mx-auto px-6 py-3 sm:py-4 flex items-center justify-between">
 <div class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center text-white font-bold text-sm">C</div><span class="font-semibold">Carvline</span></div>
-<a href="#try" class="px-4 py-2 rounded-lg btn-primary text-sm font-medium">免費試 AI 分析</a>
+<div class="flex items-center gap-2">
+<button onclick="toggleHistory()" class="px-3 py-1.5 rounded-lg btn-secondary text-xs font-medium hidden sm:inline-flex" id="history-btn-desktop">📊 我的紀錄 <span id="history-count-desktop" class="ml-1 text-gray-400"></span></button>
+<a href="#try" class="nav-cta px-4 py-2 rounded-lg btn-primary text-sm font-medium">免費試 AI 分析</a>
+</div>
 </div></nav>
+
+<!-- HISTORY PANEL (toggle from nav button) -->
+<div id="history-modal" class="hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" onclick="if(event.target===this)toggleHistory()">
+<div class="absolute inset-x-0 bottom-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl w-full sm:max-w-lg max-h-[85vh] overflow-hidden flex flex-col">
+<div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
+<div>
+<div class="font-bold text-lg">📊 我的分析紀錄</div>
+<div class="text-xs text-gray-500" id="history-meta">本機 visitor_id 過去 30 天</div>
+</div>
+<button onclick="toggleHistory()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xl">×</button>
+</div>
+<div class="flex-1 overflow-y-auto p-5" id="history-list">
+<div class="text-center text-gray-400 text-sm py-12">載入中...</div>
+</div>
+<div class="px-5 py-3 border-t border-gray-100 bg-gray-50 text-xs text-gray-500 flex-shrink-0">
+visitor_id: <code id="history-vid" class="text-[10px]"></code>
+</div>
+</div>
+</div>
 
 <section class="bg-snow"><div class="max-w-6xl mx-auto px-6 pt-20 pb-16 text-center">
 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium mb-6"><span class="w-1.5 h-1.5 rounded-full bg-blue-600 pulse"></span>真實 AI 分析 · Powered by Claude Vision</div>
 
-<h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6">
+<h1 class="hero-h1 text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6">
 拍 30 秒,<br>
 AI 告訴你<br>
 <span class="accent">下次怎麼滑得更好</span>
 </h1>
 
-<p class="text-lg md:text-xl text-gray-700 max-w-xl mx-auto mb-3 leading-relaxed">
+<p class="hero-p text-lg md:text-xl text-gray-700 max-w-xl mx-auto mb-3 leading-relaxed">
 你滑單板回來, <b>不用花 USD $300/小時請教練</b>。<br>
 拍一段你滑的影片, AI 立刻看出你哪裡卡住、下次怎麼改。
 </p>
 <p class="text-sm text-gray-500 mb-10">為亞洲單板族設計 · 雙板也能用</p>
 
-<div class="flex flex-col sm:flex-row gap-3 justify-center mb-16">
-<a href="#try" class="px-7 py-3.5 rounded-lg btn-primary font-semibold">免費試 AI 分析 →</a>
-<a href="#how" class="px-7 py-3.5 rounded-lg btn-secondary font-semibold">看怎麼運作</a>
+<div class="flex flex-col sm:flex-row gap-3 justify-center mb-12 sm:mb-16 max-w-md mx-auto sm:max-w-none">
+<a href="#try" class="px-7 py-4 sm:py-3.5 rounded-lg btn-primary font-semibold">免費試 AI 分析 →</a>
+<a href="#how" class="px-7 py-4 sm:py-3.5 rounded-lg btn-secondary font-semibold">看怎麼運作</a>
 </div>
 
-<div class="relative mx-auto max-w-sm"><div class="bg-white rounded-3xl p-5 shadow-2xl border border-gray-200"><div class="aspect-[9/16] rounded-2xl bg-gradient-to-br from-blue-50 to-slate-100 relative overflow-hidden">
+<div class="relative mx-auto max-w-xs sm:max-w-sm"><div class="bg-white rounded-3xl p-3 sm:p-5 shadow-2xl border border-gray-200"><div class="aspect-[9/16] rounded-2xl bg-gradient-to-br from-blue-50 to-slate-100 relative overflow-hidden">
 <svg class="absolute bottom-0 left-0 w-full" viewBox="0 0 400 200" preserveAspectRatio="none"><polygon points="0,200 80,100 150,140 220,60 290,120 360,80 400,130 400,200" fill="#cbd5e1"/><polygon points="0,200 60,140 130,160 200,110 270,150 340,120 400,160 400,200" fill="#94a3b8"/></svg>
 <svg class="absolute inset-0 w-full h-full" viewBox="0 0 200 350" preserveAspectRatio="xMidYMid meet"><circle cx="100" cy="80" r="12" class="skeleton-joint draw-anim"/><line x1="100" y1="92" x2="100" y2="180" class="skeleton-line draw-anim"/><line x1="100" y1="115" x2="65" y2="155" class="skeleton-line draw-anim"/><line x1="100" y1="115" x2="138" y2="148" class="skeleton-line draw-anim"/><circle cx="65" cy="155" r="5" class="skeleton-joint"/><circle cx="138" cy="148" r="5" class="skeleton-joint"/><circle cx="100" cy="180" r="6" class="skeleton-joint"/><line x1="100" y1="180" x2="78" y2="240" class="skeleton-line draw-anim"/><line x1="100" y1="180" x2="125" y2="245" class="skeleton-line draw-anim"/><circle cx="78" cy="240" r="5" class="skeleton-joint"/><circle cx="125" cy="245" r="5" class="skeleton-joint"/><line x1="78" y1="240" x2="65" y2="295" class="skeleton-line draw-anim"/><line x1="125" y1="245" x2="142" y2="298" class="skeleton-line draw-anim"/><line x1="50" y1="295" x2="155" y2="298" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/></svg>
 <div class="absolute top-3 left-3 right-3 flex justify-between gap-2"><div class="bg-white/90 backdrop-blur rounded-lg px-3 py-1.5 shadow-sm"><div class="text-[10px] text-gray-500">今日最高速</div><div class="font-bold text-sm">62 km/h</div></div><div class="bg-white/90 backdrop-blur rounded-lg px-3 py-1.5 shadow-sm"><div class="text-[10px] text-gray-500">比上次</div><div class="font-bold text-sm text-green-600">+12% ↑</div></div></div>
@@ -78,29 +141,29 @@ AI 告訴你<br>
 <section id="try" class="section py-24 bg-blue-50/30"><div class="max-w-3xl mx-auto px-6">
 <div class="text-center mb-10">
 <div class="inline-block text-xs font-semibold accent uppercase tracking-wider mb-3">立即試用 · 真實 AI 分析</div>
-<h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-3">上傳一段你滑單板的影片</h2>
-<p class="text-lg text-gray-700">AI 會抽 3 個關鍵 frame 給你 3 個重點, <b>完全免費</b>。深入想看再付 USD $5。</p>
+<h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-3">上傳一段你滑單板的影片</h2>
+<p class="text-base sm:text-lg text-gray-700">AI 會抽 3 個關鍵 frame 給你 3 個重點, <b>完全免費</b>。深入想看再付 USD $5。</p>
 </div>
 
 <div id="upload-zone">
-<!-- PRIMARY: Video upload — robust extraction via requestVideoFrameCallback -->
-<div class="upload-zone bg-white rounded-2xl p-8 text-center mb-3" onclick="document.getElementById('file-input').click()">
-<input type="file" id="file-input" accept="video/*" class="hidden" onchange="analyzeVideo(this)">
-<div class="text-3xl mb-2">🎬</div>
-<div class="font-semibold text-lg mb-1">上傳一段你滑單板的影片</div>
-<div class="text-sm text-gray-500">MP4 / MOV · 60 秒內最佳 · iPhone / GoPro 都可</div>
+<!-- Primary: Photo upload (works on all devices) -->
+<div class="upload-zone bg-white rounded-2xl p-8 text-center mb-3" onclick="document.getElementById('image-input').click()">
+<input type="file" id="image-input" accept="image/*" multiple class="hidden" onchange="analyzeImages(this)">
+<div class="text-3xl sm:text-4xl mb-2">📸</div>
+<div class="font-semibold text-base sm:text-lg mb-1">上傳 3-6 張單板動作照片</div>
+<div class="text-xs sm:text-sm text-gray-500">推薦 · 從相簿選關鍵姿勢截圖, 任何手機都穩</div>
 </div>
 
-<!-- FALLBACK: Photo upload (if video fails on user device) -->
+<!-- Secondary: Video upload (may timeout on iOS HEVC) -->
 <details class="bg-white rounded-2xl border border-gray-200">
 <summary class="font-medium text-sm text-gray-600 px-4 py-3 cursor-pointer hover:bg-gray-50">
-📸 影片有問題？改用 3-6 張照片
+🎬 或上傳影片 (實驗中, iPhone HEVC 可能不穩)
 </summary>
-<div class="upload-zone bg-gray-50 m-4 rounded-xl p-6 text-center" onclick="document.getElementById('image-input').click()">
-<input type="file" id="image-input" accept="image/*" multiple class="hidden" onchange="analyzeImages(this)">
-<div class="text-2xl mb-2">📸</div>
-<div class="text-sm font-medium mb-1">選 3-6 張動作照片</div>
-<div class="text-xs text-gray-500">純圖片分析, 適合 iPhone 影片有問題時</div>
+<div class="upload-zone bg-gray-50 m-4 rounded-xl p-6 text-center" onclick="document.getElementById('file-input').click()">
+<input type="file" id="file-input" accept="video/*" class="hidden" onchange="analyzeVideo(this, 'free')">
+<div class="text-2xl mb-2">▶</div>
+<div class="text-sm font-medium mb-1">點擊上傳影片</div>
+<div class="text-xs text-gray-500">MP4 / MOV · 60 秒內 · 桌面 Chrome 較穩</div>
 </div>
 </details>
 </div>
@@ -111,9 +174,9 @@ AI 告訴你<br>
 <div id="processing-text" class="text-sm text-gray-500">讀取影片...</div>
 </div>
 
-<div id="result" class="hidden mt-6 bg-white rounded-2xl p-8">
+<div id="result" class="hidden mt-6 bg-white rounded-2xl p-6 sm:p-8">
 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-medium mb-4"><span>✓</span> AI 分析完成</div>
-<h3 class="text-2xl font-bold mb-6">你的 3 個重點 (Free)</h3>
+<h3 class="text-xl sm:text-2xl font-bold mb-6">你的 3 個重點 (Free)</h3>
 
 <div id="free-results" class="space-y-3 mb-8">
 <!-- 真實 AI 結果會插入這裡 -->
@@ -123,23 +186,23 @@ AI 告訴你<br>
 <div id="deep-results" class="hidden space-y-3 mb-8"></div>
 
 <!-- LOCKED PREMIUM CONTENT -->
-<div id="locked-prompt" class="border-2 border-blue-600 rounded-2xl p-6 bg-gradient-to-br from-blue-50 to-white relative">
-<div class="flex items-start justify-between gap-4 mb-4">
-<div>
+<div id="locked-prompt" class="border-2 border-blue-600 rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-blue-50 to-white relative">
+<div class="flex items-start justify-between gap-3 sm:gap-4 mb-4">
+<div class="flex-1 min-w-0">
 <div class="text-xs font-semibold accent uppercase tracking-wider mb-1">🔒 完整深度分析</div>
-<h4 class="text-xl font-bold mb-1">解鎖 8 維度評分 + 練習建議</h4>
-<p class="text-sm text-gray-600">看完整 stance / edge engagement / weight transfer 等 8 個面向, 加個人化下次練什麼</p>
+<h4 class="text-lg sm:text-xl font-bold mb-1">解鎖 8 維度評分 + 練習建議</h4>
+<p class="text-xs sm:text-sm text-gray-600">看完整 stance / edge engagement / weight transfer 等 8 個面向, 加個人化下次練什麼</p>
 </div>
 <div class="text-right flex-shrink-0">
-<div class="text-3xl font-extrabold accent">$5</div>
-<div class="text-xs text-gray-500">USD 一次性</div>
+<div class="text-2xl sm:text-3xl font-extrabold accent">$5</div>
+<div class="text-[10px] sm:text-xs text-gray-500">USD 一次性</div>
 </div>
 </div>
 
 <button onclick="unlockDeep()" class="w-full py-3 rounded-lg btn-accent font-semibold">
 解鎖完整分析 — USD $5
 </button>
-<p class="text-xs text-gray-500 text-center mt-3">透過 Stripe 信用卡安全付款 · 30 天退費</p>
+<p class="text-[11px] sm:text-xs text-gray-500 text-center mt-3">透過 Stripe 信用卡安全付款 · 30 天退費</p>
 </div>
 
 <button onclick="resetTry()" class="w-full mt-6 py-2.5 rounded-lg text-sm text-gray-500 hover:text-gray-900">
@@ -147,20 +210,27 @@ AI 告訴你<br>
 </button>
 </div>
 
-<p class="text-center text-xs text-gray-400 mt-6">由 Claude Vision (Anthropic) 提供 AI 分析 · 影片 24 小時內自動刪除</p>
+<p class="text-center text-[11px] sm:text-xs text-gray-400 mt-6">由 Claude Vision (Anthropic) 提供 AI 分析 · 影片 24 小時內自動刪除</p>
+
+<!-- Mobile-only: surface history below upload -->
+<div class="mt-8 sm:hidden">
+<button onclick="toggleHistory()" class="w-full py-3 rounded-lg btn-secondary text-sm font-medium" id="history-btn-mobile">
+📊 看我之前的分析 <span id="history-count-mobile" class="ml-1 text-gray-400"></span>
+</button>
+</div>
 </div></section>
 
 <section id="how" class="section py-20"><div class="max-w-5xl mx-auto px-6">
 <div class="text-center mb-14">
-<h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-3">三種用法, 看你哪天想做什麼</h2>
-<p class="text-lg text-gray-600">下板就能立刻看到結果</p>
+<h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-3">三種用法, 看你哪天想做什麼</h2>
+<p class="text-base sm:text-lg text-gray-600">下板就能立刻看到結果</p>
 </div>
 
-<div class="grid md:grid-cols-3 gap-5">
+<div class="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
 
-<div class="card rounded-2xl p-7"><div class="text-4xl mb-4">🏂</div>
+<div class="card rounded-2xl p-6 sm:p-7"><div class="text-3xl sm:text-4xl mb-4">🏂</div>
 <div class="text-xs font-semibold accent uppercase tracking-wider mb-2">今天滑了什麼</div>
-<h3 class="text-xl font-bold mb-3">手機放口袋, 自動紀錄</h3>
+<h3 class="text-lg sm:text-xl font-bold mb-3">手機放口袋, 自動紀錄</h3>
 <p class="text-gray-600 text-sm leading-relaxed mb-4">完全不用操作。下纜車就看到:</p>
 <ul class="space-y-1.5 text-sm text-gray-700">
 <li>· 你今天最高速幾公里</li>
@@ -169,9 +239,9 @@ AI 告訴你<br>
 <li>· 比上次進步多少 %</li>
 </ul></div>
 
-<div class="card rounded-2xl p-7"><div class="text-4xl mb-4">🎬</div>
+<div class="card rounded-2xl p-6 sm:p-7"><div class="text-3xl sm:text-4xl mb-4">🎬</div>
 <div class="text-xs font-semibold accent uppercase tracking-wider mb-2">朋友圈炫耀用</div>
-<h3 class="text-xl font-bold mb-3">AI 幫你剪成 30 秒短片</h3>
+<h3 class="text-lg sm:text-xl font-bold mb-3">AI 幫你剪成 30 秒短片</h3>
 <p class="text-gray-600 text-sm leading-relaxed mb-4">把 GoPro 或手機影片丟進來:</p>
 <ul class="space-y-1.5 text-sm text-gray-700">
 <li>· 自動找出最帥的片段</li>
@@ -180,11 +250,11 @@ AI 告訴你<br>
 <li>· 不用自己剪輯</li>
 </ul></div>
 
-<div class="card rounded-2xl p-7 ring-2 ring-blue-600 relative">
+<div class="card rounded-2xl p-6 sm:p-7 ring-2 ring-blue-600 relative sm:col-span-2 md:col-span-1">
 <div class="absolute -top-3 right-6 px-3 py-0.5 rounded-full bg-blue-600 text-white text-xs font-bold">最受歡迎</div>
-<div class="text-4xl mb-4">👥</div>
+<div class="text-3xl sm:text-4xl mb-4">👥</div>
 <div class="text-xs font-semibold accent uppercase tracking-wider mb-2">想變更強</div>
-<h3 class="text-xl font-bold mb-3">朋友幫你拍, AI 當教練</h3>
+<h3 class="text-lg sm:text-xl font-bold mb-3">朋友幫你拍, AI 當教練</h3>
 <p class="text-gray-600 text-sm leading-relaxed mb-4">選一個動作 (像 S-turn), 朋友拍 15 秒:</p>
 <ul class="space-y-1.5 text-sm text-gray-700">
 <li>· AI 30-45 秒給你 3 個重點</li>
@@ -198,11 +268,11 @@ AI 告訴你<br>
 <section class="section py-20 bg-gray-50">
 <div class="max-w-3xl mx-auto px-6 text-center">
 <div class="text-5xl mb-6">🇯🇵</div>
-<h2 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-6">
+<h2 class="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-6">
 飛一趟日本 NT$50,000,<br>
 <span class="accent">回來不知道進步多少?</span>
 </h2>
-<p class="text-lg text-gray-700 mb-3 leading-relaxed">
+<p class="text-base sm:text-lg text-gray-700 mb-3 leading-relaxed">
 Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 回家就知道這趟值不值得。
 </p>
@@ -211,11 +281,11 @@ Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 
 <section id="pricing" class="section py-20"><div class="max-w-5xl mx-auto px-6">
 <div class="text-center mb-12">
-<h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-3">怎麼用, 怎麼付</h2>
-<p class="text-lg text-gray-600">先免費試, 喜歡再付 — 不滿意 30 天退費</p>
+<h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-3">怎麼用, 怎麼付</h2>
+<p class="text-base sm:text-lg text-gray-600">先免費試, 喜歡再付 — 不滿意 30 天退費</p>
 </div>
 
-<div class="grid md:grid-cols-4 gap-4">
+<div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
 
 <div class="card rounded-2xl p-5">
 <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">先試試</div>
@@ -226,7 +296,7 @@ Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 <li>✓ 不用註冊</li>
 <li class="text-gray-400">— 不含完整評分</li>
 </ul>
-<a href="#try" class="block text-center w-full py-2.5 rounded-lg btn-secondary font-medium text-sm">立即試用</a>
+<a href="#try" class="block text-center w-full py-3 rounded-lg btn-secondary font-medium text-sm">立即試用</a>
 </div>
 
 <div class="card rounded-2xl p-5 ring-2 ring-blue-600 relative">
@@ -240,7 +310,7 @@ Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 <li>✓ 對比示範影片</li>
 <li>✓ 個人化練習計畫</li>
 </ul>
-<a href="#try" class="block text-center w-full py-2.5 rounded-lg btn-accent font-semibold text-sm">先試免費版</a>
+<a href="#try" class="block text-center w-full py-3 rounded-lg btn-accent font-semibold text-sm">先試免費版</a>
 </div>
 
 <div class="card rounded-2xl p-5">
@@ -253,7 +323,7 @@ Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 <li>✓ 跨 trip 比對</li>
 <li>✓ 朋友互拍評分</li>
 </ul>
-<a href="#join" class="block text-center w-full py-2.5 rounded-lg btn-secondary font-medium text-sm">下季開放通知</a>
+<a href="#join" class="block text-center w-full py-3 rounded-lg btn-secondary font-medium text-sm">下季開放通知</a>
 </div>
 
 <div class="card rounded-2xl p-5 bg-gradient-to-br from-amber-50 to-white border-amber-200">
@@ -266,7 +336,7 @@ Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 <li>✓ 優先 beta 測試</li>
 <li>✓ 1-on-1 review (1 次)</li>
 </ul>
-<a href="#join" class="block text-center w-full py-2.5 rounded-lg btn-primary font-semibold text-sm">搶名額 (剩 87)</a>
+<a href="#join" class="block text-center w-full py-3 rounded-lg btn-primary font-semibold text-sm">搶名額 (剩 87)</a>
 </div>
 
 </div>
@@ -274,21 +344,21 @@ Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 </div></section>
 
 <section id="join" class="section py-20 bg-gray-50"><div class="max-w-xl mx-auto px-6 text-center">
-<h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3">先留 email, 等 Season + Lifetime 開放通知你</h2>
-<p class="text-gray-600 mb-8">不會 spam · 一個月最多兩封 · 隨時退訂</p>
-<form onsubmit="event.preventDefault();const e=this.querySelector('input').value;this.innerHTML='<div class=\'p-4 rounded-lg bg-green-50 text-green-700 text-sm\'>✓ 收到! '+e+' 已加入等候名單。</div>'" class="flex flex-col sm:flex-row gap-2">
-<input type="email" placeholder="你的 email" class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-600 focus:outline-none text-sm" required>
+<h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">先留 email, 等 Season + Lifetime 開放通知你</h2>
+<p class="text-gray-600 mb-8 text-sm sm:text-base">不會 spam · 一個月最多兩封 · 隨時退訂</p>
+<form id="waitlist-form" onsubmit="submitWaitlist(event)" class="flex flex-col sm:flex-row gap-2">
+<input type="email" name="email" placeholder="你的 email" class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-600 focus:outline-none text-sm" required>
 <button class="px-5 py-3 rounded-lg btn-primary font-semibold text-sm whitespace-nowrap">加入等候</button>
 </form>
 </div></section>
 
 <section class="section py-20"><div class="max-w-2xl mx-auto px-6">
-<h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-10 text-center">大家常問</h2>
+<h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-10 text-center">大家常問</h2>
 <div class="space-y-2">
 
 <details class="card rounded-xl px-5 py-4">
 <summary class="font-semibold">免費版可以無限上傳嗎?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">每天可以免費試。想看更深入的同一段分析, 升級 USD $5 解鎖即可。</p>
+<p class="text-gray-600 mt-3 text-sm leading-relaxed">每天可以免費試 (每 IP 每天 2 次)。想看更深入的同一段分析, 升級 USD $5 解鎖即可。</p>
 </details>
 
 <details class="card rounded-xl px-5 py-4">
@@ -317,6 +387,11 @@ Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 </details>
 
 <details class="card rounded-xl px-5 py-4">
+<summary class="font-semibold">在哪裡看我之前的分析?</summary>
+<p class="text-gray-600 mt-3 text-sm leading-relaxed">右上角點「📊 我的紀錄」 (手機版在試用區下方)。我們用本機 visitor_id 認你, 不用註冊。換手機或清快取就會重新計算。</p>
+</details>
+
+<details class="card rounded-xl px-5 py-4">
 <summary class="font-semibold">Season $25 vs Lifetime $25 怎麼選?</summary>
 <p class="text-gray-600 mt-3 text-sm leading-relaxed">如果你只玩這個雪季 (1-3 趟)，Season 划算。如果你打算長期玩單板，搶 Lifetime 早鳥 (限 100 名, 正常價 USD $240) 最划算。</p>
 </details>
@@ -330,8 +405,16 @@ Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 
 <footer class="section py-10"><div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
 <div class="flex items-center gap-2"><div class="w-7 h-7 rounded-lg bg-gray-900 flex items-center justify-center text-white font-bold text-xs">C</div><span class="font-semibold text-sm">Carvline</span></div>
-<div class="text-xs text-gray-500">© 2026 Carvline · 給每一個追求乾淨 carving line 的人</div>
+<div class="text-xs text-gray-500 text-center">© 2026 Carvline · 給每一個追求乾淨 carving line 的人</div>
 </div></footer>
+
+<!-- Sticky bottom CTA (mobile only) -->
+<div class="sticky-cta">
+<div class="sticky-cta-inner flex gap-2">
+<button onclick="toggleHistory()" class="px-3 py-3 rounded-lg btn-secondary text-sm font-medium flex-shrink-0">📊 <span id="history-count-sticky"></span></button>
+<a href="#try" class="flex-1 px-4 py-3 rounded-lg btn-primary text-sm font-semibold text-center">免費試 AI 分析 →</a>
+</div>
+</div>
 
 <script>
 const WORKER_URL = 'https://carvline-ai.uncleshu827.workers.dev/';
@@ -343,6 +426,123 @@ if (!visitorId) {
 
 let currentFrames = null; // 暫存抽出的 frames, 給 deep mode 重用
 
+// ========================
+// HISTORY PANEL
+// ========================
+function toggleHistory() {
+  const m = document.getElementById('history-modal');
+  if (m.classList.contains('hidden')) {
+    m.classList.remove('hidden');
+    loadHistory();
+  } else {
+    m.classList.add('hidden');
+  }
+}
+
+async function loadHistory() {
+  document.getElementById('history-vid').textContent = visitorId;
+  const list = document.getElementById('history-list');
+  list.innerHTML = '<div class="text-center text-gray-400 text-sm py-12">載入中...</div>';
+  try {
+    const r = await fetch(WORKER_URL + 'history?visitor_id=' + encodeURIComponent(visitorId));
+    const data = await r.json();
+    if (!data.ok) {
+      list.innerHTML = '<div class="text-center text-gray-400 text-sm py-12">載入失敗: ' + (data.error || 'unknown') + '</div>';
+      return;
+    }
+    renderHistory(data.items || []);
+    document.getElementById('history-meta').textContent = '共 ' + (data.items?.length || 0) + ' 筆 · 過去 30 天';
+  } catch (e) {
+    list.innerHTML = '<div class="text-center text-gray-400 text-sm py-12">網路錯誤: ' + e.message + '</div>';
+  }
+}
+
+function renderHistory(items) {
+  const list = document.getElementById('history-list');
+  if (items.length === 0) {
+    list.innerHTML = '<div class="text-center py-12">' +
+      '<div class="text-4xl mb-3">🏂</div>' +
+      '<div class="font-semibold text-gray-700 mb-1">還沒有任何紀錄</div>' +
+      '<div class="text-sm text-gray-500 mb-5">上傳第一段影片試試 AI 分析</div>' +
+      '<button onclick="toggleHistory();document.getElementById(\'try\').scrollIntoView({behavior:\'smooth\'})" class="px-5 py-2.5 rounded-lg btn-primary text-sm font-semibold">立即試用</button>' +
+      '</div>';
+    return;
+  }
+  list.innerHTML = items.map(item => {
+    const d = new Date(item.created_at);
+    const dateStr = d.toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric' }) + ' ' + d.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
+    let summary = '';
+    let scoreHtml = '';
+    try {
+      const r = JSON.parse(item.result_json || '{}');
+      if (item.mode === 'free') {
+        summary = (r.fix || r.ok || r.good || '').slice(0, 60);
+      } else {
+        const dims = ['stance', 'edge_engagement', 'weight_transfer', 'upper_body', 'knee_bend', 'arms_balance', 'rhythm', 'finish'];
+        const scores = dims.map(d => r[d]?.score).filter(s => s != null);
+        if (scores.length) {
+          const avg = (scores.reduce((a,b)=>a+b,0) / scores.length).toFixed(1);
+          const cls = avg >= 7 ? 'score-good' : avg >= 5 ? 'score-mid' : 'score-low';
+          scoreHtml = '<span class="score-pill ' + cls + '">平均 ' + avg + '/10</span>';
+        }
+        summary = r.next_drill ? ('下次練: ' + r.next_drill).slice(0, 60) : '';
+      }
+    } catch (e) { summary = '(無法解析)'; }
+
+    const modeBadge = item.mode === 'deep'
+      ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-semibold">DEEP</span>'
+      : '<span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-semibold">FREE</span>';
+
+    return '<div class="history-item mb-2">' +
+      '<div class="flex items-center justify-between mb-1.5 gap-2">' +
+        '<div class="flex items-center gap-2 min-w-0">' + modeBadge + '<span class="text-xs text-gray-500">' + dateStr + '</span></div>' +
+        scoreHtml +
+      '</div>' +
+      (summary ? '<div class="text-sm text-gray-700 leading-snug">' + escapeHtml(summary) + '</div>' : '') +
+    '</div>';
+  }).join('');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// 載入頁面時先 fetch 一次, 把次數秀在按鈕
+async function preloadHistoryCount() {
+  try {
+    const r = await fetch(WORKER_URL + 'history?visitor_id=' + encodeURIComponent(visitorId) + '&count_only=1');
+    const data = await r.json();
+    if (data.ok && data.count != null && data.count > 0) {
+      const t = '(' + data.count + ')';
+      document.getElementById('history-count-desktop').textContent = t;
+      document.getElementById('history-count-mobile').textContent = t;
+      document.getElementById('history-count-sticky').textContent = t;
+    }
+  } catch (e) { /* silent */ }
+}
+
+// ========================
+// WAITLIST
+// ========================
+async function submitWaitlist(ev) {
+  ev.preventDefault();
+  const form = ev.target;
+  const email = form.email.value.trim();
+  if (!email) return;
+  // 樂觀 UI: 立即顯示成功 (即使 API 失敗也不阻塞)
+  form.outerHTML = '<div class="p-4 rounded-lg bg-green-50 text-green-700 text-sm">✓ 收到! ' + escapeHtml(email) + ' 已加入等候名單。</div>';
+  try {
+    await fetch(WORKER_URL + 'waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, visitor_id: visitorId, source: 'website' })
+    });
+  } catch (e) { /* silent */ }
+}
+
+// ========================
+// VIDEO FRAME EXTRACTION
+// ========================
 async function extractFrames(file, count, onProgress) {
   return new Promise((resolve, reject) => {
     const video = document.createElement('video');
@@ -350,137 +550,58 @@ async function extractFrames(file, count, onProgress) {
     video.playsInline = true;
     video.setAttribute('webkit-playsinline', 'true');
     video.setAttribute('playsinline', 'true');
-    video.setAttribute('autoplay', 'false');
     video.preload = 'auto';
-    // CRITICAL FIX: must append to DOM for iOS Safari to actually decode/seek
-    video.style.cssText = 'position:fixed;top:0;left:0;width:2px;height:2px;opacity:0.01;pointer-events:none;z-index:-9999';
-    document.body.appendChild(video);
-
+    video.crossOrigin = 'anonymous';
     const src = URL.createObjectURL(file);
     let cleaned = false;
-    const cleanup = () => {
-      if (cleaned) return;
-      cleaned = true;
-      try { video.pause(); } catch (e) {}
-      URL.revokeObjectURL(src);
-      video.remove();
-    };
+    const cleanup = () => { if (!cleaned) { cleaned = true; URL.revokeObjectURL(src); } };
 
     video.addEventListener('error', () => {
       cleanup();
-      const err = video.error;
-      reject(new Error('影片讀取失敗' + (err ? ' (code ' + err.code + ': ' + (err.message || 'unknown') + ')' : '')));
+      reject(new Error('影片讀取失敗 (codec 不支援?)'));
     }, { once: true });
 
     video.addEventListener('loadedmetadata', async () => {
       try {
         const duration = video.duration;
-        if (!duration || !isFinite(duration)) throw new Error('影片時長異常 (可能 codec 不支援)');
+        if (!duration || !isFinite(duration)) throw new Error('影片時長異常');
         if (duration > 180) throw new Error('影片太長 (限 3 分鐘內)');
-        if (onProgress) onProgress('影片讀取完成 (' + duration.toFixed(1) + ' 秒)');
 
         const canvas = document.createElement('canvas');
-        const vw = video.videoWidth || 1280;
-        const vh = video.videoHeight || 720;
+        const vw = video.videoWidth || 640;
+        const vh = video.videoHeight || 360;
         canvas.width = Math.min(1024, vw);
         canvas.height = canvas.width * (vh / vw);
         const ctx = canvas.getContext('2d');
-
-        // Compute target time stamps
-        const targetTimes = [];
-        for (let i = 0; i < count; i++) {
-          targetTimes.push((duration * (i + 1)) / (count + 1));
-        }
-
         const frames = [];
-        let nextIdx = 0;
 
-        const hasRVFC = 'requestVideoFrameCallback' in HTMLVideoElement.prototype;
+        try { await video.play(); video.pause(); } catch (e) {}
 
-        if (hasRVFC) {
-          // STRATEGY 1: requestVideoFrameCallback + 8x playback (iOS 15.4+)
-          if (onProgress) onProgress('用 8 倍速掃過影片抽 frame...');
-
-          video.playbackRate = 8;
-
-          const captureFrame = (now, metadata) => {
-            if (cleaned) return;
-            const t = metadata && metadata.mediaTime ? metadata.mediaTime : video.currentTime;
-
-            while (nextIdx < targetTimes.length && t >= targetTimes[nextIdx]) {
-              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-              const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-              frames.push(dataUrl.split(',')[1]);
-              nextIdx++;
-              if (onProgress) onProgress('已抽 ' + nextIdx + '/' + count + ' 個 frame');
-            }
-
-            if (nextIdx >= targetTimes.length || t >= duration - 0.05) {
-              video.pause();
-              cleanup();
-              if (frames.length === count) resolve(frames);
-              else reject(new Error('frame 不足 (' + frames.length + '/' + count + ')'));
-              return;
-            }
-            video.requestVideoFrameCallback(captureFrame);
-          };
-
-          try {
-            await video.play();
-          } catch (e) {
-            cleanup();
-            reject(new Error('影片播放失敗: ' + e.message));
-            return;
-          }
-          video.requestVideoFrameCallback(captureFrame);
-
-          // Safety: kill after duration/8 + 30 sec
-          setTimeout(() => {
-            if (!cleaned && frames.length < count) {
-              cleanup();
-              if (frames.length >= 1) {
-                resolve(frames); // partial frames better than nothing
-              } else {
-                reject(new Error('影片抽 frame 逾時, 請改用照片上傳'));
-              }
-            }
-          }, (duration / 8 + 30) * 1000);
-
-        } else {
-          // STRATEGY 2: Seek-based fallback (older browsers)
-          if (onProgress) onProgress('用 seek 模式抽 frame (舊瀏覽器)...');
-
-          try { await video.play(); video.pause(); } catch (e) {}
-
-          for (let i = 0; i < count; i++) {
-            const time = targetTimes[i];
-            await new Promise((r, j) => {
-              let done = false;
-              const finish = (err) => {
-                if (done) return;
-                done = true;
-                clearTimeout(t);
-                video.removeEventListener('seeked', onSeek);
-                err ? j(err) : r();
-              };
-              const onSeek = () => finish();
-              const t = setTimeout(() => finish(new Error('seek timeout frame ' + (i+1))), 30000);
-              video.addEventListener('seeked', onSeek);
-              try { video.currentTime = time; } catch (e) { finish(e); }
-            });
-            await new Promise(r => setTimeout(r, 100));
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-            frames.push(dataUrl.split(',')[1]);
-            if (onProgress) onProgress('已抽 ' + (i+1) + '/' + count + ' 個 frame');
-          }
-          cleanup();
-          resolve(frames);
+        for (let i = 0; i < count; i++) {
+          const time = (duration * (i + 1)) / (count + 1);
+          await new Promise((r, j) => {
+            let done = false;
+            const finish = (err) => {
+              if (done) return;
+              done = true;
+              clearTimeout(t);
+              video.removeEventListener('seeked', onSeek);
+              err ? j(err) : r();
+            };
+            const onSeek = () => finish();
+            const t = setTimeout(() => finish(new Error('seek timeout frame ' + (i+1))), 20000);
+            video.addEventListener('seeked', onSeek);
+            try { video.currentTime = time; } catch (e) { finish(e); }
+          });
+          await new Promise(r => setTimeout(r, 50));
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+          frames.push(dataUrl.split(',')[1]);
+          if (onProgress) onProgress('已抽 ' + (i+1) + '/' + count + ' 個 frame');
         }
-      } catch (e) {
         cleanup();
-        reject(e);
-      }
+        resolve(frames);
+      } catch (e) { cleanup(); reject(e); }
     }, { once: true });
 
     video.src = src;
@@ -488,6 +609,9 @@ async function extractFrames(file, count, onProgress) {
   });
 }
 
+// ========================
+// IMAGES UPLOAD (PRIMARY)
+// ========================
 async function analyzeImages(input) {
   if (!input.files || input.files.length === 0) return;
   const files = Array.from(input.files).slice(0, 6);
@@ -502,7 +626,7 @@ async function analyzeImages(input) {
     procText.textContent = '處理 ' + files.length + ' 張照片...';
     const frames = await Promise.all(files.map(f => fileToCompressedBase64(f)));
     currentFrames = frames;
-    procText.textContent = '送 Claude Vision 分析中...';
+    procText.textContent = '送 Claude Vision 分析中... (約 5-10 秒)';
 
     const response = await fetch(WORKER_URL, {
       method: 'POST',
@@ -510,11 +634,13 @@ async function analyzeImages(input) {
       body: JSON.stringify({ frames, mode: 'free', visitor_id: visitorId })
     });
     const data = await response.json();
+    if (response.status === 429) throw new Error('今日免費額度已用完 (' + (data.limit||2) + '/天), 明天再來');
     if (!data.ok) throw new Error(data.error || JSON.stringify(data));
 
     renderResult(data.result, 'free');
     proc.classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
+    preloadHistoryCount(); // 更新次數
   } catch (e) {
     proc.classList.add('hidden');
     document.getElementById('upload-zone').classList.remove('hidden');
@@ -543,6 +669,9 @@ async function fileToCompressedBase64(file) {
   });
 }
 
+// ========================
+// VIDEO UPLOAD (SECONDARY)
+// ========================
 async function analyzeVideo(input) {
   if (!input.files || !input.files[0]) return;
   const file = input.files[0];
@@ -551,10 +680,7 @@ async function analyzeVideo(input) {
   const proc = document.getElementById('processing');
   const procText = document.getElementById('processing-text');
   proc.classList.remove('hidden');
-
-  const setStep = (n, total, msg) => {
-    procText.textContent = '步驟 ' + n + '/' + total + ': ' + msg;
-  };
+  const setStep = (n, total, msg) => { procText.textContent = '步驟 ' + n + '/' + total + ': ' + msg; };
 
   try {
     setStep(1, 4, '影片大小 ' + (file.size / 1048576).toFixed(1) + 'MB, 格式 ' + (file.type || 'unknown'));
@@ -572,15 +698,15 @@ async function analyzeVideo(input) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ frames, mode: 'free', visitor_id: visitorId })
     });
-
     setStep(4, 4, 'Claude Vision AI 分析中 (約 5-10 秒)...');
-
     const data = await response.json();
+    if (response.status === 429) throw new Error('今日免費額度已用完 (' + (data.limit||2) + '/天), 明天再來');
     if (!data.ok) throw new Error(data.error || JSON.stringify(data));
 
     renderResult(data.result, 'free');
     proc.classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
+    preloadHistoryCount();
   } catch (e) {
     proc.classList.add('hidden');
     document.getElementById('upload-zone').classList.remove('hidden');
@@ -588,6 +714,9 @@ async function analyzeVideo(input) {
   }
 }
 
+// ========================
+// RESULT RENDERING
+// ========================
 function renderResult(result, mode) {
   if (mode === 'free') {
     const free = document.getElementById('free-results');
@@ -600,20 +729,19 @@ function renderResult(result, mode) {
     items.forEach(it => {
       const div = document.createElement('div');
       div.className = `card rounded-xl p-4 flex items-start gap-3 ${it.bg}`;
-      div.innerHTML = `<div class="w-8 h-8 rounded-full ${it.iconBg} flex items-center justify-center flex-shrink-0"><span class="${it.iconColor} font-bold">${it.icon}</span></div><div><div class="font-semibold">${it.label}</div></div>`;
+      div.innerHTML = `<div class="w-8 h-8 rounded-full ${it.iconBg} flex items-center justify-center flex-shrink-0"><span class="${it.iconColor} font-bold">${it.icon}</span></div><div class="min-w-0 flex-1"><div class="font-semibold text-sm sm:text-base">${escapeHtml(it.label)}</div></div>`;
       free.appendChild(div);
     });
     document.getElementById('locked-prompt').classList.remove('hidden');
     document.getElementById('deep-results').classList.add('hidden');
   } else {
-    // Deep mode rendering
     const deep = document.getElementById('deep-results');
     deep.innerHTML = '';
     const dimensions = ['stance', 'edge_engagement', 'weight_transfer', 'upper_body', 'knee_bend', 'arms_balance', 'rhythm', 'finish'];
     const labels = { stance: '站姿', edge_engagement: '雪刃使用', weight_transfer: '重心轉移', upper_body: '上半身姿態', knee_bend: '膝蓋彎曲', arms_balance: '手臂平衡', rhythm: '轉彎節奏', finish: '收尾穩定' };
 
     const grid = document.createElement('div');
-    grid.className = 'grid grid-cols-2 gap-3 mb-6';
+    grid.className = 'grid grid-cols-2 gap-2 sm:gap-3 mb-6';
     dimensions.forEach(d => {
       const dim = result[d];
       if (!dim) return;
@@ -621,8 +749,8 @@ function renderResult(result, mode) {
       const adv = dim.advice || '';
       const color = score >= 8 ? 'green' : score >= 5 ? 'amber' : 'red';
       const card = document.createElement('div');
-      card.className = `card rounded-xl p-4 border-${color}-200 bg-${color}-50/20`;
-      card.innerHTML = `<div class="flex items-baseline justify-between mb-1"><div class="font-semibold text-sm">${labels[d]}</div><div class="text-2xl font-extrabold text-${color}-600">${score}<span class="text-xs text-gray-400">/10</span></div></div><div class="text-xs text-gray-600 leading-relaxed">${adv}</div>`;
+      card.className = `card rounded-xl p-3 sm:p-4 border-${color}-200 bg-${color}-50/20`;
+      card.innerHTML = `<div class="flex items-baseline justify-between mb-1"><div class="font-semibold text-xs sm:text-sm">${labels[d]}</div><div class="text-xl sm:text-2xl font-extrabold text-${color}-600">${score}<span class="text-xs text-gray-400">/10</span></div></div><div class="text-[11px] sm:text-xs text-gray-600 leading-relaxed">${escapeHtml(adv)}</div>`;
       grid.appendChild(card);
     });
     deep.appendChild(grid);
@@ -630,7 +758,7 @@ function renderResult(result, mode) {
     if (result.next_drill) {
       const next = document.createElement('div');
       next.className = 'border-2 border-blue-600 rounded-xl p-4 bg-blue-50';
-      next.innerHTML = `<div class="text-xs font-semibold accent uppercase tracking-wider mb-1">🎯 下次練這個</div><div class="text-sm">${result.next_drill}</div>`;
+      next.innerHTML = `<div class="text-xs font-semibold accent uppercase tracking-wider mb-1">🎯 下次練這個</div><div class="text-sm">${escapeHtml(result.next_drill)}</div>`;
       deep.appendChild(next);
     }
 
@@ -646,7 +774,7 @@ async function unlockDeep() {
   const procText = document.getElementById('processing-text');
   document.getElementById('result').classList.add('hidden');
   proc.classList.remove('hidden');
-  procText.textContent = 'Claude Vision 深度分析 (8 維度)...';
+  procText.textContent = 'Claude Vision 深度分析 (8 維度, 約 10-15 秒)...';
 
   try {
     // TODO: 串 Stripe 後加入付款流程; 目前直接做 deep 分析測試 PMF
@@ -656,11 +784,13 @@ async function unlockDeep() {
       body: JSON.stringify({ frames: currentFrames, mode: 'deep', visitor_id: visitorId })
     });
     const data = await response.json();
+    if (response.status === 429) throw new Error('今日深度分析額度已用完, 明天再來');
     if (!data.ok) throw new Error(data.error || JSON.stringify(data));
 
     renderResult(data.result, 'deep');
     proc.classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
+    preloadHistoryCount();
   } catch (e) {
     proc.classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
@@ -672,9 +802,20 @@ function resetTry(){
   document.getElementById('result').classList.add('hidden');
   document.getElementById('upload-zone').classList.remove('hidden');
   document.getElementById('file-input').value = '';
+  document.getElementById('image-input').value = '';
   document.getElementById('locked-prompt').classList.remove('hidden');
   document.getElementById('deep-results').classList.add('hidden');
   currentFrames = null;
 }
+
+// ESC closes history modal
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !document.getElementById('history-modal').classList.contains('hidden')) {
+    toggleHistory();
+  }
+});
+
+// Init
+preloadHistoryCount();
 </script>
 </body></html>
