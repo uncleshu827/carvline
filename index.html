@@ -146,24 +146,24 @@ AI 告訴你<br>
 </div>
 
 <div id="upload-zone">
-<!-- Primary: Photo upload (works on all devices) -->
-<div class="upload-zone bg-white rounded-2xl p-8 text-center mb-3" onclick="document.getElementById('image-input').click()">
-<input type="file" id="image-input" accept="image/*" multiple class="hidden" onchange="analyzeImages(this)">
-<div class="text-3xl sm:text-4xl mb-2">📸</div>
-<div class="font-semibold text-base sm:text-lg mb-1">上傳 3-6 張單板動作照片</div>
-<div class="text-xs sm:text-sm text-gray-500">推薦 · 從相簿選關鍵姿勢截圖, 任何手機都穩</div>
+<!-- Primary: Video upload (snowboard is dynamic — motion matters) -->
+<div class="upload-zone bg-white rounded-2xl p-8 text-center mb-3" onclick="document.getElementById('file-input').click()">
+<input type="file" id="file-input" accept="video/*" capture="environment" class="hidden" onchange="analyzeVideo(this, 'free')">
+<div class="text-3xl sm:text-4xl mb-2">🎬</div>
+<div class="font-semibold text-base sm:text-lg mb-1">上傳一段滑雪影片</div>
+<div class="text-xs sm:text-sm text-gray-500">MP4 / MOV · 60 秒內 · AI 自動抽關鍵 frame 分析</div>
 </div>
 
-<!-- Secondary: Video upload (may timeout on iOS HEVC) -->
+<!-- Fallback: Photo upload (if video fails on device) -->
 <details class="bg-white rounded-2xl border border-gray-200">
 <summary class="font-medium text-sm text-gray-600 px-4 py-3 cursor-pointer hover:bg-gray-50">
-🎬 或上傳影片 (實驗中, iPhone HEVC 可能不穩)
+📸 影片上傳失敗? 改用 3-6 張動作截圖
 </summary>
-<div class="upload-zone bg-gray-50 m-4 rounded-xl p-6 text-center" onclick="document.getElementById('file-input').click()">
-<input type="file" id="file-input" accept="video/*" class="hidden" onchange="analyzeVideo(this, 'free')">
-<div class="text-2xl mb-2">▶</div>
-<div class="text-sm font-medium mb-1">點擊上傳影片</div>
-<div class="text-xs text-gray-500">MP4 / MOV · 60 秒內 · 桌面 Chrome 較穩</div>
+<div class="upload-zone bg-gray-50 m-4 rounded-xl p-6 text-center" onclick="document.getElementById('image-input').click()">
+<input type="file" id="image-input" accept="image/*" multiple class="hidden" onchange="analyzeImages(this)">
+<div class="text-2xl mb-2">📸</div>
+<div class="text-sm font-medium mb-1">上傳 3-6 張單板照片</div>
+<div class="text-xs text-gray-500">從相簿挑關鍵姿勢, 任何手機都穩</div>
 </div>
 </details>
 </div>
