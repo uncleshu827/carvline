@@ -451,7 +451,7 @@ const STR = {
     waitlist_received: '✓ Got it! {email} is on the waitlist.',
     faq_h2: 'Common questions',
     faqs: [
-      ['Is the free version unlimited?','You get 2 free analyses per IP per day. Want a deeper read on the same clip? Upgrade for USD $1.'],
+      ['Is the free version unlimited?','Yes — try as many clips as you want. The free version always shows 3 quick takeaways. Want a full 8-dimension breakdown of any clip? Upgrade for USD $1.'],
       ['What does USD $1 include?','Unlocks the full 8-dimension breakdown of your already-tried clip — stance, edge engagement, weight transfer, upper body, knee bend, arms balance, rhythm, finish — plus a personalized drill for next session.'],
       ['Do I need extra gear?','No. An iPhone 12+ (or any modern Android) is enough. The "Friend films you" mode needs two phones — yours and a friend’s.'],
       ['Snowboard or skiing — both work?','Snowboard is our home turf and gets the most refined feedback. Skiing works too — the model auto-switches to ski-specific analysis (S-turns, pole timing, outside-ski pressure).'],
@@ -509,7 +509,7 @@ const STR = {
     dim_rhythm: 'Rhythm', dim_finish: 'Finish',
     next_drill_label: '🎯 Next drill',
     // alerts
-    err_rate_free: 'Daily free quota exhausted ({n}/day) — try again tomorrow.',
+    err_rate_busy: 'Service busy — please try again in a few minutes.',
     err_rate_deep: 'Daily deep-analysis quota exhausted — try again tomorrow.',
     err_analyze_fail: 'Analysis failed: {err}',
     err_deep_fail: 'Deep analysis failed: {err}',
@@ -608,7 +608,7 @@ const STR = {
     waitlist_received: '✓ 收到! {email} 已加入等候名單。',
     faq_h2: '大家常問',
     faqs: [
-      ['免費版可以無限上傳嗎?','每天可以免費試 (每 IP 每天 2 次)。想看更深入的同一段分析, 升級 USD $1 解鎖即可。'],
+      ['免費版可以無限上傳嗎?','可以, 想試幾段都行。免費版會給你 3 個快速重點。想要完整 8 維度分析? 升級 USD $1 解鎖即可。'],
       ['USD $1 包括什麼?','同一段你已試的影片, 解鎖完整 8 維度評分 (stance / edge engagement / weight transfer / upper body / knee bend / arms balance / rhythm / finish) + 個人化下次練什麼建議。'],
       ['需要買額外裝備嗎?','完全不用。你只要有 iPhone 12 以上就夠。「朋友幫你拍」模式需要兩支手機 (你的 + 朋友的)。'],
       ['單板和雙板都能用嗎?','單板是我們的主場 (亞洲市場 70%+ 是單板)。雙板也支援, 會自動切換成 ski 對應的動作分析 (S-turn、雪杖時機、外側施壓)。'],
@@ -661,7 +661,7 @@ const STR = {
     dim_upper_body: '上半身姿態', dim_knee_bend: '膝蓋彎曲', dim_arms_balance: '手臂平衡',
     dim_rhythm: '轉彎節奏', dim_finish: '收尾穩定',
     next_drill_label: '🎯 下次練這個',
-    err_rate_free: '今日免費額度已用完 ({n}/天), 明天再來',
+    err_rate_busy: '伺服器忙碌中, 請稍候再試。',
     err_rate_deep: '今日深度分析額度已用完, 明天再來',
     err_analyze_fail: '分析失敗: {err}',
     err_deep_fail: '深度分析失敗: {err}',
@@ -760,7 +760,7 @@ const STR = {
     waitlist_received: '✓ 收到! {email} 已加入等候名单。',
     faq_h2: '常见问题',
     faqs: [
-      ['免费版可以无限上传吗?','每天可以免费试 (每 IP 每天 2 次)。想看更深入的同一段分析, 升级 USD $1 解锁即可。'],
+      ['免费版可以无限上传吗?','可以, 想试几段都行。免费版会给你 3 个快速重点。想要完整 8 维度分析? 升级 USD $1 解锁即可。'],
       ['USD $1 包括什么?','同一段你已试的视频, 解锁完整 8 维度评分 (stance / edge engagement / weight transfer / upper body / knee bend / arms balance / rhythm / finish) + 个人化下次练什么建议。'],
       ['需要买额外装备吗?','完全不用。你只要有 iPhone 12 以上就够。「朋友帮你拍」模式需要两支手机 (你的 + 朋友的)。'],
       ['单板和双板都能用吗?','单板是我们的主场 (亚洲市场 70%+ 是单板)。双板也支持, 会自动切换成 ski 对应的动作分析 (S-turn、雪杖时机、外侧施压)。'],
@@ -813,7 +813,7 @@ const STR = {
     dim_upper_body: '上半身姿态', dim_knee_bend: '膝盖弯曲', dim_arms_balance: '手臂平衡',
     dim_rhythm: '转弯节奏', dim_finish: '收尾稳定',
     next_drill_label: '🎯 下次练这个',
-    err_rate_free: '今日免费额度已用完 ({n}/天), 明天再来',
+    err_rate_busy: '服务器忙碌中, 请稍候再试。',
     err_rate_deep: '今日深度分析额度已用完, 明天再来',
     err_analyze_fail: '分析失败: {err}',
     err_deep_fail: '深度分析失败: {err}',
@@ -1252,7 +1252,7 @@ async function analyzeVideo(input) {
     });
     setStep(4, 4, t('proc_analyzing'));
     const data = await response.json();
-    if (response.status === 429) throw new Error(t('err_rate_free', { n: data.limit || 2 }));
+    if (response.status === 429) throw new Error(data.error || t('err_rate_busy'));
     if (!data.ok) throw new Error(data.error || JSON.stringify(data));
 
     renderResult(data.result, 'free');
