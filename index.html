@@ -332,43 +332,76 @@ async function extractFrames(file, count) {
     const video = document.createElement('video');
     video.muted = true;
     video.playsInline = true;
+    video.setAttribute('webkit-playsinline', 'true');
+    video.setAttribute('playsinline', 'true');
     video.preload = 'auto';
-    video.src = URL.createObjectURL(file);
+    video.crossOrigin = 'anonymous';
+    const src = URL.createObjectURL(file);
+    video.src = src;
 
-    video.addEventListener('loadedmetadata', async () => {
-      const duration = video.duration;
-      if (!duration || duration > 120) { reject(new Error('影片需要 < 2 分鐘')); return; }
+    let cleaned = false;
+    const cleanup = () => { if (!cleaned) { cleaned = true; URL.revokeObjectURL(src); } };
 
-      const canvas = document.createElement('canvas');
-      const maxW = 1024;
-      const ratio = video.videoHeight / video.videoWidth;
-      canvas.width = Math.min(maxW, video.videoWidth);
-      canvas.height = canvas.width * ratio;
-      const ctx = canvas.getContext('2d');
+    video.addEventListener('error', () => {
+      cleanup();
+      reject(new Error('影片讀取失敗 (codec 不支援?)'));
+    }, { once: true });
 
-      const frames = [];
+    const start = async () => {
       try {
+        const duration = video.duration;
+        if (!duration || !isFinite(duration)) throw new Error('影片時長異常');
+        if (duration > 180) throw new Error('影片太長 (限 3 分鐘內)');
+
+        // iOS hack: play + pause 觸發影片真正解碼
+        try { await video.play(); video.pause(); } catch (e) {}
+
+        const canvas = document.createElement('canvas');
+        const vw = video.videoWidth || 640;
+        const vh = video.videoHeight || 360;
+        canvas.width = Math.min(1024, vw);
+        canvas.height = canvas.width * (vh / vw);
+        const ctx = canvas.getContext('2d');
+
+        const frames = [];
         for (let i = 0; i < count; i++) {
           const time = (duration * (i + 1)) / (count + 1);
           await new Promise((r, j) => {
-            const onSeek = () => { video.removeEventListener('seeked', onSeek); r(); };
+            let done = false;
+            const finish = (err) => {
+              if (done) return;
+              done = true;
+              clearTimeout(t);
+              video.removeEventListener('seeked', onSeek);
+              err ? j(err) : r();
+            };
+            const onSeek = () => finish();
+            const t = setTimeout(() => finish(new Error('seek timeout frame ' + (i+1))), 20000);
             video.addEventListener('seeked', onSeek);
-            video.currentTime = time;
-            setTimeout(() => { video.removeEventListener('seeked', onSeek); j(new Error('seek timeout')); }, 5000);
+            try { video.currentTime = time; } catch (e) { finish(e); }
           });
+          // 等下一個 paint frame 確保畫布正確
+          await new Promise(r => setTimeout(r, 50));
           ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
           const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
           frames.push(dataUrl.split(',')[1]);
         }
-        URL.revokeObjectURL(video.src);
+        cleanup();
         resolve(frames);
       } catch (e) {
-        URL.revokeObjectURL(video.src);
+        cleanup();
         reject(e);
       }
-    });
+    };
 
-    video.addEventListener('error', () => reject(new Error('影片讀取失敗')));
+    // loadeddata 通常比 loadedmetadata 更可靠 (iOS Safari)
+    video.addEventListener('loadeddata', start, { once: true });
+    // fallback: 5 秒後 loadeddata 還沒觸發, 試試 loadedmetadata
+    setTimeout(() => {
+      if (!cleaned && video.readyState < 2) {
+        video.addEventListener('canplay', start, { once: true });
+      }
+    }, 5000);
   });
 }
 
