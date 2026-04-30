@@ -1467,5 +1467,6 @@ document.addEventListener('keydown', e => {
 // Init
 applyI18n();
 preloadHistoryCount();
+handleStripeReturn(); // If we just came back from Stripe with ?unlock=success&session_id=xxx, kick off verify + deep flow
 </script>
 </body></html>
