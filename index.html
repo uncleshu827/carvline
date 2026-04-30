@@ -1259,10 +1259,51 @@ async function analyzeVideo(input) {
     proc.classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
     preloadHistoryCount();
+
+    // === Pending unlock recovery: if user has an unused paid session, auto-redeem it ===
+    let pendingSession = null;
+    try { pendingSession = localStorage.getItem('cv_pending_unlock_session'); } catch (e) {}
+    if (pendingSession) {
+      // Brief pause so user sees the free 3 takeaways first, then auto-trigger deep
+      setTimeout(() => redeemPendingUnlock(pendingSession), 800);
+    }
   } catch (e) {
     proc.classList.add('hidden');
     document.getElementById('upload-zone').classList.remove('hidden');
     alert(t('err_analyze_fail', { err: e.message }));
+  }
+}
+
+async function redeemPendingUnlock(sessionId) {
+  if (!currentFrames || currentFrames.length === 0) return;
+  const proc = document.getElementById('processing');
+  const procText = document.getElementById('processing-text');
+  document.getElementById('result').classList.add('hidden');
+  proc.classList.remove('hidden');
+  procText.textContent = t('proc_deep');
+  try {
+    const r = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ frames: currentFrames, mode: 'deep', visitor_id: visitorId, language: currentLang, paid_session_id: sessionId })
+    });
+    const data = await r.json();
+    if (!data.ok) {
+      // Unlock either invalid or already-used. Clear it to avoid retry loop.
+      if (r.status === 409 || r.status === 402) {
+        try { localStorage.removeItem('cv_pending_unlock_session'); } catch (e) {}
+      }
+      throw new Error(data.error || 'deep failed');
+    }
+    renderResult(data.result, 'deep');
+    proc.classList.add('hidden');
+    document.getElementById('result').classList.remove('hidden');
+    try { localStorage.removeItem('cv_pending_unlock_session'); } catch (e) {}
+    preloadHistoryCount();
+  } catch (e) {
+    proc.classList.add('hidden');
+    document.getElementById('result').classList.remove('hidden');
+    alert(t('err_deep_fail', { err: e.message }));
   }
 }
 
@@ -1369,6 +1410,14 @@ async function unlockDeepDirect() {
 // Run on page load — if redirected from Stripe with ?unlock=success&session_id=xxx
 async function handleStripeReturn() {
   const params = new URLSearchParams(window.location.search);
+  // Recovery URL: ?recover_unlock=<session_id> — saves the session as pending so the next upload auto-redeems it
+  const recoverSession = params.get('recover_unlock');
+  if (recoverSession) {
+    try { localStorage.setItem('cv_pending_unlock_session', recoverSession); } catch (e) {}
+    history.replaceState({}, '', window.location.pathname);
+    alert(t('err_paid_no_frames'));
+    return;
+  }
   if (params.get('unlock') !== 'success') return;
   const sessionId = params.get('session_id');
   if (!sessionId) return;
@@ -1412,7 +1461,8 @@ async function handleStripeReturn() {
     }
 
     if (!frames || frames.length === 0) {
-      // We can't run analysis without frames (user cleared cache?). Acknowledge payment but ask them to re-upload.
+      // No frames cached. Save the unlock to localStorage so the next upload auto-redeems it.
+      try { localStorage.setItem('cv_pending_unlock_session', sessionId); } catch (e) {}
       proc.classList.add('hidden');
       document.getElementById('upload-zone').classList.remove('hidden');
       alert(t('err_paid_no_frames'));
