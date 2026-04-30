@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privacy Policy — Carvline</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:system-ui,-apple-system,sans-serif;color:#0a0a0a}</style>
+</head>
+<body class="bg-white">
+<nav class="border-b border-gray-100 sticky top-0 bg-white/90 backdrop-blur-md z-50">
+<div class="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+<a href="/" class="flex items-center gap-2"><div class="w-7 h-7 rounded-lg bg-gray-900 flex items-center justify-center text-white font-bold text-xs">C</div><span class="font-semibold text-sm">Carvline</span></a>
+<a href="/" class="text-sm text-gray-600 hover:text-gray-900">← Back</a>
+</div></nav>
+
+<main class="max-w-3xl mx-auto px-6 py-12">
+<h1 class="text-3xl font-bold mb-2">Privacy Policy</h1>
+<p class="text-sm text-gray-500 mb-10">Last updated: 2026-04-30</p>
+
+<div class="prose max-w-none space-y-6 text-gray-700 leading-relaxed">
+
+<p>Carvline ("we", "us") is a snowboard video analysis tool. This Privacy Policy explains what we collect, how we use it, and how to control your data.</p>
+
+<h2 class="text-xl font-bold mt-8 mb-3 text-gray-900">What we collect</h2>
+
+<p><strong>Video clips you upload</strong>. We extract a small number of still frames (typically 3) and send them to Anthropic's Claude API for analysis. The original video file never leaves your browser.</p>
+
+<p><strong>Your analysis results</strong> (skill level, scores, advice text). Stored on Cloudflare's edge database in Asia (Tokyo region) so you can view your history.</p>
+
+<p><strong>An anonymous visitor ID</strong> (a random UUID stored in your browser's localStorage). We use this only to link your past analyses together — no name, email, or account required.</p>
+
+<p><strong>Basic technical data</strong>: IP address, browser user-agent, country (from your IP), language preference. Used for rate-limiting (preventing abuse) and to show feedback in your language.</p>
+
+<p><strong>Email address</strong> (optional). Only if you join our waitlist or pay for a deep analysis. Used to notify you about your unlock or features going live.</p>
+
+<p><strong>Payment data</strong>. Card details are handled exclusively by Stripe. We never see, store, or have access to your card number.</p>
+
+<h2 class="text-xl font-bold mt-8 mb-3 text-gray-900">What we don't collect</h2>
+
+<p>We do not use cookies for tracking. We do not run third-party analytics scripts (no Google Analytics, no Facebook Pixel). We do not sell your data. We do not use your video frames to train AI models — they are sent to Anthropic for one-time analysis and then discarded.</p>
+
+<h2 class="text-xl font-bold mt-8 mb-3 text-gray-900">Data retention</h2>
+
+<p><strong>Video frames</strong>: discarded immediately after each analysis. Not stored on our servers.</p>
+
+<p><strong>Analysis results</strong>: kept for as long as you want them. Email us to delete.</p>
+
+<p><strong>Email + payment records</strong>: retained for 7 years to comply with tax/accounting requirements.</p>
+
+<p><strong>Anonymous visitor ID</strong>: lives in your browser's localStorage. Clearing your browser data removes it.</p>
+
+<h2 class="text-xl font-bold mt-8 mb-3 text-gray-900">Third parties</h2>
+
+<p>We use the following processors. Each has its own privacy policy:</p>
+
+<ul class="list-disc ml-6 space-y-1">
+<li><a href="https://www.anthropic.com/legal/privacy" class="text-blue-600 underline">Anthropic</a> — processes your video frames for AI analysis. Per Anthropic's API policy, your frames are not used to train their models.</li>
+<li><a href="https://www.cloudflare.com/privacypolicy/" class="text-blue-600 underline">Cloudflare</a> — hosts the website, edge database (D1), and serverless backend (Workers).</li>
+<li><a href="https://stripe.com/privacy" class="text-blue-600 underline">Stripe</a> — processes payments.</li>
+<li><a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" class="text-blue-600 underline">GitHub Pages</a> — serves static HTML/CSS/JS.</li>
+</ul>
+
+<h2 class="text-xl font-bold mt-8 mb-3 text-gray-900">Your rights</h2>
+
+<p>You can:</p>
+
+<ul class="list-disc ml-6 space-y-1">
+<li>Delete all your past analyses by emailing us with your visitor_id (shown at the bottom of "My History")</li>
+<li>Request a copy of your data</li>
+<li>Withdraw your waitlist email by replying "unsubscribe" to any email</li>
+<li>Get a refund for any paid unlock within 30 days, no questions asked</li>
+</ul>
+
+<p>Email all data requests to <strong>hsiehshukang@gmail.com</strong>. We respond within 7 days.</p>
+
+<h2 class="text-xl font-bold mt-8 mb-3 text-gray-900">Children</h2>
+
+<p>Carvline is not directed at children under 13. We do not knowingly collect data from anyone under 13. If you believe a child has used our service, email us and we'll delete their data.</p>
+
+<h2 class="text-xl font-bold mt-8 mb-3 text-gray-900">Changes</h2>
+
+<p>If we materially change this policy, we'll update the "Last updated" date at the top. For significant changes (e.g. new third-party processors), we'll email anyone on the waitlist.</p>
+
+<p class="mt-12 text-sm text-gray-500">Questions? Email hsiehshukang@gmail.com.</p>
+
+</div>
+</main>
+
+<footer class="border-t border-gray-100 py-8 mt-16">
+<div class="max-w-3xl mx-auto px-6 flex items-center justify-between text-xs text-gray-500">
+<div>© 2026 Carvline</div>
+<div class="space-x-4"><a href="/privacy.html" class="hover:text-gray-900">Privacy</a><a href="/terms.html" class="hover:text-gray-900">Terms</a></div>
+</div>
+</footer>
+</body></html>
