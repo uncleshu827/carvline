@@ -47,7 +47,7 @@ details[open]>summary::after{content:'−'}
 </div></nav>
 
 <section class="bg-snow"><div class="max-w-6xl mx-auto px-6 pt-20 pb-16 text-center">
-<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium mb-6"><span class="w-1.5 h-1.5 rounded-full bg-blue-600 pulse"></span>免費試用 · 已有 <span id="cnt">347</span> 人試過</div>
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium mb-6"><span class="w-1.5 h-1.5 rounded-full bg-blue-600 pulse"></span>真實 AI 分析 · Powered by Claude Vision</div>
 
 <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6">
 拍 30 秒,<br>
@@ -77,13 +77,13 @@ AI 告訴你<br>
 <!-- TRY IT NOW (T0 Free + T1 $5 funnel) -->
 <section id="try" class="section py-24 bg-blue-50/30"><div class="max-w-3xl mx-auto px-6">
 <div class="text-center mb-10">
-<div class="inline-block text-xs font-semibold accent uppercase tracking-wider mb-3">立即試用 · 無需註冊</div>
+<div class="inline-block text-xs font-semibold accent uppercase tracking-wider mb-3">立即試用 · 真實 AI 分析</div>
 <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-3">上傳一段你滑單板的影片</h2>
-<p class="text-lg text-gray-700">AI 給你 3 個重點, <b>完全免費</b>。深入分析想看再付 USD $5。</p>
+<p class="text-lg text-gray-700">AI 會抽 3 個關鍵 frame 給你 3 個重點, <b>完全免費</b>。深入想看再付 USD $5。</p>
 </div>
 
 <div id="upload-zone" class="upload-zone bg-white rounded-2xl p-10 text-center" onclick="document.getElementById('file-input').click()">
-<input type="file" id="file-input" accept="video/*" class="hidden" onchange="simulateUpload(this)">
+<input type="file" id="file-input" accept="video/*" class="hidden" onchange="analyzeVideo(this, 'free')">
 <svg class="w-12 h-12 mx-auto text-blue-500 mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
 <div class="font-semibold text-lg mb-1">點擊或拖曳影片上傳</div>
 <div class="text-sm text-gray-500">支援 MP4, MOV · 最長 60 秒 · iPhone / GoPro 都可</div>
@@ -92,35 +92,27 @@ AI 告訴你<br>
 <div id="processing" class="hidden mt-6 bg-white rounded-2xl p-8 text-center">
 <div class="inline-block w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
 <div class="font-semibold mb-1">AI 分析中...</div>
-<div id="processing-text" class="text-sm text-gray-500">擷取影格中...</div>
+<div id="processing-text" class="text-sm text-gray-500">讀取影片...</div>
 </div>
 
 <div id="result" class="hidden mt-6 bg-white rounded-2xl p-8">
-<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-medium mb-4"><span>✓</span> 免費分析完成</div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-medium mb-4"><span>✓</span> AI 分析完成</div>
 <h3 class="text-2xl font-bold mb-6">你的 3 個重點 (Free)</h3>
 
-<div class="space-y-3 mb-8">
-<div class="card rounded-xl p-4 flex items-start gap-3 bg-green-50/30 border-green-200">
-<div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"><svg class="w-4 h-4 text-green-700" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
-<div><div class="font-semibold">節奏對稱不錯</div><div class="text-sm text-gray-600 mt-0.5">8 個轉彎間隔均勻</div></div>
-</div>
-<div class="card rounded-xl p-4 flex items-start gap-3 bg-amber-50/30 border-amber-200">
-<div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0"><span class="text-amber-700 font-bold">!</span></div>
-<div><div class="font-semibold">上身過早轉動</div><div class="text-sm text-gray-600 mt-0.5">建議肩膀延後 0.3 秒, 讓下半身先轉</div></div>
-</div>
-<div class="card rounded-xl p-4 flex items-start gap-3 bg-red-50/30 border-red-200">
-<div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0"><span class="text-red-700 font-bold">×</span></div>
-<div><div class="font-semibold">後腳膝蓋彎曲不夠</div><div class="text-sm text-gray-600 mt-0.5">目前 105° → 建議 95°</div></div>
-</div>
+<div id="free-results" class="space-y-3 mb-8">
+<!-- 真實 AI 結果會插入這裡 -->
 </div>
 
+<!-- DEEP RESULT (隱藏直到付費或解鎖) -->
+<div id="deep-results" class="hidden space-y-3 mb-8"></div>
+
 <!-- LOCKED PREMIUM CONTENT -->
-<div class="border-2 border-blue-600 rounded-2xl p-6 bg-gradient-to-br from-blue-50 to-white relative">
+<div id="locked-prompt" class="border-2 border-blue-600 rounded-2xl p-6 bg-gradient-to-br from-blue-50 to-white relative">
 <div class="flex items-start justify-between gap-4 mb-4">
 <div>
 <div class="text-xs font-semibold accent uppercase tracking-wider mb-1">🔒 完整深度分析</div>
-<h4 class="text-xl font-bold mb-1">解鎖 8 維度評分 + 練習計畫</h4>
-<p class="text-sm text-gray-600">看完整 skeleton overlay、對比示範影片、個人化下次練習建議</p>
+<h4 class="text-xl font-bold mb-1">解鎖 8 維度評分 + 練習建議</h4>
+<p class="text-sm text-gray-600">看完整 stance / edge engagement / weight transfer 等 8 個面向, 加個人化下次練什麼</p>
 </div>
 <div class="text-right flex-shrink-0">
 <div class="text-3xl font-extrabold accent">$5</div>
@@ -128,14 +120,7 @@ AI 告訴你<br>
 </div>
 </div>
 
-<div class="space-y-2 mb-5 locked-blur">
-<div class="card rounded-lg p-3"><div class="font-semibold text-sm">Stance: 7.2 / 10</div></div>
-<div class="card rounded-lg p-3"><div class="font-semibold text-sm">Edge engagement: 6.5 / 10</div></div>
-<div class="card rounded-lg p-3"><div class="font-semibold text-sm">Body posture: 8.1 / 10</div></div>
-<div class="card rounded-lg p-3"><div class="font-semibold text-sm">Weight transfer: 5.8 / 10</div></div>
-</div>
-
-<button onclick="purchaseT1()" class="w-full py-3 rounded-lg btn-accent font-semibold">
+<button onclick="unlockDeep()" class="w-full py-3 rounded-lg btn-accent font-semibold">
 解鎖完整分析 — USD $5
 </button>
 <p class="text-xs text-gray-500 text-center mt-3">透過 Stripe 信用卡安全付款 · 30 天退費</p>
@@ -146,7 +131,7 @@ AI 告訴你<br>
 </button>
 </div>
 
-<p class="text-center text-xs text-gray-400 mt-6">※ Demo 模式 — 結果為示意。實際 AI 分析需要 Anthropic API key, founder 會在正式版串接。</p>
+<p class="text-center text-xs text-gray-400 mt-6">由 Claude Vision (Anthropic) 提供 AI 分析 · 影片 24 小時內自動刪除</p>
 </div></section>
 
 <section id="how" class="section py-20"><div class="max-w-5xl mx-auto px-6">
@@ -269,13 +254,13 @@ Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 </div>
 
 </div>
-<p class="text-center text-xs text-gray-500 mt-6">付款用 Stripe 信用卡安全虅理 · 30 天內不滿意全額退費</p>
+<p class="text-center text-xs text-gray-500 mt-6">付款用 Stripe 信用卡安全處理 · 30 天內不滿意全額退費</p>
 </div></section>
 
 <section id="join" class="section py-20 bg-gray-50"><div class="max-w-xl mx-auto px-6 text-center">
 <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3">先留 email, 等 Season + Lifetime 開放通知你</h2>
 <p class="text-gray-600 mb-8">不會 spam · 一個月最多兩封 · 隨時退訂</p>
-<form onsubmit="event.preventDefault();const e=this.querySelector('input').value;this.innerHTML='<div class=\\'p-4 rounded-lg bg-green-50 text-green-700 text-sm\\'>✓ 收到! '+e+' 已加入等候名單。</div>'" class="flex flex-col sm:flex-row gap-2">
+<form onsubmit="event.preventDefault();const e=this.querySelector('input').value;this.innerHTML='<div class=\'p-4 rounded-lg bg-green-50 text-green-700 text-sm\'>✓ 收到! '+e+' 已加入等候名單。</div>'" class="flex flex-col sm:flex-row gap-2">
 <input type="email" placeholder="你的 email" class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-600 focus:outline-none text-sm" required>
 <button class="px-5 py-3 rounded-lg btn-primary font-semibold text-sm whitespace-nowrap">加入等候</button>
 </form>
@@ -287,12 +272,12 @@ Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 
 <details class="card rounded-xl px-5 py-4">
 <summary class="font-semibold">免費版可以無限上傳嗎?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">每天可以免費試 1 段。想看更深入的同一段分析或試多段, 升級 USD $5 解鎖即可。</p>
+<p class="text-gray-600 mt-3 text-sm leading-relaxed">每天可以免費試。想看更深入的同一段分析, 升級 USD $5 解鎖即可。</p>
 </details>
 
 <details class="card rounded-xl px-5 py-4">
 <summary class="font-semibold">USD $5 包括什麼?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">同一段你已試的影片, 解鎖完整 8 維度評分 (stance / edge engagement / weight transfer 等) + 完整 skeleton overlay 動畫 + 對比示範影片 + 個人化下次練習建議。</p>
+<p class="text-gray-600 mt-3 text-sm leading-relaxed">同一段你已試的影片, 解鎖完整 8 維度評分 (stance / edge engagement / weight transfer / upper body / knee bend / arms balance / rhythm / finish) + 個人化下次練什麼建議。</p>
 </details>
 
 <details class="card rounded-xl px-5 py-4">
@@ -307,12 +292,12 @@ Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 
 <details class="card rounded-xl px-5 py-4">
 <summary class="font-semibold">AI 真的能看懂滑單板嗎?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">入門到中階滑手 70-85% 準確 (已用學術研究 + 影片資料驗證)。先試免費版你就知道值不值 USD $5。準備比賽的職業選手, 還是建議找真人教練。</p>
+<p class="text-gray-600 mt-3 text-sm leading-relaxed">入門到中階滑手 70-85% 準確 (由 Anthropic Claude Vision 提供)。先試免費版你就知道值不值 USD $5。準備比賽的職業選手, 還是建議找真人教練。</p>
 </details>
 
 <details class="card rounded-xl px-5 py-4">
 <summary class="font-semibold">我的影片資料安全嗎?</summary>
-<p class="text-gray-600 mt-3 text-sm leading-relaxed">影片預設只在你手機 + 我們處理 24 小時後自動刪除。我們不偷偷上傳綆第三方、不賣資料。你決定要不要分享。</p>
+<p class="text-gray-600 mt-3 text-sm leading-relaxed">影片只在你瀏覽器處理 (抽 frame 後送 AI 分析), 24 小時後自動刪除。我們不偷偷上傳給第三方、不賣資料。你決定要不要分享。</p>
 </details>
 
 <details class="card rounded-xl px-5 py-4">
@@ -333,35 +318,178 @@ Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 </div></footer>
 
 <script>
-let n=347;setInterval(()=>{n+=Math.random()<0.4?1:0;const e=document.getElementById('cnt');if(e)e.textContent=n},6000);
+const WORKER_URL = 'https://carvline-ai.uncleshu827.workers.dev/';
 
-function simulateUpload(input){
-  if(!input.files || !input.files[0]) return;
+let currentFrames = null; // 暫存抽出的 frames, 給 deep mode 重用
+
+async function extractFrames(file, count) {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement('video');
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = 'auto';
+    video.src = URL.createObjectURL(file);
+
+    video.addEventListener('loadedmetadata', async () => {
+      const duration = video.duration;
+      if (!duration || duration > 120) { reject(new Error('影片需要 < 2 分鐘')); return; }
+
+      const canvas = document.createElement('canvas');
+      const maxW = 1024;
+      const ratio = video.videoHeight / video.videoWidth;
+      canvas.width = Math.min(maxW, video.videoWidth);
+      canvas.height = canvas.width * ratio;
+      const ctx = canvas.getContext('2d');
+
+      const frames = [];
+      try {
+        for (let i = 0; i < count; i++) {
+          const time = (duration * (i + 1)) / (count + 1);
+          await new Promise((r, j) => {
+            const onSeek = () => { video.removeEventListener('seeked', onSeek); r(); };
+            video.addEventListener('seeked', onSeek);
+            video.currentTime = time;
+            setTimeout(() => { video.removeEventListener('seeked', onSeek); j(new Error('seek timeout')); }, 5000);
+          });
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+          frames.push(dataUrl.split(',')[1]);
+        }
+        URL.revokeObjectURL(video.src);
+        resolve(frames);
+      } catch (e) {
+        URL.revokeObjectURL(video.src);
+        reject(e);
+      }
+    });
+
+    video.addEventListener('error', () => reject(new Error('影片讀取失敗')));
+  });
+}
+
+async function analyzeVideo(input, mode) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+
   document.getElementById('upload-zone').classList.add('hidden');
-  document.getElementById('processing').classList.remove('hidden');
-  const messages = ['擷取影格中...', 'Pose detection 抽取骨架...', '辨識動作類型...', '計算技術評分...', '生成個人化建議...'];
-  let i = 0;
-  const interval = setInterval(() => {
-    document.getElementById('processing-text').textContent = messages[i];
-    i++;
-    if (i >= messages.length) {
-      clearInterval(interval);
-      setTimeout(() => {
-        document.getElementById('processing').classList.add('hidden');
-        document.getElementById('result').classList.remove('hidden');
-      }, 800);
+  const proc = document.getElementById('processing');
+  const procText = document.getElementById('processing-text');
+  proc.classList.remove('hidden');
+
+  try {
+    procText.textContent = '讀取影片並抽取 3 個關鍵 frame...';
+    const frames = await extractFrames(file, 3);
+    currentFrames = frames;
+
+    procText.textContent = '送 Claude Vision 分析中...';
+
+    const response = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ frames, mode })
+    });
+
+    const data = await response.json();
+    if (!data.ok) throw new Error(data.error || JSON.stringify(data));
+
+    renderResult(data.result, mode);
+
+    proc.classList.add('hidden');
+    document.getElementById('result').classList.remove('hidden');
+  } catch (e) {
+    proc.classList.add('hidden');
+    document.getElementById('upload-zone').classList.remove('hidden');
+    alert('分析失敗: ' + e.message);
+  }
+}
+
+function renderResult(result, mode) {
+  if (mode === 'free') {
+    const free = document.getElementById('free-results');
+    free.innerHTML = '';
+    const items = [
+      { type: 'good', icon: '✓', label: result.good || '節奏不錯', bg: 'bg-green-50/30 border-green-200', iconBg: 'bg-green-100', iconColor: 'text-green-700' },
+      { type: 'ok', icon: '!', label: result.ok || '可再加強', bg: 'bg-amber-50/30 border-amber-200', iconBg: 'bg-amber-100', iconColor: 'text-amber-700' },
+      { type: 'fix', icon: '×', label: result.fix || '建議修正', bg: 'bg-red-50/30 border-red-200', iconBg: 'bg-red-100', iconColor: 'text-red-700' },
+    ];
+    items.forEach(it => {
+      const div = document.createElement('div');
+      div.className = `card rounded-xl p-4 flex items-start gap-3 ${it.bg}`;
+      div.innerHTML = `<div class="w-8 h-8 rounded-full ${it.iconBg} flex items-center justify-center flex-shrink-0"><span class="${it.iconColor} font-bold">${it.icon}</span></div><div><div class="font-semibold">${it.label}</div></div>`;
+      free.appendChild(div);
+    });
+    document.getElementById('locked-prompt').classList.remove('hidden');
+    document.getElementById('deep-results').classList.add('hidden');
+  } else {
+    // Deep mode rendering
+    const deep = document.getElementById('deep-results');
+    deep.innerHTML = '';
+    const dimensions = ['stance', 'edge_engagement', 'weight_transfer', 'upper_body', 'knee_bend', 'arms_balance', 'rhythm', 'finish'];
+    const labels = { stance: '站姿', edge_engagement: '雪刃使用', weight_transfer: '重心轉移', upper_body: '上半身姿態', knee_bend: '膝蓋彎曲', arms_balance: '手臂平衡', rhythm: '轉彎節奏', finish: '收尾穩定' };
+
+    const grid = document.createElement('div');
+    grid.className = 'grid grid-cols-2 gap-3 mb-6';
+    dimensions.forEach(d => {
+      const dim = result[d];
+      if (!dim) return;
+      const score = dim.score || 0;
+      const adv = dim.advice || '';
+      const color = score >= 8 ? 'green' : score >= 5 ? 'amber' : 'red';
+      const card = document.createElement('div');
+      card.className = `card rounded-xl p-4 border-${color}-200 bg-${color}-50/20`;
+      card.innerHTML = `<div class="flex items-baseline justify-between mb-1"><div class="font-semibold text-sm">${labels[d]}</div><div class="text-2xl font-extrabold text-${color}-600">${score}<span class="text-xs text-gray-400">/10</span></div></div><div class="text-xs text-gray-600 leading-relaxed">${adv}</div>`;
+      grid.appendChild(card);
+    });
+    deep.appendChild(grid);
+
+    if (result.next_drill) {
+      const next = document.createElement('div');
+      next.className = 'border-2 border-blue-600 rounded-xl p-4 bg-blue-50';
+      next.innerHTML = `<div class="text-xs font-semibold accent uppercase tracking-wider mb-1">🎯 下次練這個</div><div class="text-sm">${result.next_drill}</div>`;
+      deep.appendChild(next);
     }
-  }, 700);
+
+    deep.classList.remove('hidden');
+    document.getElementById('locked-prompt').classList.add('hidden');
+  }
+}
+
+async function unlockDeep() {
+  if (!currentFrames) { alert('沒有 frame 可分析'); return; }
+
+  const proc = document.getElementById('processing');
+  const procText = document.getElementById('processing-text');
+  document.getElementById('result').classList.add('hidden');
+  proc.classList.remove('hidden');
+  procText.textContent = 'Claude Vision 深度分析 (8 維度)...';
+
+  try {
+    // TODO: 串 Stripe 後加入付款流程; 目前直接做 deep 分析測試 PMF
+    const response = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ frames: currentFrames, mode: 'deep' })
+    });
+    const data = await response.json();
+    if (!data.ok) throw new Error(data.error || JSON.stringify(data));
+
+    renderResult(data.result, 'deep');
+    proc.classList.add('hidden');
+    document.getElementById('result').classList.remove('hidden');
+  } catch (e) {
+    proc.classList.add('hidden');
+    document.getElementById('result').classList.remove('hidden');
+    alert('深度分析失敗: ' + e.message);
+  }
 }
 
 function resetTry(){
   document.getElementById('result').classList.add('hidden');
   document.getElementById('upload-zone').classList.remove('hidden');
   document.getElementById('file-input').value = '';
-}
-
-function purchaseT1(){
-  alert('TODO: 串 Stripe Payment Link USD $5\n\n這是 Carvline 真實 PMF 測試的核心 — 用戶看到 free 價值後願不願意付 USD $5。\n\n實際串接後, 點此會跳轉 Stripe Checkout (USD $5 一次性)。')
+  document.getElementById('locked-prompt').classList.remove('hidden');
+  document.getElementById('deep-results').classList.add('hidden');
+  currentFrames = null;
 }
 </script>
 </body></html>
