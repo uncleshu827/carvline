@@ -45,7 +45,6 @@ details[open]>summary::after{content:'−'}
 @media (max-width:640px){
   .hero-h1{font-size:2.25rem;line-height:1.15}
   .hero-p{font-size:1.0625rem}
-  .nav-cta{padding:0.5rem 0.875rem;font-size:0.8125rem}
   .upload-zone{padding:1.5rem 1rem;min-height:160px}
   .px-6{padding-left:1.25rem;padding-right:1.25rem}
   .pt-20{padding-top:3rem}
@@ -63,6 +62,9 @@ details[open]>summary::after{content:'−'}
 @media (max-width:640px){#processing{padding:2rem 1.25rem}}
 details summary{padding:0.5rem 0;min-height:44px;display:flex;align-items:center;flex-wrap:wrap}
 details summary::after{margin-left:auto}
+/* Nav buttons — fixed height so the row stays aligned regardless of content */
+.btn-nav{display:inline-flex;align-items:center;justify-content:center;height:38px;min-height:38px;padding:0 0.875rem;border-radius:0.5rem;font-size:0.875rem;line-height:1;font-weight:500;gap:0.25rem;white-space:nowrap}
+@media (max-width:640px){.btn-nav{height:36px;min-height:36px;padding:0 0.75rem;font-size:0.8125rem}}
 .lang-menu{position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid #e5e7eb;border-radius:0.5rem;box-shadow:0 8px 24px rgba(0,0,0,0.08);min-width:160px;z-index:60;overflow:hidden}
 .lang-menu button{display:block;width:100%;text-align:left;padding:0.625rem 0.875rem;font-size:0.875rem;background:transparent;border:none;cursor:pointer}
 .lang-menu button:hover{background:#f3f4f6}
@@ -76,15 +78,15 @@ details summary::after{margin-left:auto}
 <div class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center text-white font-bold text-sm">C</div><span class="font-semibold">Carvline</span></div>
 <div class="flex items-center gap-2">
 <div class="relative">
-<button onclick="toggleLangMenu(event)" class="px-3 py-2 rounded-lg btn-secondary text-sm font-medium inline-flex items-center gap-1" id="lang-btn"><span id="lang-current-flag">🌐</span><span id="lang-current-label" class="hidden sm:inline">English</span><span class="text-xs">▾</span></button>
+<button onclick="toggleLangMenu(event)" class="btn-nav btn-secondary" id="lang-btn"><span id="lang-current-flag">🌐</span><span id="lang-current-label" class="hidden sm:inline">English</span><span class="text-xs">▾</span></button>
 <div id="lang-menu" class="lang-menu hidden">
 <button data-lang="en" onclick="setLanguage('en')">🇺🇸 English</button>
 <button data-lang="zh-TW" onclick="setLanguage('zh-TW')">🇹🇼 繁體中文</button>
 <button data-lang="zh-CN" onclick="setLanguage('zh-CN')">🇨🇳 简体中文</button>
 </div>
 </div>
-<button onclick="toggleHistory()" class="px-3 py-2 rounded-lg btn-secondary text-sm font-medium hidden sm:inline-flex items-center" id="history-btn-desktop"><span data-i18n="nav_history">My History</span> <span id="history-count-desktop" class="ml-1 text-gray-400"></span></button>
-<a href="#try" class="nav-cta px-4 py-2 rounded-lg btn-primary text-sm font-medium" data-i18n="nav_cta">Try It Now</a>
+<button onclick="toggleHistory()" class="btn-nav btn-secondary hidden sm:inline-flex" id="history-btn-desktop"><span data-i18n="nav_history">My History</span> <span id="history-count-desktop" class="ml-1 text-gray-400"></span></button>
+<a href="#try" class="btn-nav btn-primary" data-i18n="nav_cta">Try It Now</a>
 </div>
 </div></nav>
 
