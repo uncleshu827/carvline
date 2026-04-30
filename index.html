@@ -615,6 +615,8 @@ const STR = {
     waitlist_prompt_record: 'Drop your email — we’ll let you know when "auto-tracked riding" goes live:',
     waitlist_prompt_reel: 'Drop your email — we’ll let you know when "auto-edit reel" goes live:',
     waitlist_alert: 'Got it! We’ll notify you when it launches.',
+    demo_active_msg: "✓ Demo mode active!\n\nUpload a snowboard clip below — you'll get the FULL deep analysis (free + 8-dimension + drill prescription) without payment. The unlock will auto-redeem after free analysis renders.",
+    demo_unavailable_msg: 'Demo unlocks are temporarily unavailable. Please try again later or contact us.',
     fb_heading: 'Help us improve',
     fb_q_overall: 'How accurate was this analysis?',
     fb_fully: '✓ Fully accurate',
@@ -801,6 +803,8 @@ const STR = {
     waitlist_prompt_record: '留個 email, 「自動紀錄」上線立刻通知你：',
     waitlist_prompt_reel: '留個 email, 「自動剪 30 秒」上線立刻通知你：',
     waitlist_alert: '已收到！上線會立刻通知你。',
+    demo_active_msg: '✓ Demo 模式啟動！\n\n上傳一段滑雪影片，你會拿到完整分析（免費 3 點 + 8 維度評分 + drill 處方），不用付款。Free 分析跑完後會自動觸發 deep。',
+    demo_unavailable_msg: 'Demo 額度暫時用完了，請稍後再試或聯絡我們。',
     fb_heading: '幫我們進步',
     fb_q_overall: '這次分析準確嗎？',
     fb_fully: '✓ 完全準確',
@@ -987,6 +991,8 @@ const STR = {
     waitlist_prompt_record: '留个 email, 「自动记录」上线立刻通知你：',
     waitlist_prompt_reel: '留个 email, 「自动剪 30 秒」上线立刻通知你：',
     waitlist_alert: '已收到！上线会立刻通知你。',
+    demo_active_msg: '✓ Demo 模式启动！\n\n上传一段滑雪视频，你会拿到完整分析（免费 3 点 + 8 维度评分 + drill 处方），不用付款。Free 分析跑完后会自动触发 deep。',
+    demo_unavailable_msg: 'Demo 额度暂时用完了，请稍后再试或联系我们。',
     fb_heading: '帮我们进步',
     fb_q_overall: '这次分析准确吗？',
     fb_fully: '✓ 完全准确',
@@ -1168,6 +1174,8 @@ const STR = {
     waitlist_prompt_record: 'メールを残してください、「自動記録」公開時に通知します：',
     waitlist_prompt_reel: 'メールを残してください、「30秒自動編集」公開時に通知します：',
     waitlist_alert: '受領しました！公開時にすぐ通知します。',
+    demo_active_msg: '✓ デモモード起動！\n\nスノーボードクリップをアップロードしてください。支払いなしで完全分析（無料3ポイント + 8項目スコア + ドリル処方）を取得できます。無料分析完了後、自動的にディープ分析が始まります。',
+    demo_unavailable_msg: 'デモ枠が一時的に利用できません。後でお試しください。',
     fb_heading: '改善にご協力ください',
     fb_q_overall: 'この分析の精度は？',
     fb_fully: '✓ 完璧',
@@ -1349,6 +1357,8 @@ const STR = {
     waitlist_prompt_record: '이메일을 남겨주세요, "자동 기록" 출시 시 알려드립니다:',
     waitlist_prompt_reel: '이메일을 남겨주세요, "자동 편집 30초" 출시 시 알려드립니다:',
     waitlist_alert: '접수했습니다! 출시 시 즉시 알려드립니다.',
+    demo_active_msg: '✓ 데모 모드 활성화!\n\n스노보드 클립을 업로드하세요. 결제 없이 완전 분석(무료 3가지 + 8가지 항목 점수 + 드릴 처방)을 받을 수 있습니다. 무료 분석 후 자동으로 심층 분석이 실행됩니다.',
+    demo_unavailable_msg: '데모 사용권이 일시적으로 사용 불가. 잠시 후 다시 시도해주세요.',
     fb_heading: '개선에 도움 주세요',
     fb_q_overall: '이 분석은 정확했나요?',
     fb_fully: '✓ 완전 정확',
@@ -2115,6 +2125,25 @@ async function unlockDeepDirect() {
 // Run on page load — if redirected from Stripe with ?unlock=success&session_id=xxx
 async function handleStripeReturn() {
   const params = new URLSearchParams(window.location.search);
+
+  // Demo URL: ?demo=1 — auto-fetch a fresh demo unlock from worker, no payment needed
+  if (params.get('demo') === '1') {
+    history.replaceState({}, '', window.location.pathname);
+    try {
+      const r = await fetch(WORKER_URL + 'demo-unlock', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+      const d = await r.json();
+      if (d.ok && d.session_id) {
+        try { localStorage.setItem('cv_pending_unlock_session', d.session_id); } catch (e) {}
+        alert(t('demo_active_msg'));
+      } else {
+        alert(t('demo_unavailable_msg'));
+      }
+    } catch (e) {
+      alert(t('demo_unavailable_msg'));
+    }
+    return;
+  }
+
   // Recovery URL: ?recover_unlock=<session_id> — saves the session as pending so the next upload auto-redeems it
   const recoverSession = params.get('recover_unlock');
   if (recoverSession) {
