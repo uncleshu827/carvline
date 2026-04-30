@@ -53,8 +53,13 @@ details[open]>summary::after{content:'−'}
   .btn-primary:hover,.btn-accent:hover,.btn-secondary:hover{transform:none}
 }
 .history-panel{max-height:320px;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.history-item{padding:0.75rem;border:1px solid #e5e7eb;border-radius:0.625rem;background:#fafafa;transition:all .15s}
-.history-item:hover{border-color:#2563eb;background:#f0f7ff}
+.history-item{padding:0.875rem;border:1px solid #e5e7eb;border-radius:0.625rem;background:#fff;transition:border-color .15s}
+.history-item:hover{border-color:#cbd5e1}
+.history-item>summary{padding:0;min-height:auto;display:block;flex-wrap:initial;list-style:none}
+.history-item>summary::-webkit-details-marker{display:none}
+.history-item>summary::after{content:'⌄';float:none;position:absolute;right:0.875rem;top:0.875rem;font-size:1rem;color:#9ca3af;transition:transform .2s}
+.history-item[open]>summary::after{content:'⌄';transform:rotate(180deg)}
+.history-item{position:relative;padding-right:2.5rem}
 .score-pill{display:inline-block;padding:0.125rem 0.5rem;border-radius:9999px;font-size:0.6875rem;font-weight:600}
 .score-good{background:#dcfce7;color:#15803d}
 .score-mid{background:#fef3c7;color:#a16207}
@@ -502,6 +507,9 @@ const STR = {
     hist_network_err: 'Network error: {err}',
     hist_count_label: '{n} entries · past 30 days',
     hist_avg_label: 'Avg {x}/10',
+    hist_free_only: 'Free only',
+    hist_no_deep_yet: 'No deep analysis yet — upload again and unlock for USD $1.',
+    hist_no_content: 'No content available.',
     hist_next_drill_prefix: 'Next drill: ',
     // dimension labels (deep mode)
     dim_stance: 'Stance', dim_edge_engagement: 'Edge engagement', dim_weight_transfer: 'Weight transfer',
@@ -656,6 +664,9 @@ const STR = {
     hist_network_err: '網路錯誤: {err}',
     hist_count_label: '共 {n} 筆 · 過去 30 天',
     hist_avg_label: '平均 {x}/10',
+    hist_free_only: '只試免費',
+    hist_no_deep_yet: '還沒做深度分析 — 重新上傳並解鎖 USD $1。',
+    hist_no_content: '沒有內容。',
     hist_next_drill_prefix: '下次練: ',
     dim_stance: '站姿', dim_edge_engagement: '雪刃使用', dim_weight_transfer: '重心轉移',
     dim_upper_body: '上半身姿態', dim_knee_bend: '膝蓋彎曲', dim_arms_balance: '手臂平衡',
@@ -808,6 +819,9 @@ const STR = {
     hist_network_err: '网络错误: {err}',
     hist_count_label: '共 {n} 笔 · 过去 30 天',
     hist_avg_label: '平均 {x}/10',
+    hist_free_only: '仅试免费',
+    hist_no_deep_yet: '还没做深度分析 — 重新上传并解锁 USD $1。',
+    hist_no_content: '没有内容。',
     hist_next_drill_prefix: '下次练: ',
     dim_stance: '站姿', dim_edge_engagement: '雪刃使用', dim_weight_transfer: '重心转移',
     dim_upper_body: '上半身姿态', dim_knee_bend: '膝盖弯曲', dim_arms_balance: '手臂平衡',
@@ -928,6 +942,7 @@ if (!visitorId) {
   localStorage.setItem('cv_visitor_id', visitorId);
 }
 let currentFrames = null;
+let currentAnalysisId = null; // The free analysis_id for the clip currently in view (links the deep call back)
 
 // ==========================================================================
 // HISTORY
@@ -971,37 +986,129 @@ function renderHistory(items) {
     </div>`;
     return;
   }
-  list.innerHTML = items.map(item => {
-    const d = new Date(item.created_at);
-    const dateStr = d.toLocaleDateString(currentLang, { month: 'numeric', day: 'numeric' }) + ' ' + d.toLocaleTimeString(currentLang, { hour: '2-digit', minute: '2-digit' });
-    let summary = '';
-    let scoreHtml = '';
-    try {
-      const r = JSON.parse(item.result_json || '{}');
-      if (item.mode === 'free') {
-        summary = (r.fix || r.ok || r.good || '').slice(0, 80);
-      } else {
-        const dims = ['stance', 'edge_engagement', 'weight_transfer', 'upper_body', 'knee_bend', 'arms_balance', 'rhythm', 'finish'];
-        const scores = dims.map(k => r[k]?.score).filter(s => s != null);
-        if (scores.length) {
-          const avg = (scores.reduce((a,b)=>a+b,0) / scores.length).toFixed(1);
-          const cls = avg >= 7 ? 'score-good' : avg >= 5 ? 'score-mid' : 'score-low';
-          scoreHtml = `<span class="score-pill ${cls}">${escapeHtml(t('hist_avg_label', { x: avg }))}</span>`;
-        }
-        summary = r.next_drill ? (t('hist_next_drill_prefix') + r.next_drill).slice(0, 80) : '';
-      }
-    } catch (e) { summary = ''; }
-    const modeBadge = item.mode === 'deep'
-      ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-semibold">DEEP</span>'
-      : '<span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-semibold">FREE</span>';
-    return `<div class="history-item mb-2">
-      <div class="flex items-center justify-between mb-1.5 gap-2">
-        <div class="flex items-center gap-2 min-w-0">${modeBadge}<span class="text-xs text-gray-500">${dateStr}</span></div>
-        ${scoreHtml}
-      </div>
-      ${summary ? `<div class="text-sm text-gray-700 leading-snug">${escapeHtml(summary)}</div>` : ''}
+
+  // === Group: each clip = 1 card. Free + paid Deep on the same clip merge by parent_id link. ===
+  const byId = {}; items.forEach(it => { byId[it.id] = it; });
+  const groups = []; // each: { free: row|null, deep: row|null, anchor_created_at: ms }
+  const consumed = new Set();
+  // Walk in chronological order so deep can attach to its parent
+  const sorted = items.slice().sort((a,b) => a.created_at - b.created_at);
+  for (const it of sorted) {
+    if (consumed.has(it.id)) continue;
+    if (it.mode === 'deep' && it.parent_id && byId[it.parent_id]) {
+      // Attach to parent free record
+      const parent = byId[it.parent_id];
+      const grp = groups.find(g => g.free && g.free.id === parent.id);
+      if (grp) { grp.deep = it; consumed.add(it.id); continue; }
+    }
+    if (it.mode === 'free') {
+      groups.push({ free: it, deep: null, anchor_created_at: it.created_at });
+      consumed.add(it.id);
+    } else {
+      // Orphan deep (no parent_id link) — make it its own group
+      groups.push({ free: null, deep: it, anchor_created_at: it.created_at });
+      consumed.add(it.id);
+    }
+  }
+  // Recent first
+  groups.sort((a,b) => b.anchor_created_at - a.anchor_created_at);
+
+  list.innerHTML = groups.map((g, idx) => renderHistoryGroup(g, idx)).join('');
+}
+
+function renderHistoryGroup(g, idx) {
+  const anchor = g.free || g.deep;
+  const d = new Date(anchor.created_at);
+  const dateStr = d.toLocaleDateString(currentLang, { month: 'numeric', day: 'numeric' }) + ' ' + d.toLocaleTimeString(currentLang, { hour: '2-digit', minute: '2-digit' });
+
+  let freeData = null, deepData = null;
+  try { if (g.free) freeData = JSON.parse(g.free.result_json || '{}'); } catch (e) {}
+  try { if (g.deep) deepData = JSON.parse(g.deep.result_json || '{}'); } catch (e) {}
+
+  // Headline summary line for the collapsed card
+  let summary = '';
+  if (deepData && deepData.next_drill) {
+    summary = t('hist_next_drill_prefix') + deepData.next_drill;
+  } else if (freeData) {
+    summary = freeData.fix || freeData.ok || freeData.good || '';
+  } else if (deepData && deepData.unable_to_score) {
+    summary = deepData.reason || '';
+  }
+  if (summary.length > 100) summary = summary.slice(0, 100) + '…';
+
+  // Right-side badge: avg score if deep exists, else "Free only"
+  let badge = '';
+  if (deepData && !deepData.unable_to_score) {
+    const dims = ['stance','edge_engagement','weight_transfer','upper_body','knee_bend','arms_balance','rhythm','finish'];
+    const scores = dims.map(k => deepData[k]?.score).filter(s => s != null);
+    if (scores.length) {
+      const avg = (scores.reduce((a,b)=>a+b,0) / scores.length).toFixed(1);
+      const cls = avg >= 7 ? 'score-good' : avg >= 5 ? 'score-mid' : 'score-low';
+      badge = `<span class="score-pill ${cls}">${escapeHtml(t('hist_avg_label', { x: avg }))}</span>`;
+    }
+  } else {
+    badge = `<span class="score-pill" style="background:#f3f4f6;color:#6b7280">${escapeHtml(t('hist_free_only'))}</span>`;
+  }
+
+  // Skill level chip if present
+  const lvl = (deepData && deepData.skill_level) || (freeData && freeData.skill_level);
+  const lvlChip = lvl && lvl !== 'unknown' ? `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-semibold uppercase tracking-wider">${escapeHtml(lvl.replace(/_/g,' '))}</span>` : '';
+
+  // Expanded body
+  let expandedHtml = '';
+  if (freeData && (freeData.good || freeData.ok || freeData.fix)) {
+    expandedHtml += `<div class="space-y-2 mb-3">
+      ${freeData.good ? `<div class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><div class="text-sm text-gray-800 flex-1" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(freeData.good)}</div></div>` : ''}
+      ${freeData.ok ? `<div class="flex items-start gap-2"><span class="text-amber-600 font-bold mt-0.5">!</span><div class="text-sm text-gray-800 flex-1" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(freeData.ok)}</div></div>` : ''}
+      ${freeData.fix ? `<div class="flex items-start gap-2"><span class="text-red-600 font-bold mt-0.5">×</span><div class="text-sm text-gray-800 flex-1" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(freeData.fix)}</div></div>` : ''}
     </div>`;
-  }).join('');
+  }
+
+  if (deepData && !deepData.unable_to_score) {
+    const dims = [
+      ['stance', t('dim_stance')],['edge_engagement', t('dim_edge_engagement')],
+      ['weight_transfer', t('dim_weight_transfer')],['upper_body', t('dim_upper_body')],
+      ['knee_bend', t('dim_knee_bend')],['arms_balance', t('dim_arms_balance')],
+      ['rhythm', t('dim_rhythm')],['finish', t('dim_finish')],
+    ];
+    const dimsHtml = dims.map(([k, label]) => {
+      const dim = deepData[k];
+      if (!dim) return '';
+      const score = dim.score || 0;
+      const adv = dim.advice || '';
+      const color = score >= 8 ? 'green' : score >= 5 ? 'amber' : 'red';
+      return `<div class="rounded-lg p-2.5 border border-${color}-200 bg-${color}-50/30">
+        <div class="flex items-baseline justify-between mb-0.5">
+          <div class="text-[11px] font-semibold text-gray-700">${escapeHtml(label)}</div>
+          <div class="text-base font-extrabold text-${color}-600">${score}<span class="text-[10px] text-gray-400">/10</span></div>
+        </div>
+        <div class="text-[11px] text-gray-600 leading-snug" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(adv)}</div>
+      </div>`;
+    }).join('');
+    expandedHtml += `<div class="grid grid-cols-2 gap-2 mb-3">${dimsHtml}</div>`;
+    if (deepData.next_drill) {
+      expandedHtml += `<div class="border-2 border-blue-600 rounded-xl p-3 bg-blue-50/60">
+        <div class="text-[10px] font-semibold accent uppercase tracking-wider mb-1">${escapeHtml(t('next_drill_label'))}</div>
+        <div class="text-sm text-gray-800 leading-relaxed" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(deepData.next_drill)}</div>
+      </div>`;
+    }
+  } else if (g.free && !g.deep) {
+    expandedHtml += `<div class="text-xs text-gray-500 mt-2 italic">${escapeHtml(t('hist_no_deep_yet'))}</div>`;
+  }
+
+  return `<details class="history-item mb-2">
+    <summary class="cursor-pointer">
+      <div class="flex items-center justify-between gap-2 mb-1">
+        <div class="flex items-center gap-2 min-w-0 flex-wrap">
+          <span class="text-xs text-gray-500 font-medium">${dateStr}</span>
+          ${lvlChip}
+        </div>
+        ${badge}
+      </div>
+      ${summary ? `<div class="text-sm text-gray-700 leading-snug" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(summary)}</div>` : ''}
+    </summary>
+    <div class="mt-3 pt-3 border-t border-gray-100">${expandedHtml || `<div class="text-xs text-gray-400 italic">${escapeHtml(t('hist_no_content'))}</div>`}</div>
+  </details>`;
 }
 
 function escapeHtml(s) {
@@ -1255,6 +1362,7 @@ async function analyzeVideo(input) {
     if (response.status === 429) throw new Error(data.error || t('err_rate_busy'));
     if (!data.ok) throw new Error(data.error || JSON.stringify(data));
 
+    currentAnalysisId = data.analysis_id || null;
     renderResult(data.result, 'free');
     proc.classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
@@ -1285,7 +1393,7 @@ async function redeemPendingUnlock(sessionId) {
     const r = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ frames: currentFrames, mode: 'deep', visitor_id: visitorId, language: currentLang, paid_session_id: sessionId })
+      body: JSON.stringify({ frames: currentFrames, mode: 'deep', visitor_id: visitorId, language: currentLang, paid_session_id: sessionId, parent_analysis_id: currentAnalysisId })
     });
     const data = await r.json();
     if (!data.ok) {
@@ -1350,8 +1458,8 @@ function renderResult(result, mode) {
 
     if (result.next_drill) {
       const next = document.createElement('div');
-      next.className = 'border-2 border-blue-600 rounded-xl p-4 bg-blue-50';
-      next.innerHTML = `<div class="text-xs font-semibold accent uppercase tracking-wider mb-1">${escapeHtml(t('next_drill_label'))}</div><div class="text-sm">${escapeHtml(result.next_drill)}</div>`;
+      next.className = 'border-2 border-blue-600 rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-blue-50 to-white';
+      next.innerHTML = `<div class="flex items-center gap-2 text-xs font-semibold accent uppercase tracking-wider mb-3">${escapeHtml(t('next_drill_label'))}</div><div class="text-[15px] sm:text-base text-gray-800 leading-7" style="word-break:break-word;overflow-wrap:anywhere">${escapeHtml(result.next_drill)}</div>`;
       deep.appendChild(next);
     }
 
@@ -1391,7 +1499,7 @@ async function unlockDeepDirect() {
     const response = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ frames: currentFrames, mode: 'deep', visitor_id: visitorId, language: currentLang })
+      body: JSON.stringify({ frames: currentFrames, mode: 'deep', visitor_id: visitorId, language: currentLang, parent_analysis_id: currentAnalysisId })
     });
     const data = await response.json();
     if (response.status === 429) throw new Error(t('err_rate_deep'));
@@ -1474,7 +1582,7 @@ async function handleStripeReturn() {
     const ar = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ frames, mode: 'deep', visitor_id: visitorId, language: lang, paid_session_id: sessionId })
+      body: JSON.stringify({ frames, mode: 'deep', visitor_id: visitorId, language: lang, paid_session_id: sessionId, parent_analysis_id: currentAnalysisId })
     });
     const ad = await ar.json();
     if (!ad.ok) throw new Error(ad.error || 'deep analysis failed');
