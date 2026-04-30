@@ -319,6 +319,11 @@ Carvline 幫你比對「今年的你 vs 去年的你」。<br>
 
 <script>
 const WORKER_URL = 'https://carvline-ai.uncleshu827.workers.dev/';
+let visitorId = localStorage.getItem('cv_visitor_id');
+if (!visitorId) {
+  visitorId = (crypto.randomUUID && crypto.randomUUID()) || ('vid-' + Date.now() + '-' + Math.random().toString(36).slice(2,10));
+  localStorage.setItem('cv_visitor_id', visitorId);
+}
 
 let currentFrames = null; // 暫存抽出的 frames, 給 deep mode 重用
 
@@ -386,7 +391,7 @@ async function analyzeVideo(input, mode) {
     const response = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ frames, mode })
+      body: JSON.stringify({ frames, mode, visitor_id: visitorId })
     });
 
     const data = await response.json();
@@ -468,7 +473,7 @@ async function unlockDeep() {
     const response = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ frames: currentFrames, mode: 'deep' })
+      body: JSON.stringify({ frames: currentFrames, mode: 'deep', visitor_id: visitorId })
     });
     const data = await response.json();
     if (!data.ok) throw new Error(data.error || JSON.stringify(data));
