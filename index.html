@@ -1428,7 +1428,15 @@ async function analyzeVideo(input) {
     setStep(4, 4, t('proc_analyzing'));
     const data = await response.json();
     if (response.status === 429) throw new Error(data.error || t('err_rate_busy'));
-    if (!data.ok) throw new Error(data.error || JSON.stringify(data));
+    if (!data.ok) {
+      let msg = data.error || 'unknown';
+      // Surface Anthropic detail when available — helps debug "Anthropic API error" cases
+      if (data.detail) {
+        const inner = data.detail.error?.message || data.detail.message || (typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail).slice(0, 200));
+        msg = msg + ' — ' + inner;
+      }
+      throw new Error(msg);
+    }
 
     currentAnalysisId = data.analysis_id || null;
     renderResult(data.result, 'free');
@@ -1571,7 +1579,15 @@ async function unlockDeepDirect() {
     });
     const data = await response.json();
     if (response.status === 429) throw new Error(t('err_rate_deep'));
-    if (!data.ok) throw new Error(data.error || JSON.stringify(data));
+    if (!data.ok) {
+      let msg = data.error || 'unknown';
+      // Surface Anthropic detail when available — helps debug "Anthropic API error" cases
+      if (data.detail) {
+        const inner = data.detail.error?.message || data.detail.message || (typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail).slice(0, 200));
+        msg = msg + ' — ' + inner;
+      }
+      throw new Error(msg);
+    }
     renderResult(data.result, 'deep');
     proc.classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
