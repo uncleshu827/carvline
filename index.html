@@ -256,6 +256,14 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-medium mb-4"><span>✓</span> <span data-i18n="result_done">Analysis complete</span></div>
 <h3 class="text-xl sm:text-2xl font-bold mb-6" data-i18n="result_h3">Your 3 takeaways</h3>
 
+<!-- Annotated frame card (visual MVP — drawn from result.annotations + chosen frame) -->
+<div id="annotated-card" class="hidden mb-6">
+<div id="annotated-canvas-wrap" class="rounded-xl overflow-hidden bg-slate-900 shadow-md"></div>
+<div class="mt-3 flex flex-wrap items-center gap-2 justify-end">
+<button id="annotated-download-btn" class="px-3 py-1.5 rounded-lg text-xs font-medium border border-gray-300 hover:bg-gray-50">⬇︎ <span data-i18n="annotated_download">Download image</span></button>
+</div>
+</div>
+
 <div id="free-results" class="space-y-3 mb-8"></div>
 <div id="deep-results" class="hidden space-y-3 mb-8"></div>
 
@@ -533,6 +541,8 @@ const STR = {
     locked_pay_note: 'Secure card payment via Stripe · 30-day refund',
     reset_btn: '↻ Try another clip',
     privacy_note: 'Clips auto-delete after 24 hours · never shared with third parties',
+    annotated_download: 'Download image',
+    annotated_save_alt: 'AI marked these spots on your clip',
     history_btn_mobile: '📊 See my past analyses',
     how_h2: 'Three ways to use it',
     how_sub: 'Three modes for three moments of the trip',
@@ -743,6 +753,8 @@ const STR = {
     locked_pay_note: '透過 Stripe 信用卡安全付款 · 30 天退費',
     reset_btn: '↻ 試另一段影片',
     privacy_note: '影片 24 小時內自動刪除，不分享給第三方',
+    annotated_download: '下載圖片',
+    annotated_save_alt: 'AI 在你的影片上標出這些位置',
     history_btn_mobile: '📊 看我之前的分析',
     how_h2: '三種用法',
     how_sub: '三種模式對應三種使用時機',
@@ -948,6 +960,8 @@ const STR = {
     locked_pay_note: '通过 Stripe 信用卡安全支付 · 30 天退款',
     reset_btn: '↻ 试另一段视频',
     privacy_note: '视频 24 小时内自动删除，不分享给第三方',
+    annotated_download: '下载图片',
+    annotated_save_alt: 'AI 在你的视频上标出这些位置',
     history_btn_mobile: '📊 看我之前的分析',
     how_h2: '三种用法',
     how_sub: '三种模式对应三种使用时机',
@@ -1153,6 +1167,8 @@ const STR = {
     locked_pay_note: 'Stripeで安全にカード決済 · 30日返金保証',
     reset_btn: '↻ 別のクリップを試す',
     privacy_note: 'クリップは24時間で自動削除 · 第三者と共有しません',
+    annotated_download: '画像をダウンロード',
+    annotated_save_alt: 'AIがあなたのクリップ上にマーキング',
     history_btn_mobile: '📊 過去の分析を見る',
     how_h2: '3つの使い方',
     how_sub: '滑雪旅行の3つの瞬間に対応する3モード',
@@ -1353,6 +1369,8 @@ const STR = {
     locked_pay_note: 'Stripe 카드 안전 결제 · 30일 환불',
     reset_btn: '↻ 다른 클립 시도',
     privacy_note: '클립은 24시간 후 자동 삭제 · 제3자와 공유하지 않음',
+    annotated_download: '이미지 다운로드',
+    annotated_save_alt: 'AI가 클립에 표시한 위치',
     history_btn_mobile: '📊 이전 분석 보기',
     how_h2: '3가지 사용 방법',
     how_sub: '여행의 세 순간에 맞는 세 가지 모드',
@@ -2037,6 +2055,313 @@ async function extractFrames(file, count, onProgress) {
 }
 
 // ==========================================================================
+// ANNOTATED FRAME RENDERING (visual MVP)
+// Draws the chosen frame with numbered markers + dashed lines + caption boxes,
+// in the spirit of the reference snowboard-coaching infographic the user shared.
+// ==========================================================================
+
+function _roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function _wrapToLines(ctx, text, maxW) {
+  if (!text) return [''];
+  // First pass — split by spaces
+  const tokens = String(text).split(/(\s+)/);
+  const lines = [];
+  let line = '';
+  for (const tok of tokens) {
+    const test = line + tok;
+    if (ctx.measureText(test).width > maxW && line.trim()) {
+      lines.push(line.trim());
+      line = tok;
+    } else {
+      line = test;
+    }
+  }
+  if (line.trim()) lines.push(line.trim());
+  // Second pass — any line still too wide (CJK) → break per char
+  const out = [];
+  for (const ln of lines) {
+    if (ctx.measureText(ln).width <= maxW || ln.length <= 1) { out.push(ln); continue; }
+    let buf = '';
+    for (const ch of [...ln]) {
+      const test = buf + ch;
+      if (ctx.measureText(test).width > maxW && buf) { out.push(buf); buf = ch; }
+      else buf = test;
+    }
+    if (buf) out.push(buf);
+  }
+  return out.length ? out : [String(text)];
+}
+
+// Severity → color (used for both circle & label box border)
+function _sevColor(sev) {
+  if (sev === 'good') return '#16A34A';     // green
+  if (sev === 'ok')   return '#D97706';     // amber
+  return '#DC2626';                          // red (default = fix)
+}
+function _sevColorSoft(sev) {
+  if (sev === 'good') return '#DCFCE7';
+  if (sev === 'ok')   return '#FEF3C7';
+  return '#FEE2E2';
+}
+
+// Decide which side each label sits on. We bias by the rider's position in the frame.
+function _planLabelLayout(annotations) {
+  if (!annotations || !annotations.length) return [];
+  // Sort by Y so vertical staggering follows body order top→bottom
+  const idx = annotations.map((a, i) => i);
+  idx.sort((a, b) => annotations[a].y - annotations[b].y);
+  const total = annotations.length;
+  return idx.map((origIdx, sortedPos) => {
+    const a = annotations[origIdx];
+    // If marker is on the right half of frame → put label on the LEFT, and vice-versa.
+    const labelOnLeft = a.x >= 0.5;
+    // Distribute the labels evenly along the side they're on.
+    const sideCount = annotations.filter(b =>
+      (b.x >= 0.5) === labelOnLeft
+    ).length || 1;
+    const sideRank = annotations
+      .map((b, j) => ({ j, y: b.y, side: b.x >= 0.5 }))
+      .filter(b => b.side === labelOnLeft)
+      .sort((a, b) => a.y - b.y)
+      .findIndex(b => b.j === origIdx);
+    const yFrac = sideCount > 1
+      ? 0.10 + (sideRank / (sideCount - 1)) * 0.80
+      : 0.50;
+    return { origIdx, labelOnLeft, yFrac };
+  });
+}
+
+async function renderAnnotatedFrame(frameBase64, annotations, headline, skillLevel) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onerror = () => reject(new Error('frame load fail'));
+    img.onload = () => {
+      try {
+        // ---- Layout constants ----
+        // Photo target dimensions (capped, preserves aspect ratio)
+        const PHOTO_LONG = 720;
+        let photoW, photoH;
+        if (img.width >= img.height) {
+          photoW = Math.min(PHOTO_LONG, img.width);
+          photoH = photoW * (img.height / img.width);
+        } else {
+          photoH = Math.min(PHOTO_LONG, img.height);
+          photoW = photoH * (img.width / img.height);
+        }
+        const SIDE_PAD = 200;       // each side reserved for caption boxes
+        const TOP_PAD  = 100;       // headline area
+        const BOTTOM_PAD = 56;      // skill chip + watermark
+        const cssW = photoW + 2 * SIDE_PAD;
+        const cssH = photoH + TOP_PAD + BOTTOM_PAD;
+
+        // Retina-friendly canvas
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const canvas = document.createElement('canvas');
+        canvas.width  = Math.round(cssW * dpr);
+        canvas.height = Math.round(cssH * dpr);
+        canvas.style.width  = '100%';
+        canvas.style.maxWidth = cssW + 'px';
+        canvas.style.height = 'auto';
+        canvas.style.display = 'block';
+        const ctx = canvas.getContext('2d');
+        ctx.scale(dpr, dpr);
+
+        // ---- Background ----
+        // Gradient dark slate → matches reference card energy
+        const bg = ctx.createLinearGradient(0, 0, 0, cssH);
+        bg.addColorStop(0, '#0F172A');
+        bg.addColorStop(1, '#1E293B');
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, cssW, cssH);
+
+        // ---- Headline (top) ----
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '700 22px system-ui, -apple-system, "PingFang TC", "PingFang SC", "Hiragino Sans", "Microsoft JhengHei", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const headlineLines = _wrapToLines(ctx, headline || '', cssW - 60);
+        const visibleLines = headlineLines.slice(0, 2);
+        const startY = TOP_PAD / 2 - ((visibleLines.length - 1) * 14);
+        visibleLines.forEach((line, i) => {
+          ctx.fillText(line, cssW / 2, startY + i * 28);
+        });
+
+        // ---- Photo (centered, with subtle border) ----
+        const photoX = SIDE_PAD;
+        const photoY = TOP_PAD;
+        ctx.save();
+        _roundRect(ctx, photoX, photoY, photoW, photoH, 12);
+        ctx.clip();
+        ctx.drawImage(img, photoX, photoY, photoW, photoH);
+        ctx.restore();
+        // Border
+        ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+        ctx.lineWidth = 1;
+        _roundRect(ctx, photoX, photoY, photoW, photoH, 12);
+        ctx.stroke();
+
+        // ---- Annotations ----
+        const layouts = _planLabelLayout(annotations || []);
+        layouts.forEach(L => {
+          const a = annotations[L.origIdx];
+          const sev = a.severity || 'fix';
+          const color = _sevColor(sev);
+          const colorSoft = _sevColorSoft(sev);
+
+          // Marker on body
+          const mx = photoX + Math.max(0, Math.min(1, a.x)) * photoW;
+          const my = photoY + Math.max(0, Math.min(1, a.y)) * photoH;
+
+          // Label position
+          const boxW = SIDE_PAD - 24;
+          const labelTipX = L.labelOnLeft
+            ? photoX - 8
+            : photoX + photoW + 8;
+          const lyCenter = TOP_PAD + L.yFrac * photoH;
+
+          // Dashed connector line (marker → side)
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2;
+          ctx.setLineDash([7, 5]);
+          ctx.beginPath();
+          ctx.moveTo(mx, my);
+          ctx.lineTo(labelTipX, lyCenter);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Marker circle (white halo + colored fill + number)
+          ctx.beginPath();
+          ctx.arc(mx, my, 18, 0, Math.PI * 2);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(mx, my, 14, 0, Math.PI * 2);
+          ctx.fillStyle = color;
+          ctx.fill();
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = '700 14px system-ui, -apple-system, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(String(a.n ?? '?'), mx, my + 0.5);
+
+          // Label box
+          ctx.font = '600 13px system-ui, -apple-system, "PingFang TC", "PingFang SC", "Hiragino Sans", sans-serif';
+          const labelLines = _wrapToLines(ctx, a.label || '', boxW - 44).slice(0, 3);
+          const lineH = 17;
+          const innerPadY = 12;
+          const boxH = innerPadY * 2 + labelLines.length * lineH;
+          const boxX = L.labelOnLeft ? labelTipX - boxW : labelTipX;
+          const boxY = lyCenter - boxH / 2;
+
+          // Box bg
+          ctx.fillStyle = '#FFFFFF';
+          _roundRect(ctx, boxX, boxY, boxW, boxH, 10);
+          ctx.fill();
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2;
+          _roundRect(ctx, boxX, boxY, boxW, boxH, 10);
+          ctx.stroke();
+
+          // Number tab (severity-colored, top-left of box)
+          const tabSize = 22;
+          ctx.fillStyle = color;
+          _roundRect(ctx, boxX + 8, boxY + (boxH - tabSize) / 2, tabSize, tabSize, 6);
+          ctx.fill();
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = '700 13px system-ui, -apple-system, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(String(a.n ?? '?'), boxX + 8 + tabSize / 2, boxY + boxH / 2 + 0.5);
+
+          // Label text
+          ctx.fillStyle = '#1F2937';
+          ctx.font = '600 13px system-ui, -apple-system, "PingFang TC", "PingFang SC", "Hiragino Sans", sans-serif';
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'top';
+          const textX = boxX + 8 + tabSize + 8;
+          const textStartY = boxY + innerPadY;
+          labelLines.forEach((ln, i) => ctx.fillText(ln, textX, textStartY + i * lineH));
+        });
+
+        // ---- Skill chip (bottom-left) ----
+        if (skillLevel && skillLevel !== 'unknown') {
+          const chipText = String(skillLevel).replace(/_/g, ' ');
+          ctx.font = '600 12px system-ui, -apple-system, sans-serif';
+          const tw = ctx.measureText(chipText).width;
+          const cx = 18, cy = cssH - BOTTOM_PAD + 14, cw = tw + 22, ch = 26;
+          ctx.fillStyle = 'rgba(255,255,255,0.10)';
+          _roundRect(ctx, cx, cy, cw, ch, 13);
+          ctx.fill();
+          ctx.fillStyle = '#FFFFFF';
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(chipText, cx + 11, cy + ch / 2 + 0.5);
+        }
+
+        // ---- Watermark (bottom-right) ----
+        ctx.fillStyle = 'rgba(255,255,255,0.55)';
+        ctx.font = '500 12px system-ui, -apple-system, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('carvlineai.com', cssW - 18, cssH - BOTTOM_PAD + 27);
+
+        resolve(canvas);
+      } catch (err) { reject(err); }
+    };
+    img.src = 'data:image/jpeg;base64,' + frameBase64;
+  });
+}
+
+// Mount the rendered annotated card into #annotated-card. Hides container if data missing/unusable.
+async function showAnnotatedCard(result) {
+  const card = document.getElementById('annotated-card');
+  const wrap = document.getElementById('annotated-canvas-wrap');
+  if (!card || !wrap) return;
+  // Validate inputs
+  const idx = Number.isInteger(result?.annotated_frame_index) ? result.annotated_frame_index : 0;
+  const ann = Array.isArray(result?.annotations) ? result.annotations.filter(a =>
+    a && typeof a.x === 'number' && typeof a.y === 'number' && a.label
+  ) : [];
+  const headline = (result?.headline || '').trim();
+  if (!currentFrames || !currentFrames[idx] || ann.length === 0) {
+    card.classList.add('hidden');
+    wrap.innerHTML = '';
+    return;
+  }
+  try {
+    const canvas = await renderAnnotatedFrame(currentFrames[idx], ann, headline || result.fix || '', result.skill_level);
+    wrap.innerHTML = '';
+    wrap.appendChild(canvas);
+    card.classList.remove('hidden');
+    // Wire download button
+    const btn = document.getElementById('annotated-download-btn');
+    if (btn) {
+      btn.onclick = () => {
+        try {
+          const url = canvas.toDataURL('image/png');
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'carvline-' + (result.skill_level || 'analysis') + '-' + Date.now() + '.png';
+          document.body.appendChild(a); a.click(); a.remove();
+        } catch (e) { console.warn('download failed', e); }
+      };
+    }
+  } catch (e) {
+    console.warn('annotated render failed', e);
+    card.classList.add('hidden');
+  }
+}
+
+// ==========================================================================
 // VIDEO ANALYSIS
 // ==========================================================================
 async function analyzeVideo(input) {
@@ -2142,6 +2467,9 @@ function renderResult(result, mode) {
     document.getElementById('feedback-thanks')?.classList.add('hidden');
     fbw.querySelectorAll('.fb-btn').forEach(b => { b.classList.remove('ring-2','ring-blue-600','bg-blue-50'); b.style.opacity = '1'; });
   }
+  // Visual annotated frame (above the text takeaways)
+  // Fire-and-forget; failure just hides the card and we fall through to text.
+  showAnnotatedCard(result);
   if (mode === 'free') {
     const free = document.getElementById('free-results');
     free.innerHTML = '';
@@ -2364,6 +2692,11 @@ function resetTry(){
   document.getElementById('file-input').value = '';
   document.getElementById('locked-prompt').classList.remove('hidden');
   document.getElementById('deep-results').classList.add('hidden');
+  // Hide annotated card too
+  const ac = document.getElementById('annotated-card');
+  const aw = document.getElementById('annotated-canvas-wrap');
+  if (ac) ac.classList.add('hidden');
+  if (aw) aw.innerHTML = '';
   currentFrames = null;
 }
 
