@@ -187,6 +187,39 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 
 </div></section>
 
+<!-- VISUAL FEEDBACK SHOWCASE — the new annotated-frame differentiator -->
+<section class="section py-20 bg-gradient-to-b from-slate-50 to-white"><div class="max-w-4xl mx-auto px-6">
+<div class="text-center mb-10">
+<div class="inline-block text-xs font-semibold accent uppercase tracking-wider mb-3" data-i18n="showcase_eyebrow">Pinpoint visual feedback</div>
+<h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-3" data-i18n="showcase_h2">AI marks the issues right on your video — not just text</h2>
+<p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto" data-i18n="showcase_sub">Numbered markers on the exact body parts, color-coded by severity. Save the image, study it on the lift.</p>
+</div>
+
+<div id="showcase-annotated-card-wrap" class="rounded-2xl overflow-hidden shadow-lg bg-slate-900"></div>
+
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
+<div class="rounded-xl bg-white border border-gray-200 p-4">
+<div class="text-2xl mb-1">🎯</div>
+<div class="font-semibold text-sm mb-1" data-i18n="showcase_b1_h">Pinpoint markers</div>
+<div class="text-xs text-gray-600 leading-relaxed" data-i18n="showcase_b1_b">Each marker lands on the exact body part being called out — no more guessing what "shift forward" means.</div>
+</div>
+<div class="rounded-xl bg-white border border-gray-200 p-4">
+<div class="text-2xl mb-1">🎨</div>
+<div class="font-semibold text-sm mb-1" data-i18n="showcase_b2_h">Severity-coded</div>
+<div class="text-xs text-gray-600 leading-relaxed" data-i18n="showcase_b2_b">Red = fix this now. Amber = needs work. Green = keep doing this. You see priority at a glance.</div>
+</div>
+<div class="rounded-xl bg-white border border-gray-200 p-4">
+<div class="text-2xl mb-1">📲</div>
+<div class="font-semibold text-sm mb-1" data-i18n="showcase_b3_h">Shareable image</div>
+<div class="text-xs text-gray-600 leading-relaxed" data-i18n="showcase_b3_b">Download a 9:16 image — show your coach, post to your training group, or pull it up between runs.</div>
+</div>
+</div>
+
+<div class="text-center mt-6">
+<p class="text-[11px] text-gray-400" data-i18n="showcase_disclaimer">Example output — illustrated rider. Your own clip will get the same treatment in 30 seconds.</p>
+</div>
+</div></section>
+
 <!-- SAMPLE ANALYSIS — show a real output before asking for upload -->
 <section class="section py-20 bg-white"><div class="max-w-4xl mx-auto px-6">
 <div class="text-center mb-10">
@@ -665,6 +698,20 @@ const STR = {
     waitlist_prompt_record: 'Drop your email — we’ll let you know when "auto-tracked riding" goes live:',
     waitlist_prompt_reel: 'Drop your email — we’ll let you know when "auto-edit reel" goes live:',
     waitlist_alert: 'Got it! We’ll notify you when it launches.',
+    showcase_eyebrow: 'Pinpoint visual feedback',
+    showcase_h2: 'AI marks the issues right on your video — not just text',
+    showcase_sub: 'Numbered markers on the exact body parts, color-coded by severity. Save the image, study it on the lift.',
+    showcase_b1_h: 'Pinpoint markers',
+    showcase_b1_b: 'Each marker lands on the exact body part being called out — no more guessing what "shift forward" means.',
+    showcase_b2_h: 'Severity-coded',
+    showcase_b2_b: 'Red = fix this now. Amber = needs work. Green = keep doing this. You see priority at a glance.',
+    showcase_b3_h: 'Shareable image',
+    showcase_b3_b: 'Download a 9:16 image — show your coach, post to your training group, or pull it up between runs.',
+    showcase_disclaimer: 'Example output — illustrated rider. Your own clip will get the same treatment in 30 seconds.',
+    showcase_mock_headline: 'Hips trapped behind rear heel — toe-side will stay impossible until fixed',
+    showcase_mock_a1: 'Strong upper body — head facing fall line',
+    showcase_mock_a2: 'Bending at waist — flex from ankles instead',
+    showcase_mock_a3: 'Hips trailing past rear heel — backseat',
     sample_eyebrow: 'Sample output',
     sample_h2: "Here's what you actually get",
     sample_sub: 'Real output from a Niseko groomer run by an intermediate carver. This is what the $1 unlock returns.',
@@ -872,6 +919,20 @@ const STR = {
     waitlist_prompt_record: '留個 email, 「自動紀錄」上線立刻通知你：',
     waitlist_prompt_reel: '留個 email, 「自動剪 30 秒」上線立刻通知你：',
     waitlist_alert: '已收到！上線會立刻通知你。',
+    showcase_eyebrow: '視覺化精準指錯',
+    showcase_h2: 'AI 直接在你的影片上標出問題，不只給你看文字',
+    showcase_sub: '編號標記直接落在身體部位上，嚴重度配色一目了然。下載圖片，搭纜車時複習。',
+    showcase_b1_h: '精準標記',
+    showcase_b1_b: '每個標記落在被點名的身體部位上 — 不再猜「重心前移」到底是哪裡。',
+    showcase_b2_h: '顏色分級',
+    showcase_b2_b: '紅 = 馬上改。琥珀 = 待加強。綠 = 繼續保持。優先順序一眼看懂。',
+    showcase_b3_h: '可分享圖片',
+    showcase_b3_b: '下載 9:16 圖片 — 給教練看、發到練習群組、或下趟纜車時拿出來複習。',
+    showcase_disclaimer: '範例輸出 — 示意 rider。你自己的影片 30 秒內會拿到同樣分析。',
+    showcase_mock_headline: '臀部卡在後腳跟後面 — 趾側刻滑會一直做不到',
+    showcase_mock_a1: '上半身穩定 — 頭部面向 fall line',
+    showcase_mock_a2: '彎腰折疊 — 改從腳踝屈膝',
+    showcase_mock_a3: '臀部留在後腳跟後 — backseat',
     sample_eyebrow: '樣本輸出',
     sample_h2: '你實際會拿到的東西',
     sample_sub: '一個中階 carving 滑手在二世谷壓雪坡的真實分析輸出。這就是 $1 解鎖會給你的內容。',
@@ -1079,6 +1140,20 @@ const STR = {
     waitlist_prompt_record: '留个 email, 「自动记录」上线立刻通知你：',
     waitlist_prompt_reel: '留个 email, 「自动剪 30 秒」上线立刻通知你：',
     waitlist_alert: '已收到！上线会立刻通知你。',
+    showcase_eyebrow: '可视化精准指错',
+    showcase_h2: 'AI 直接在你的视频上标出问题，不只给你看文字',
+    showcase_sub: '编号标记直接落在身体部位上，严重度配色一目了然。下载图片，搭缆车时复习。',
+    showcase_b1_h: '精准标记',
+    showcase_b1_b: '每个标记落在被点名的身体部位上 — 不再猜「重心前移」到底是哪里。',
+    showcase_b2_h: '颜色分级',
+    showcase_b2_b: '红 = 马上改。琥珀 = 待加强。绿 = 继续保持。优先顺序一眼看懂。',
+    showcase_b3_h: '可分享图片',
+    showcase_b3_b: '下载 9:16 图片 — 给教练看、发到练习群组、或下趟缆车时拿出来复习。',
+    showcase_disclaimer: '示例输出 — 示意 rider。你自己的视频 30 秒内会拿到同样分析。',
+    showcase_mock_headline: '臀部卡在后脚跟后面 — 趾侧刻滑会一直做不到',
+    showcase_mock_a1: '上半身稳定 — 头部面向 fall line',
+    showcase_mock_a2: '弯腰折叠 — 改从脚踝屈膝',
+    showcase_mock_a3: '臀部留在后脚跟后 — backseat',
     sample_eyebrow: '样本输出',
     sample_h2: '你实际会拿到的东西',
     sample_sub: '一个中阶 carving 滑手在二世谷压雪坡的真实分析输出。这就是 $1 解锁会给你的内容。',
@@ -1281,6 +1356,20 @@ const STR = {
     waitlist_prompt_record: 'メールを残してください、「自動記録」公開時に通知します：',
     waitlist_prompt_reel: 'メールを残してください、「30秒自動編集」公開時に通知します：',
     waitlist_alert: '受領しました！公開時にすぐ通知します。',
+    showcase_eyebrow: 'ビジュアルで指摘',
+    showcase_h2: 'AI がクリップ上に直接マーキング — テキストだけじゃない',
+    showcase_sub: '番号付きマーカーが該当部位に直接、重要度で色分け。画像保存してリフトで復習。',
+    showcase_b1_h: 'ピンポイントマーカー',
+    showcase_b1_b: '各マーカーが指摘されている身体部位の上に落ちる — 「前へ」がどこか迷わない。',
+    showcase_b2_h: '重要度カラーコード',
+    showcase_b2_b: '赤 = 即修正。琥珀 = 要改善。緑 = キープ。優先順位がひと目でわかる。',
+    showcase_b3_h: 'シェアできる画像',
+    showcase_b3_b: '9:16 画像をダウンロード — コーチに見せたり、練習仲間に共有したり、滑走の合間に確認したり。',
+    showcase_disclaimer: 'サンプル出力 — イラストのライダー。あなたのクリップも 30 秒で同じ分析を受けられます。',
+    showcase_mock_headline: '腰が後足かかとの後ろに残る — トーサイドが永遠にできない原因',
+    showcase_mock_a1: '上半身は安定 — 頭がフォールラインを向いている',
+    showcase_mock_a2: '腰から折れる — 足首/膝で曲げ直そう',
+    showcase_mock_a3: '腰が後足かかとの後ろ — バックシート',
     sample_eyebrow: 'サンプル出力',
     sample_h2: '実際に得られる内容',
     sample_sub: 'ニセコ整地斜面で滑った中級カーバーの実際の分析。$1 アンロックで得られるものです。',
@@ -1483,6 +1572,20 @@ const STR = {
     waitlist_prompt_record: '이메일을 남겨주세요, "자동 기록" 출시 시 알려드립니다:',
     waitlist_prompt_reel: '이메일을 남겨주세요, "자동 편집 30초" 출시 시 알려드립니다:',
     waitlist_alert: '접수했습니다! 출시 시 즉시 알려드립니다.',
+    showcase_eyebrow: '시각적 피드백',
+    showcase_h2: 'AI가 영상에 직접 표시 — 단순한 텍스트가 아닙니다',
+    showcase_sub: '번호 마커가 해당 신체 부위에 정확히, 심각도별 색상 구분. 이미지를 저장해 리프트에서 복습하세요.',
+    showcase_b1_h: '정확한 마커',
+    showcase_b1_b: '각 마커가 지적된 신체 부위 위에 정확히 위치 — "체중 앞으로"가 어디인지 헤맬 필요 없음.',
+    showcase_b2_h: '심각도 색상 코드',
+    showcase_b2_b: '빨강 = 즉시 수정. 호박색 = 개선 필요. 초록 = 계속 유지. 우선순위가 한눈에.',
+    showcase_b3_h: '공유 가능한 이미지',
+    showcase_b3_b: '9:16 이미지 다운로드 — 코치에게 보여주거나, 연습 그룹에 공유하거나, 활강 중간에 확인하세요.',
+    showcase_disclaimer: '예시 출력 — 일러스트 라이더. 당신의 클립도 30초 안에 같은 분석을 받습니다.',
+    showcase_mock_headline: '엉덩이가 뒤꿈치 뒤에 남아 있음 — 토 사이드 카빙이 계속 안 되는 원인',
+    showcase_mock_a1: '상체 안정 — 머리가 폴 라인을 향함',
+    showcase_mock_a2: '허리에서 굽힘 — 발목/무릎에서 굽히도록',
+    showcase_mock_a3: '엉덩이가 뒤꿈치 뒤로 — 백시트',
     sample_eyebrow: '샘플 출력',
     sample_h2: '실제로 받게 되는 내용',
     sample_sub: '니세코 정설 슬로프에서 라이딩한 중급 카버의 실제 분석. $1 잠금 해제로 받는 내용입니다.',
@@ -1595,6 +1698,8 @@ function setLanguage(lang) {
   currentLang = lang;
   localStorage.setItem('cv_lang', lang);
   applyI18n();
+  // Re-render the showcase annotated card so its labels follow the new language.
+  if (typeof renderShowcaseAnnotatedCard === 'function') renderShowcaseAnnotatedCard();
   document.getElementById('lang-menu').classList.add('hidden');
 }
 
@@ -2321,6 +2426,210 @@ async function renderAnnotatedFrame(frameBase64, annotations, headline, skillLev
   });
 }
 
+// =================================================================
+// Showcase mock — used in the marketing section above the sample analysis.
+// We synthesize a stylized snowboarder + draw the same annotated card the
+// real analysis produces. Re-renders on language change so labels follow.
+// =================================================================
+
+function _makeShowcaseRider(w, h) {
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const x = c.getContext('2d');
+
+  // Sky gradient (alpine dawn)
+  const sky = x.createLinearGradient(0, 0, 0, h*0.55);
+  sky.addColorStop(0, '#7dd3fc');
+  sky.addColorStop(0.6, '#bae6fd');
+  sky.addColorStop(1, '#f0f9ff');
+  x.fillStyle = sky; x.fillRect(0, 0, w, h*0.55);
+
+  // Distant mountain silhouette
+  x.fillStyle = '#cbd5e1';
+  x.beginPath();
+  x.moveTo(0, h*0.45);
+  for (let i=0; i<=10; i++) {
+    const px = (i/10)*w;
+    const py = h*0.45 - 30 - Math.sin(i*0.7)*22 - Math.random()*8;
+    x.lineTo(px, py);
+  }
+  x.lineTo(w, h*0.55); x.lineTo(0, h*0.55); x.closePath(); x.fill();
+
+  // Closer ridge
+  x.fillStyle = '#94a3b8';
+  x.beginPath();
+  x.moveTo(0, h*0.52);
+  for (let i=0; i<=8; i++) {
+    const px = (i/8)*w;
+    const py = h*0.52 - 18 - Math.sin(i*1.1)*14;
+    x.lineTo(px, py);
+  }
+  x.lineTo(w, h*0.55); x.lineTo(0, h*0.55); x.closePath(); x.fill();
+
+  // Snow slope (gradient)
+  const slope = x.createLinearGradient(0, h*0.55, 0, h);
+  slope.addColorStop(0, '#f8fafc');
+  slope.addColorStop(0.5, '#e2e8f0');
+  slope.addColorStop(1, '#cbd5e1');
+  x.fillStyle = slope; x.fillRect(0, h*0.55, w, h*0.45);
+
+  // Tilt the snow a touch
+  x.fillStyle = 'rgba(148,163,184,0.18)';
+  x.beginPath(); x.moveTo(0, h*0.62); x.lineTo(w, h*0.55); x.lineTo(w, h*0.7); x.lineTo(0, h*0.78); x.closePath(); x.fill();
+
+  // Pine trees (left + right cluster)
+  function tree(tx, ty, scale, shade) {
+    x.fillStyle = shade;
+    x.beginPath();
+    x.moveTo(tx, ty);
+    x.lineTo(tx-14*scale, ty+38*scale);
+    x.lineTo(tx-7*scale, ty+38*scale);
+    x.lineTo(tx-12*scale, ty+62*scale);
+    x.lineTo(tx+12*scale, ty+62*scale);
+    x.lineTo(tx+7*scale, ty+38*scale);
+    x.lineTo(tx+14*scale, ty+38*scale);
+    x.closePath(); x.fill();
+  }
+  for (let i=0; i<5; i++) tree(50+i*40, h*0.49+Math.random()*8, 0.9+Math.random()*0.3, '#0f172a');
+  for (let i=0; i<5; i++) tree(w-260+i*45, h*0.50+Math.random()*8, 0.85+Math.random()*0.3, '#1e293b');
+
+  // Past ride trail (subtle S-curve in snow, behind rider)
+  x.strokeStyle = 'rgba(100,116,139,0.35)';
+  x.lineWidth = 4;
+  x.beginPath();
+  x.moveTo(w*0.2, h*0.95);
+  x.bezierCurveTo(w*0.45, h*0.85, w*0.55, h*0.78, w*0.5, h*0.65);
+  x.stroke();
+  x.lineWidth = 1;
+
+  // ---- Rider (stylized, mid-toe-side carve, with backseat tendency) ----
+  const rx = w*0.5, ry = h*0.62;
+
+  // Snowboard
+  x.save();
+  x.translate(rx, ry+150);
+  x.rotate(-0.08);
+  // Board base shadow
+  x.fillStyle = 'rgba(15,23,42,0.25)';
+  x.beginPath(); x.ellipse(4, 8, 95, 14, 0, 0, Math.PI*2); x.fill();
+  // Board itself
+  const boardGrad = x.createLinearGradient(-95, 0, 95, 0);
+  boardGrad.addColorStop(0, '#1e293b');
+  boardGrad.addColorStop(0.5, '#334155');
+  boardGrad.addColorStop(1, '#1e293b');
+  x.fillStyle = boardGrad;
+  x.beginPath(); x.ellipse(0, 0, 95, 13, 0, 0, Math.PI*2); x.fill();
+  // Board highlight (top edge — toe edge engaged)
+  x.fillStyle = 'rgba(56,189,248,0.55)';
+  x.beginPath(); x.ellipse(0, -10, 90, 4, 0, 0, Math.PI*2); x.fill();
+  x.restore();
+
+  // Snow spray under back foot
+  x.fillStyle = 'rgba(255,255,255,0.85)';
+  for (let i=0; i<8; i++) {
+    const sx = rx + 30 + Math.random()*40;
+    const sy = ry + 145 + Math.random()*10;
+    x.beginPath(); x.arc(sx, sy, 2 + Math.random()*4, 0, Math.PI*2); x.fill();
+  }
+
+  // Pants (puffy, mid-blue, slight asymmetric flex)
+  x.fillStyle = '#3b82f6';
+  x.beginPath();
+  x.moveTo(rx-38, ry-10);    // upper waist L
+  x.lineTo(rx+38, ry-10);    // upper waist R
+  x.lineTo(rx+50, ry+148);   // outer shin R (back leg, planted)
+  x.lineTo(rx+8, ry+148);    // inner shin R
+  x.lineTo(rx-12, ry+148);   // inner shin L
+  x.lineTo(rx-46, ry+148);   // outer shin L (front leg)
+  x.closePath();
+  x.fill();
+  // Pant shadow / fold
+  x.fillStyle = 'rgba(0,0,0,0.18)';
+  x.beginPath();
+  x.moveTo(rx-38, ry+50); x.lineTo(rx+38, ry+50);
+  x.lineTo(rx+50, ry+148); x.lineTo(rx+8, ry+148);
+  x.closePath(); x.fill();
+
+  // Boots (two stub circles)
+  x.fillStyle = '#0f172a';
+  x.beginPath(); x.arc(rx-32, ry+148, 16, 0, Math.PI*2); x.fill();
+  x.beginPath(); x.arc(rx+32, ry+148, 16, 0, Math.PI*2); x.fill();
+
+  // Torso (white hoodie — slight forward fold, simulating waist bend)
+  x.fillStyle = '#f8fafc';
+  x.beginPath();
+  x.moveTo(rx-34, ry-90);
+  x.bezierCurveTo(rx-44, ry-30, rx-44, ry-15, rx-38, ry-10);
+  x.lineTo(rx+38, ry-10);
+  x.bezierCurveTo(rx+44, ry-15, rx+44, ry-30, rx+34, ry-90);
+  x.closePath();
+  x.fill();
+  x.strokeStyle = '#cbd5e1'; x.lineWidth = 1; x.stroke();
+  // Hoodie inner shadow (suggests forward fold)
+  x.fillStyle = 'rgba(15,23,42,0.06)';
+  x.beginPath();
+  x.moveTo(rx-34, ry-30); x.lineTo(rx+34, ry-30); x.lineTo(rx+38, ry-10); x.lineTo(rx-38, ry-10);
+  x.closePath(); x.fill();
+
+  // Arms (one forward / one slightly back — typical mid-carve)
+  // Front arm
+  x.fillStyle = '#f8fafc';
+  x.save(); x.translate(rx-30, ry-75); x.rotate(0.55);
+  x.fillRect(0, 0, 12, 65);
+  x.restore();
+  // Glove
+  x.fillStyle = '#0f172a';
+  x.beginPath(); x.arc(rx-58, ry-22, 9, 0, Math.PI*2); x.fill();
+  // Back arm
+  x.fillStyle = '#f8fafc';
+  x.save(); x.translate(rx+22, ry-75); x.rotate(-0.35);
+  x.fillRect(0, 0, 12, 60);
+  x.restore();
+  x.fillStyle = '#0f172a';
+  x.beginPath(); x.arc(rx+50, ry-25, 9, 0, Math.PI*2); x.fill();
+
+  // Helmet
+  x.fillStyle = '#0f172a';
+  x.beginPath(); x.arc(rx, ry-115, 26, 0, Math.PI*2); x.fill();
+  // Helmet highlight
+  x.fillStyle = 'rgba(255,255,255,0.18)';
+  x.beginPath(); x.arc(rx-8, ry-122, 8, 0, Math.PI*2); x.fill();
+  // Goggles (a single dark band)
+  x.fillStyle = '#1e293b';
+  x.fillRect(rx-22, ry-118, 44, 9);
+  x.fillStyle = 'rgba(125,211,252,0.6)';
+  x.fillRect(rx-20, ry-117, 18, 6);
+  x.fillRect(rx+2, ry-117, 18, 6);
+  // Subtle face patch
+  x.fillStyle = '#fde68a';
+  x.beginPath(); x.arc(rx, ry-99, 10, 0, Math.PI*2); x.fill();
+
+  return c.toDataURL('image/jpeg', 0.92);
+}
+
+async function renderShowcaseAnnotatedCard() {
+  const wrap = document.getElementById('showcase-annotated-card-wrap');
+  if (!wrap) return;
+  try {
+    const riderImg = _makeShowcaseRider(720, 1280);
+    // Mock annotation set — 1 good + 2 fix; covers two of three severity colors.
+    // Coordinates picked to land on the rider drawn above (head ≈ y0.20, waist ≈ y0.45, hip ≈ y0.55).
+    const annotations = [
+      { n:1, x:0.50, y:0.18, label: t('showcase_mock_a1'), severity:'good' },
+      { n:2, x:0.50, y:0.42, label: t('showcase_mock_a2'), severity:'fix'  },
+      { n:3, x:0.50, y:0.62, label: t('showcase_mock_a3'), severity:'fix'  },
+    ];
+    const headline = t('showcase_mock_headline');
+    const canvas = await renderAnnotatedFrame(riderImg, annotations, headline, 'intermediate_linking');
+    canvas.style.maxWidth = '100%';
+    wrap.innerHTML = '';
+    wrap.appendChild(canvas);
+  } catch (e) {
+    console.warn('showcase render failed', e);
+    wrap.innerHTML = '';
+  }
+}
+
 // Mount the rendered annotated card into #annotated-card. Hides container if data missing/unusable.
 async function showAnnotatedCard(result) {
   const card = document.getElementById('annotated-card');
@@ -2775,5 +3084,12 @@ applyI18n();
 preloadHistoryCount();
 track('page_view', { lang: currentLang });
 handleStripeReturn(); // If we just came back from Stripe with ?unlock=success&session_id=xxx, kick off verify + deep flow
+// Render the marketing showcase annotated card (mock rider + real annotation logic).
+// Defer slightly so the rest of the page renders first — no layout shift over the fold.
+if (typeof requestIdleCallback === 'function') {
+  requestIdleCallback(() => renderShowcaseAnnotatedCard(), { timeout: 1500 });
+} else {
+  setTimeout(() => renderShowcaseAnnotatedCard(), 200);
+}
 </script>
 </body></html>
