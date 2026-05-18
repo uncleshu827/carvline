@@ -10,7 +10,37 @@
 <meta property="og:title" content="Carvline — Your iPhone is a Snowboard Coach">
 <meta property="og:description" content="Upload a 30-second clip. See exactly what to fix next time. Free to try.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://uncleshu827.github.io/carvline/">
+<meta property="og:url" content="https://carvlineai.com/">
+<meta property="og:image" content="https://carvlineai.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Carvline — Your iPhone is a Snowboard Coach">
+<meta name="twitter:description" content="Upload a 30-second clip. See exactly what to fix next time. Free to try.">
+<meta name="twitter:image" content="https://carvlineai.com/og-image.png">
+<link rel="canonical" href="https://carvlineai.com/">
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+// IMPORTANT: replace REPLACE_WITH_PIXEL_ID with your real Pixel ID from Meta Events Manager
+window.CARVLINE_FB_PIXEL_ID = 'REPLACE_WITH_PIXEL_ID';
+if (window.CARVLINE_FB_PIXEL_ID && window.CARVLINE_FB_PIXEL_ID !== 'REPLACE_WITH_PIXEL_ID') {
+  fbq('init', window.CARVLINE_FB_PIXEL_ID);
+  fbq('track', 'PageView');
+}
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=REPLACE_WITH_PIXEL_ID&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -1628,8 +1658,18 @@ const LANG_LABELS = { en: 'English', 'zh-TW': '繁體中文', 'zh-CN': '简体�
 const LANG_SHORT = { en: 'EN', 'zh-TW': '繁中', 'zh-CN': '简中', ja: '日本', ko: '한국' };
 
 function detectInitialLanguage() {
+  // 1. URL param wins (lets ad campaigns force a language, e.g. ?lang=en)
+  try {
+    const urlLang = new URLSearchParams(window.location.search).get('lang');
+    if (urlLang && STR[urlLang]) {
+      try { localStorage.setItem('cv_lang', urlLang); } catch (e) {}
+      return urlLang;
+    }
+  } catch (e) {}
+  // 2. User's previous selection
   const stored = localStorage.getItem('cv_lang');
   if (stored && STR[stored]) return stored;
+  // 3. Browser locale
   const nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
   if (nav.startsWith('zh-tw') || nav.startsWith('zh-hk') || nav.startsWith('zh-mo') || nav.startsWith('zh-hant')) return 'zh-TW';
   if (nav.startsWith('zh-cn') || nav.startsWith('zh-sg') || nav.startsWith('zh-hans')) return 'zh-CN';
@@ -2063,11 +2103,13 @@ function joinWaitlist() {
   const promptKey = lastDemoKind === 'reel' ? 'waitlist_prompt_reel' : 'waitlist_prompt_record';
   const email = prompt(t(promptKey));
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+  const source = 'demo_' + (lastDemoKind || 'unknown');
   fetch(WORKER_URL + 'waitlist', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, visitor_id: visitorId, source: 'demo_' + (lastDemoKind || 'unknown') })
+    body: JSON.stringify({ email, visitor_id: visitorId, source })
   }).catch(()=>{});
+  track('waitlist_signup', { source, email_domain: email.split('@')[1] });
   alert(t('waitlist_alert'));
   closeDemo();
 }
@@ -2081,6 +2123,7 @@ async function submitWaitlist(ev) {
   const email = form.email.value.trim();
   if (!email) return;
   form.outerHTML = `<div class="p-4 rounded-lg bg-green-50 text-green-700 text-sm">${escapeHtml(t('waitlist_received', { email }))}</div>`;
+  track('waitlist_signup', { source: 'website', email_domain: email.split('@')[1] });
   try {
     await fetch(WORKER_URL + 'waitlist', {
       method: 'POST',
@@ -2422,7 +2465,11 @@ async function renderAnnotatedFrame(frameBase64, annotations, headline, skillLev
         resolve(canvas);
       } catch (err) { reject(err); }
     };
-    img.src = 'data:image/jpeg;base64,' + frameBase64;
+    // Accept both raw base64 and full data URL (showcase passes full data URL via toDataURL)
+    const src = (typeof frameBase64 === 'string' && frameBase64.startsWith('data:'))
+      ? frameBase64
+      : 'data:image/jpeg;base64,' + frameBase64;
+    img.src = src;
   });
 }
 
@@ -2754,6 +2801,13 @@ async function redeemPendingUnlock(sessionId) {
       throw new Error(data.error || 'deep failed');
     }
     renderResult(data.result, 'deep');
+    track('deep_shown', {
+      analysis_id: data.analysis_id,
+      skill_level: data.result?.skill_level,
+      terrain: data.result?.terrain,
+      unable_to_score: !!data.result?.unable_to_score,
+      has_annotations: Array.isArray(data.result?.annotations) && data.result.annotations.length > 0
+    });
     proc.classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
     try { localStorage.removeItem('cv_pending_unlock_session'); } catch (e) {}
@@ -2874,6 +2928,13 @@ async function unlockDeepDirect() {
       throw new Error(msg);
     }
     renderResult(data.result, 'deep');
+    track('deep_shown', {
+      analysis_id: data.analysis_id,
+      skill_level: data.result?.skill_level,
+      terrain: data.result?.terrain,
+      unable_to_score: !!data.result?.unable_to_score,
+      has_annotations: Array.isArray(data.result?.annotations) && data.result.annotations.length > 0
+    });
     proc.classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
     preloadHistoryCount();
@@ -2978,6 +3039,13 @@ async function handleStripeReturn() {
     track('payment_completed', { session_id: sessionId, amount_cents: vd.amount_cents, currency: vd.currency });
     currentFrames = frames; // restore so resetTry works
     renderResult(ad.result, 'deep');
+    track('deep_shown', {
+      analysis_id: ad.analysis_id,
+      skill_level: ad.result?.skill_level,
+      terrain: ad.result?.terrain,
+      unable_to_score: !!ad.result?.unable_to_score,
+      has_annotations: Array.isArray(ad.result?.annotations) && ad.result.annotations.length > 0
+    });
     proc.classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
     preloadHistoryCount();
@@ -3059,7 +3127,21 @@ function submitFeedback(advice_key, rating) {
   track('feedback_submitted', { advice_key, rating });
 }
 
+// Map internal event types to Meta Pixel standard events.
+// Reference: https://developers.facebook.com/docs/meta-pixel/reference
+const FB_EVENT_MAP = {
+  page_view:          { name: 'PageView',          standard: true },
+  upload_start:       { name: 'InitiateCheckout',  standard: true },   // micro-conversion: started funnel
+  free_shown:         { name: 'ViewContent',       standard: true, params: (m)=>({ content_name: 'free_analysis', content_category: m?.skill_level || 'unknown' }) },
+  unlock_clicked:     { name: 'AddToCart',         standard: true },
+  payment_completed:  { name: 'Purchase',          standard: true, params: (m)=>({ value: (m?.amount_cents||100)/100, currency: m?.currency || 'USD' }) },
+  deep_shown:         { name: 'ViewContent',       standard: true, params: (m)=>({ content_name: 'deep_analysis', content_category: m?.skill_level || 'unknown' }) },
+  waitlist_signup:    { name: 'Lead',              standard: true },
+  feedback_submitted: { name: 'CarvlineFeedback',  standard: false },  // custom event
+};
+
 function track(eventType, metadata) {
+  // 1. Fire to our own analytics (D1 events table)
   try {
     const body = {
       event_type: eventType,
@@ -3069,12 +3151,22 @@ function track(eventType, metadata) {
       ..._utmCache,
       metadata: metadata || null
     };
-    // Use sendBeacon if available (survives page unload), fall back to fetch
     const json = JSON.stringify(body);
     if (navigator.sendBeacon) {
       navigator.sendBeacon(WORKER_URL + 'event', new Blob([json], { type: 'application/json' }));
     } else {
       fetch(WORKER_URL + 'event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: json, keepalive: true }).catch(()=>{});
+    }
+  } catch (e) {}
+
+  // 2. Fire to Meta Pixel (if configured)
+  try {
+    if (typeof fbq !== 'undefined' && window.CARVLINE_FB_PIXEL_ID && window.CARVLINE_FB_PIXEL_ID !== 'REPLACE_WITH_PIXEL_ID') {
+      const mapping = FB_EVENT_MAP[eventType];
+      if (mapping) {
+        const params = (mapping.params && typeof mapping.params === 'function') ? mapping.params(metadata) : {};
+        fbq(mapping.standard ? 'track' : 'trackCustom', mapping.name, params);
+      }
     }
   } catch (e) {}
 }
