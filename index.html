@@ -2465,23 +2465,27 @@ async function renderAnnotatedFrame(frameBase64, annotations, headline, skillLev
         resolve(canvas);
       } catch (err) { reject(err); }
     };
-    // Accept raw base64, full data URL, OR a regular URL/path (showcase uses /showcase-snowboarder.jpg)
+    // Decide source: base64 string (~tens of KB) vs short URL/path (<500 chars typically).
+    // CRITICAL: base64 alphabet includes '/' so we can't naively check for '/' prefix
+    // (a real base64 frame might start with '/'). Use a length-based heuristic + extension check.
     let src;
     if (typeof frameBase64 !== 'string') {
       reject(new Error('frame load fail — invalid input'));
       return;
     }
-    if (frameBase64.startsWith('data:')) {
+    const looksLikeUrl = frameBase64.length < 500 &&
+      (frameBase64.startsWith('data:') ||
+       frameBase64.startsWith('http://') || frameBase64.startsWith('https://') ||
+       (frameBase64.startsWith('/') && /\.(jpe?g|png|webp|gif)(\?|$)/i.test(frameBase64)));
+    if (looksLikeUrl) {
       src = frameBase64;
-    } else if (frameBase64.startsWith('http://') || frameBase64.startsWith('https://')) {
-      // Cross-origin URL — must opt in to CORS so canvas isn't tainted
-      src = frameBase64;
-      img.crossOrigin = 'anonymous';
-    } else if (frameBase64.startsWith('/')) {
-      // Same-origin path — do NOT set crossOrigin (GitHub Pages doesn't return CORS headers)
-      src = frameBase64;
+      if (frameBase64.startsWith('http://') || frameBase64.startsWith('https://')) {
+        // Cross-origin — must opt in to CORS so canvas isn't tainted
+        img.crossOrigin = 'anonymous';
+      }
     } else {
-      src = 'data:image/jpeg;base64,' + frameBase64; // raw base64
+      // Treat as raw base64
+      src = 'data:image/jpeg;base64,' + frameBase64;
     }
     img.src = src;
   });
