@@ -2473,9 +2473,13 @@ async function renderAnnotatedFrame(frameBase64, annotations, headline, skillLev
     }
     if (frameBase64.startsWith('data:')) {
       src = frameBase64;
-    } else if (frameBase64.startsWith('http://') || frameBase64.startsWith('https://') || frameBase64.startsWith('/')) {
-      src = frameBase64; // regular URL or relative path
+    } else if (frameBase64.startsWith('http://') || frameBase64.startsWith('https://')) {
+      // Cross-origin URL — must opt in to CORS so canvas isn't tainted
+      src = frameBase64;
       img.crossOrigin = 'anonymous';
+    } else if (frameBase64.startsWith('/')) {
+      // Same-origin path — do NOT set crossOrigin (GitHub Pages doesn't return CORS headers)
+      src = frameBase64;
     } else {
       src = 'data:image/jpeg;base64,' + frameBase64; // raw base64
     }
