@@ -302,7 +302,7 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 
 <div id="upload-zone">
 <div class="upload-zone bg-white rounded-2xl p-10 sm:p-12 text-center" onclick="document.getElementById('file-input').click()">
-<input type="file" id="file-input" accept="video/*" class="hidden" onchange="analyzeVideo(this, 'free')">
+<input type="file" id="file-input" accept="video/*" class="hidden" onchange="onFilePicked(this)">
 <div class="text-4xl sm:text-5xl mb-3">🎬</div>
 <div class="font-semibold text-lg sm:text-xl mb-2" data-i18n="upload_title">Upload a snowboard clip</div>
 <div class="text-sm text-gray-500" data-i18n="upload_sub">Tap here · 60 seconds or less</div>
@@ -404,7 +404,7 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 <div class="mt-auto inline-flex items-center gap-1 text-sm font-medium accent" data-i18n="see_demo">See demo →</div>
 </div>
 
-<div class="card rounded-2xl p-6 sm:p-7 cursor-pointer hover:shadow-lg transition-shadow flex flex-col" onclick="openDemo('reel')">
+<div class="card rounded-2xl p-6 sm:p-7 cursor-pointer hover:shadow-lg transition-shadow flex flex-col relative" onclick="location.href='reel.html'">
 <div class="text-3xl sm:text-4xl mb-4">🎬</div>
 <div class="text-xs font-semibold accent uppercase tracking-wider mb-2" data-i18n="card2_eyebrow">For the 'gram</div>
 <h3 class="text-lg sm:text-xl font-bold mb-3" data-i18n="card2_title">Auto-edit a 30-second highlight reel</h3>
@@ -415,7 +415,7 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 <li>· Vertical 9:16, ready for IG</li>
 <li>· No editing required</li>
 </ul>
-<div class="mt-auto inline-flex items-center gap-1 text-sm font-medium accent" data-i18n="see_demo">See demo →</div>
+<div class="mt-auto inline-flex items-center gap-1 text-sm font-semibold accent" data-i18n="card3_cta">Try it now →</div>
 </div>
 
 <div class="card rounded-2xl p-6 sm:p-7 ring-2 ring-blue-600 relative sm:col-span-2 md:col-span-1 cursor-pointer hover:shadow-lg transition-shadow flex flex-col" onclick="document.getElementById('try').scrollIntoView({behavior:'smooth'})">
@@ -494,7 +494,7 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 
 <div class="card rounded-2xl p-5">
 <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2" data-i18n="tier3_eyebrow">Whole season</div>
-<div class="flex items-baseline gap-1 mb-1"><span class="text-4xl font-extrabold">$25</span><span class="text-sm text-gray-500" data-i18n="tier3_price_unit">/season</span></div>
+<div class="flex items-baseline gap-1 mb-1"><span class="text-4xl font-extrabold">$39</span><span class="text-sm text-gray-500" data-i18n="tier3_price_unit">/season</span></div>
 <p class="text-sm text-gray-600 mb-4" data-i18n="tier3_desc">Unlimited clips Dec–Mar</p>
 <ul class="space-y-1.5 text-sm text-gray-700 mb-5" data-i18n-list="tier3_bullets">
 <li>✓ Unlimited uploads</li>
@@ -507,7 +507,7 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 
 <div class="card rounded-2xl p-5 bg-gradient-to-br from-amber-50 to-white border-amber-200">
 <div class="text-xs font-semibold uppercase tracking-wider text-amber-700 mb-2" data-i18n="tier4_eyebrow">Early bird · lifetime</div>
-<div class="flex items-baseline gap-2 mb-1"><span class="text-4xl font-extrabold">$25</span><span class="text-sm text-gray-400 line-through">$240</span></div>
+<div class="flex items-baseline gap-2 mb-1"><span class="text-4xl font-extrabold">$69</span><span class="text-sm text-gray-400 line-through">$149</span></div>
 <p class="text-sm text-gray-600 mb-4" data-i18n="tier4_desc">Pay once, ride forever (first 100)</p>
 <ul class="space-y-1.5 text-sm text-gray-700 mb-5" data-i18n-list="tier4_bullets">
 <li>✓ Everything in Season</li>
@@ -656,7 +656,7 @@ const STR = {
       ['Can AI really judge snowboarding?','For beginner-to-intermediate riders, ~70–85% accuracy. Try the free version and decide if it’s worth USD $1. If you’re prepping for competition, hire a real coach.'],
       ['Is my footage safe?','Clips are processed in your browser and auto-delete after 24 hours. We don’t share them with third parties or sell data. You decide whether to make any of it public.'],
       ['Where do I see past analyses?','Tap "My History" top right (or below the upload area on mobile). We use a local visitor_id — no sign-up. Switching devices or clearing cache resets it.'],
-      ['Season $25 vs Lifetime $25 — which one?','Season makes sense if you ride 1–3 trips this winter. Lifetime (early-bird, first 100, normally USD $240) is the deal if you plan on riding for years.'],
+      ['Season $39 vs Lifetime $69 — which one?','Season makes sense if you ride 1–3 trips this winter. Lifetime (early-bird, first 100, normally USD $149) is the deal if you plan on riding for years.'],
       ['Refund policy?','Email us within 30 days, full refund, no questions.'],
     ],
     footer: '© 2026 Carvline',
@@ -883,7 +883,7 @@ const STR = {
       ['AI 真的能看懂滑單板嗎？','入門到中階滑手 70-85% 準確。先試免費版你就知道值不值 USD $1。準備比賽的職業選手，還是建議找真人教練。'],
       ['我的影片資料安全嗎？','影片只在你瀏覽器處理，24 小時後自動刪除。我們不偷偷分享給第三方、不賣資料。你決定要不要公開。'],
       ['在哪裡看我之前的分析？','右上角點「我的紀錄」 (手機版在試用區下方)。我們用本機 visitor_id 認你，不用註冊。換手機或清快取就會重新計算。'],
-      ['Season $25 vs Lifetime $25 怎麼選？','如果你只玩這個雪季 (1-3 趟), Season 划算。如果你打算長期玩單板，搶 Lifetime 早鳥(限 100 名，正常價 USD $240) 最划算。'],
+      ['Season $39 vs Lifetime $69 怎麼選？','如果你只玩這個雪季 (1-3 趟), Season 划算。如果你打算長期玩單板，搶 Lifetime 早鳥(限 100 名，正常價 USD $149) 最划算。'],
       ['退費政策？','用了不滿意，30 天內 email 我們，全額退費，不問理由。'],
     ],
     footer: '© 2026 Carvline',
@@ -1105,7 +1105,7 @@ const STR = {
       ['AI 真的能看懂滑单板吗？','入门到中阶滑手 70-85% 准确。先试免费版你就知道值不值 USD $1。准备比赛的职业选手，还是建议找真人教练。'],
       ['我的视频数据安全吗？','视频只在你浏览器处理，24 小时后自动删除。我们不偷偷分享给第三方、不卖数据。你决定要不要公开。'],
       ['在哪里看我之前的分析？','右上角点「我的记录」(手机版在试用区下方)。我们用本机 visitor_id 识别你，不用注册。换手机或清缓存就会重新计算。'],
-      ['Season $25 vs Lifetime $25 怎么选？','如果你只玩这个雪季 (1-3 趟), Season 划算。如果你打算长期玩单板，抢 Lifetime 早鸟(限 100 名，正常价 USD $240) 最划算。'],
+      ['Season $39 vs Lifetime $69 怎么选？','如果你只玩这个雪季 (1-3 趟), Season 划算。如果你打算长期玩单板，抢 Lifetime 早鸟(限 100 名，正常价 USD $149) 最划算。'],
       ['退款政策？','用了不满意，30 天内 email 我们，全额退款，不问理由。'],
     ],
     footer: '© 2026 Carvline',
@@ -1324,7 +1324,7 @@ const STR = {
       ['AIは本当にスノーボードを判定できる？','初〜中級者で約70〜85%の精度。無料版でUSD $1の価値があるか判断できます。競技準備中なら本物のコーチを推奨。'],
       ['動画データは安全？','クリップはブラウザ内で処理し、24時間で自動削除。第三者と共有もデータ販売もしません。公開するかはあなた次第。'],
       ['過去の分析はどこで見れる？','右上の「履歴」をタップ（モバイルではアップロード欄の下）。ローカルvisitor_idで識別 — 登録不要。端末変更やキャッシュクリアでリセットされます。'],
-      ['シーズン$25 vs 永久$25？','このシーズン1〜3回滑るならシーズンが妥当。長期プランなら永久（先着100、通常USD $240）が断然お得。'],
+      ['シーズン$39 vs 永久$69？','このシーズン1〜3回滑るならシーズンが妥当。長期プランなら永久（先着100、通常USD $149）が断然お得。'],
       ['返金ポリシー？','30日以内にメールください、全額返金、理由不問。'],
     ],
     footer: '© 2026 Carvline',
@@ -1541,7 +1541,7 @@ const STR = {
       ['AI가 정말 스노보드를 판단할 수 있나요?','초중급자 약 70–85% 정확도. 무료 버전을 시도해보고 USD $1의 가치가 있는지 판단하세요. 대회 준비 중이면 실제 코치를 추천.'],
       ['동영상 데이터는 안전한가요?','클립은 브라우저에서 처리되고 24시간 후 자동 삭제. 제3자와 공유하지 않고 데이터를 판매하지 않습니다.'],
       ['이전 분석은 어디에서 볼 수 있나요?','우측 상단 "내 기록" 탭 (모바일은 업로드 영역 아래). 로컬 visitor_id로 식별 — 가입 불필요. 기기 변경이나 캐시 삭제 시 재설정.'],
-      ['Season $25 vs Lifetime $25 어느 것?','이번 시즌만 1–3회 라이딩이면 Season이 합리적. 장기 계획이라면 Lifetime 얼리버드 (선착 100, 정가 USD $240)가 가장 이득.'],
+      ['Season $39 vs Lifetime $69 어느 것?','이번 시즌만 1–3회 라이딩이면 Season이 합리적. 장기 계획이라면 Lifetime 얼리버드 (선착 100, 정가 USD $149)가 가장 이득.'],
       ['환불 정책?','30일 이내 이메일 주시면 전액 환불, 이유 불문.'],
     ],
     footer: '© 2026 Carvline',
@@ -3165,6 +3165,7 @@ const FB_EVENT_MAP = {
   deep_shown:         { name: 'ViewContent',       standard: true, params: (m)=>({ content_name: 'deep_analysis', content_category: m?.skill_level || 'unknown' }) },
   waitlist_signup:    { name: 'Lead',              standard: true },
   feedback_submitted: { name: 'CarvlineFeedback',  standard: false },  // custom event
+  profile_submitted:  { name: 'CompleteRegistration', standard: true, params: (m)=>({ content_category: m?.level || 'unknown' }) },  // pre-upload survey
 };
 
 function track(eventType, metadata) {
@@ -3210,5 +3211,102 @@ if (typeof requestIdleCallback === 'function') {
 } else {
   setTimeout(() => renderShowcaseAnnotatedCard(), 200);
 }
+</script>
+
+<!-- ===================================================================== -->
+<!-- PRE-UPLOAD PROFILE SURVEY (added 2026-06-27)                            -->
+<!-- 4 one-tap questions before the free analysis. Stored via track() ->     -->
+<!-- events.metadata (no backend redeploy) + localStorage. Skippable.        -->
+<!-- ===================================================================== -->
+<style>
+#cl-survey{position:fixed;inset:0;z-index:200;display:none;align-items:flex-end;justify-content:center;background:rgba(15,23,42,.5);backdrop-filter:blur(2px)}
+#cl-survey.show{display:flex}
+.cls-card{background:#fff;width:100%;max-width:480px;border-radius:20px 20px 0 0;padding:22px 20px max(22px,env(safe-area-inset-bottom));box-shadow:0 -8px 40px rgba(0,0,0,.2);max-height:92vh;overflow-y:auto}
+@media(min-width:520px){#cl-survey{align-items:center}.cls-card{border-radius:20px}}
+.cls-card h3{font-size:19px;font-weight:800;letter-spacing:-.01em;margin:0 0 2px;color:#0f172a}
+.cls-card .cls-sub{font-size:13px;color:#64748b;margin-bottom:14px}
+.cls-q{margin-bottom:14px}
+.cls-q .cls-l{font-size:12.5px;font-weight:700;color:#334155;margin-bottom:7px}
+.cls-chips{display:flex;flex-wrap:wrap;gap:7px}
+.cls-chip{border:1.5px solid #e5e7eb;background:#fff;color:#0f172a;border-radius:999px;padding:8px 13px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:.12s}
+.cls-chip:hover{border-color:#93c5fd}
+.cls-chip.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.cls-go{display:block;width:100%;text-align:center;background:#2563eb;color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:8px}
+.cls-skip{display:block;width:100%;text-align:center;background:none;border:none;color:#94a3b8;font-size:13px;padding:11px 0 2px;cursor:pointer;font-family:inherit}
+</style>
+<div id="cl-survey"><div class="cls-card" id="cls-card"></div></div>
+<script>
+// --- pre-upload survey: definitions ---
+(function(){
+  var Z = (typeof currentLang!=='undefined' ? currentLang : (navigator.language||'')).toLowerCase().indexOf('zh')===0;
+  var COPY = {
+    title: Z?'開始前，30 秒小問卷':'Quick 30-second question',
+    sub:   Z?'幫我們更懂你，給你更準的建議（可略過）':'Helps us tailor your coaching — optional',
+    go:    Z?'開始分析 →':'Start my analysis →',
+    skip:  Z?'略過，直接分析':'Skip',
+    qs: [
+      { k:'level', l: Z?'你的程度？':'Your level?', opts: Z?
+        [['first','第一次'],['linking','會連續轉彎'],['carving','會刻滑'],['advanced','進階']]:
+        [['first','First timer'],['linking','Linking turns'],['carving','Carving'],['advanced','Advanced']] },
+      { k:'goal', l: Z?'最想進步的是？':'What do you most want to nail?', opts: Z?
+        [['carving','刻滑'],['switch','換刃/轉換'],['park','跳台/公園'],['fall','不要跌倒'],['edit','拍出好影片']]:
+        [['carving','Carving'],['switch','Edge changes'],['park','Park & jumps'],['fall','Not falling'],['edit','Better edits']] },
+      { k:'freq', l: Z?'一年滑幾趟？':'Trips per year?', opts: Z?
+        [['1','1 趟'],['2-3','2–3 趟'],['4+','4 趟以上'],['indoor','主要室內']]:
+        [['1','1'],['2-3','2–3'],['4+','4+'],['indoor','Mostly indoor']] },
+      { k:'region', l: Z?'主要在哪裡滑？':'Where do you mostly ride?', opts: Z?
+        [['jp','日本'],['kr','韓國'],['eu','歐洲'],['na','美加'],['cn','中國室內'],['other','其他']]:
+        [['jp','Japan'],['kr','Korea'],['eu','Europe'],['na','N. America'],['cn','China indoor'],['other','Other']] }
+    ]
+  };
+  var answers = {};
+  var pendingInput = null;
+
+  window.onFilePicked = function(input){
+    if(!input || !input.files || !input.files[0]) return;
+    // If we already have a profile this browser, skip straight to analysis.
+    var has=null; try{ has=localStorage.getItem('carvline_profile'); }catch(e){}
+    if(has){ if(typeof analyzeVideo==='function') analyzeVideo(input); return; }
+    pendingInput = input;
+    renderSurvey();
+    document.getElementById('cl-survey').classList.add('show');
+  };
+
+  function renderSurvey(){
+    var h = '<h3>'+COPY.title+'</h3><div class="cls-sub">'+COPY.sub+'</div>';
+    COPY.qs.forEach(function(q){
+      h += '<div class="cls-q"><div class="cls-l">'+q.l+'</div><div class="cls-chips" data-q="'+q.k+'">';
+      q.opts.forEach(function(o){ h += '<button class="cls-chip" data-k="'+o[0]+'">'+o[1]+'</button>'; });
+      h += '</div></div>';
+    });
+    h += '<button class="cls-go" id="cls-go">'+COPY.go+'</button><button class="cls-skip" id="cls-skip">'+COPY.skip+'</button>';
+    var card = document.getElementById('cls-card');
+    card.innerHTML = h;
+    card.querySelectorAll('.cls-chips').forEach(function(row){
+      row.addEventListener('click', function(e){
+        var b = e.target.closest('.cls-chip'); if(!b) return;
+        row.querySelectorAll('.cls-chip').forEach(function(x){ x.classList.remove('on'); });
+        b.classList.add('on');
+        answers[row.getAttribute('data-q')] = b.getAttribute('data-k');
+      });
+    });
+    document.getElementById('cls-go').addEventListener('click', function(){ finish(true); });
+    document.getElementById('cls-skip').addEventListener('click', function(){ finish(false); });
+  }
+
+  function finish(submitted){
+    document.getElementById('cl-survey').classList.remove('show');
+    try{
+      if(submitted && Object.keys(answers).length){
+        answers.ts = Date.now();
+        localStorage.setItem('carvline_profile', JSON.stringify(answers));
+        if(typeof track==='function') track('profile_submitted', answers);
+      } else {
+        if(typeof track==='function') track('profile_skipped', {});
+      }
+    }catch(e){}
+    if(pendingInput && typeof analyzeVideo==='function') analyzeVideo(pendingInput);
+  }
+})();
 </script>
 </body></html>
