@@ -3180,10 +3180,11 @@ function track(eventType, metadata) {
       metadata: metadata || null
     };
     const json = JSON.stringify(body);
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(WORKER_URL + 'event', new Blob([json], { type: 'application/json' }));
-    } else {
-      fetch(WORKER_URL + 'event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: json, keepalive: true }).catch(()=>{});
+    // text/plain avoids a CORS preflight. sendBeacon can't preflight, so application/json events were being silently dropped cross-origin (no funnel data).
+    let _sent = false;
+    try { if (navigator.sendBeacon) _sent = navigator.sendBeacon(WORKER_URL + 'event', new Blob([json], { type: 'text/plain' })); } catch (e) {}
+    if (!_sent) {
+      fetch(WORKER_URL + 'event', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: json, keepalive: true }).catch(()=>{});
     }
   } catch (e) {}
 
@@ -3240,23 +3241,29 @@ if (typeof requestIdleCallback === 'function') {
 (function(){
   var Z = (typeof currentLang!=='undefined' ? currentLang : (navigator.language||'')).toLowerCase().indexOf('zh')===0;
   var COPY = {
-    title: Z?'開始前，30 秒小問卷':'Quick 30-second question',
-    sub:   Z?'幫我們更懂你，給你更準的建議（可略過）':'Helps us tailor your coaching — optional',
-    go:    Z?'開始分析 →':'Start my analysis →',
-    skip:  Z?'略過，直接分析':'Skip',
+    title: Z?'先懂你一點，分析更準':'First — a few quick taps',
+    sub:   Z?'幫 AI 更懂你的滑法，給你更準的影片分析（可略過）':'Helps the AI read your riding and tailor your video analysis (optional)',
+    go:    Z?'開始分析我的影片 →':'Analyze my video →',
+    skip:  Z?'略過':'Skip',
     qs: [
       { k:'level', l: Z?'你的程度？':'Your level?', opts: Z?
-        [['first','第一次'],['linking','會連續轉彎'],['carving','會刻滑'],['advanced','進階']]:
-        [['first','First timer'],['linking','Linking turns'],['carving','Carving'],['advanced','Advanced']] },
-      { k:'goal', l: Z?'最想進步的是？':'What do you most want to nail?', opts: Z?
-        [['carving','刻滑'],['switch','換刃/轉換'],['park','跳台/公園'],['fall','不要跌倒'],['edit','拍出好影片']]:
-        [['carving','Carving'],['switch','Edge changes'],['park','Park & jumps'],['fall','Not falling'],['edit','Better edits']] },
-      { k:'freq', l: Z?'一年滑幾趟？':'Trips per year?', opts: Z?
-        [['1','1 趟'],['2-3','2–3 趟'],['4+','4 趟以上'],['indoor','主要室內']]:
-        [['1','1'],['2-3','2–3'],['4+','4+'],['indoor','Mostly indoor']] },
-      { k:'region', l: Z?'主要在哪裡滑？':'Where do you mostly ride?', opts: Z?
-        [['jp','日本'],['kr','韓國'],['eu','歐洲'],['na','美加'],['cn','中國室內'],['other','其他']]:
-        [['jp','Japan'],['kr','Korea'],['eu','Europe'],['na','N. America'],['cn','China indoor'],['other','Other']] }
+        [['beginner','初學'],['intermediate','中級'],['advanced','進階']]:
+        [['beginner','Beginner'],['intermediate','Intermediate'],['advanced','Advanced']] },
+      { k:'goal', l: Z?'最想改善哪一塊？':'What do you most want to improve?', opts: Z?
+        [['carving','轉彎技術'],['speed','速度'],['jumps','跳躍'],['posture','整體姿勢']]:
+        [['carving','Turns / carving'],['speed','Speed'],['jumps','Jumps'],['posture','Overall form']] },
+      { k:'coached', l: Z?'有請過滑雪教練嗎？':'Ever had a coach?', opts: Z?
+        [['no','沒有'],['little','一點點'],['yes','長期有']]:
+        [['no','No'],['little','A little'],['yes','Yes, regularly']] },
+      { k:'freq', l: Z?'一年出國滑幾次？':'Trips per year?', opts: Z?
+        [['1','第一次 / 1 次'],['2-3','2–3 次'],['4+','4 次以上']]:
+        [['1','First / 1'],['2-3','2–3'],['4+','4+']] },
+      { k:'region', l: Z?'今年去（或想去）哪裡滑？':'Where do you ride (or plan to)?', opts: Z?
+        [['jp','日本'],['kr','韓國'],['eu','歐洲'],['other','其他']]:
+        [['jp','Japan'],['kr','Korea'],['eu','Europe'],['other','Other']] },
+      { k:'source', l: Z?'怎麼發現 Carvline 的？':'How did you find Carvline?', opts: Z?
+        [['ig','IG'],['friend','朋友'],['google','Google'],['ad','廣告'],['other','其他']]:
+        [['ig','Instagram'],['friend','Friend'],['google','Google'],['ad','An ad'],['other','Other']] }
     ]
   };
   var answers = {};
