@@ -139,6 +139,7 @@ canvas#reel{width:100%;height:100%;border-radius:23px;display:block;background:#
       <button class="btn btn-ghost" onclick="resetAll()">↻ Use a different clip</button>
       <div class="recnote" id="recnote">Tip: the surest path to IG is to <b>tap ▶ and screen-record</b> the phone preview. The Record button exports a file directly (works best on desktop Chrome &amp; iPhone Safari).</div>
       <a id="dllink" class="dl hidden" download="carvline-reel.webm">⬇ Save your reel</a>
+      <button id="shareBtn" class="dl hidden" style="border:none;cursor:pointer;width:100%;font:inherit">📲 Share / Save to Photos</button>
 
       <div class="cta-foot">Want AI coaching on this run too? <a href="index.html#try">Get your free analysis →</a></div>
     </div>
@@ -166,8 +167,10 @@ function logEvent(type, meta){
     let vid = localStorage.getItem('carvline_visitor_id');
     if(!vid){ vid = 'v_'+Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('carvline_visitor_id', vid); }
     const body = JSON.stringify({ event_type:type, visitor_id:vid, url:location.pathname, metadata:meta||null });
-    if(navigator.sendBeacon){ navigator.sendBeacon(WORKER_URL+'event', new Blob([body],{type:'application/json'})); }
-    else { fetch(WORKER_URL+'event',{method:'POST',headers:{'Content-Type':'application/json'},body,keepalive:true}).catch(()=>{}); }
+    // text/plain avoids CORS preflight (sendBeacon can't preflight; application/json gets silently dropped cross-origin)
+    let sent=false;
+    try{ if(navigator.sendBeacon) sent=navigator.sendBeacon(WORKER_URL+'event', new Blob([body],{type:'text/plain'})); }catch(e){}
+    if(!sent){ fetch(WORKER_URL+'event',{method:'POST',headers:{'Content-Type':'text/plain'},body,keepalive:true}).catch(()=>{}); }
   }catch(e){}
 }
 
@@ -449,8 +452,10 @@ async function runReel(onFrame, onDone){
 }
 
 let playing=false;
+// iOS Safari: <video>.play() must be called synchronously inside the user gesture to unlock playback
+function primeVideo(){ try{ if(videoEl){ videoEl.muted=true; const p=videoEl.play(); if(p&&p.then){ p.then(()=>{ try{videoEl.pause();}catch(e){} }).catch(()=>{}); } } }catch(e){} }
 async function playPreview(){
-  if(playing) return; playing=true;
+  if(playing) return; primeVideo(); playing=true;
   $('tapplay').classList.add('hidden');
   await runReel(null, ()=>{ playing=false; $('tapplay').classList.remove('hidden'); drawStill(); });
   logEvent('reel_preview_play', { vibe });
@@ -464,40 +469,48 @@ function pickMime(){
 }
 async function recordReel(){
   if(recording||playing) return;
-  if(!window.MediaRecorder || !canvas.captureStream){
+  const canRec = !!(window.MediaRecorder && typeof canvas.captureStream==='function');
+  if(!canRec){
     $('recnote').innerHTML = isZh
-      ? '⚠️ 這個瀏覽器不支援直接匯出。請改用 <b>點 ▶ 然後螢幕錄影</b> 手機預覽畫面。'
-      : "⚠️ This browser can't export a file. Please <b>tap ▶ and screen-record</b> the preview instead.";
+      ? '⚠️ 你的瀏覽器無法直接匯出影片檔。請點上方 ▶ 播放後，用<b>手機內建螢幕錄影</b>錄下來，或改用桌機 Chrome。'
+      : "⚠️ This browser can't export a video file. Tap ▶ above and use your phone's <b>screen recorder</b>, or use desktop Chrome.";
+    $('recnote').style.color='#b91c1c';
     return;
   }
+  primeVideo();
   const mime=pickMime();
   recording=true; recChunks=[];
-  $('recbtn').disabled=true; $('recbtn').textContent = isZh?'● 錄製中…別關視窗':'● Recording… keep this tab open';
-  $('dllink').classList.add('hidden');
+  $('recbtn').disabled=true;
+  $('dllink').classList.add('hidden'); { const sb0=$('shareBtn'); if(sb0) sb0.classList.add('hidden'); }
   if(lastBlobUrl){ URL.revokeObjectURL(lastBlobUrl); lastBlobUrl=null; }
-
-  const stream=canvas.captureStream(30);
+  let stream;
+  try{ stream=canvas.captureStream(30); }
+  catch(e){ recording=false; $('recbtn').disabled=false; $('recnote').style.color='#b91c1c'; $('recnote').innerHTML=isZh?'⚠️ 此瀏覽器不支援畫面錄製，請改用桌機或螢幕錄影。':'⚠️ Canvas capture unsupported — use desktop or screen-record.'; return; }
   try{ mediaRecorder = mime ? new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:6_000_000}) : new MediaRecorder(stream); }
-  catch(e){ mediaRecorder=new MediaRecorder(stream); }
+  catch(e){ try{ mediaRecorder=new MediaRecorder(stream); }catch(e2){ recording=false; $('recbtn').disabled=false; $('recnote').style.color='#b91c1c'; $('recnote').innerHTML=isZh?'⚠️ 此瀏覽器無法錄製，請改用桌機或螢幕錄影。':'⚠️ Recording unsupported here — use desktop or screen-record.'; return; } }
   mediaRecorder.ondataavailable=e=>{ if(e.data&&e.data.size) recChunks.push(e.data); };
   mediaRecorder.onstop=()=>{
     const type=(mediaRecorder.mimeType||mime||'video/webm').split(';')[0];
     const ext=type.includes('mp4')?'mp4':'webm';
     const blob=new Blob(recChunks,{type});
+    if(!blob.size){ recording=false; $('recbtn').disabled=false; $('recbtn').textContent=isZh?'● 再試一次':'● Try again'; $('recnote').style.color='#b91c1c'; $('recnote').innerHTML=isZh?'⚠️ 沒錄到內容。請改用桌機 Chrome，或點 ▶ 播放後用手機螢幕錄影。':'⚠️ Nothing captured. Use desktop Chrome, or tap ▶ and screen-record.'; return; }
     lastBlobUrl=URL.createObjectURL(blob);
-    const a=$('dllink'); a.href=lastBlobUrl; a.download='carvline-reel.'+ext;
-    a.textContent=(isZh?'⬇ 儲存你的影片 (.':'⬇ Save your reel (.')+ext+')';
-    a.classList.remove('hidden');
+    const file=new File([blob],'carvline-reel.'+ext,{type});
+    const a=$('dllink'); a.href=lastBlobUrl; a.download='carvline-reel.'+ext; a.textContent=(isZh?'⬇ 下載影片 (.':'⬇ Download (.')+ext+')'; a.classList.remove('hidden');
+    const sb=$('shareBtn');
+    if(sb && navigator.canShare){ try{ if(navigator.canShare({files:[file]})){ sb.textContent=isZh?'📲 分享 / 存到相簿':'📲 Share / Save to Photos'; sb.classList.remove('hidden'); sb.onclick=async()=>{ try{ await navigator.share({files:[file],title:'Carvline',text:titleText}); logEvent('reel_shared',{ext}); }catch(e){} }; } }catch(e){} }
     $('recbtn').disabled=false; $('recbtn').textContent= isZh?'● 重新錄製':'● Record again';
-    recording=false;
-    if(ext==='webm'){ $('recnote').innerHTML = isZh
-        ? '已匯出 .webm。IG 需要 mp4 — 在手機上可用相簿/轉檔 app 轉一下，或直接 <b>螢幕錄影</b> 預覽最省事。'
-        : 'Exported .webm. IG prefers mp4 — convert on your phone, or just <b>screen-record</b> the preview for the easiest path.'; }
+    recording=false; $('recnote').style.color='';
+    $('recnote').innerHTML = isZh
+      ? '✅ 完成！手機點「分享 / 存到相簿」存檔或直接發 IG；桌機點「下載」。'+(ext==='webm'?'（webm；IG 需 mp4，可用相簿轉檔或改用螢幕錄影）':'')
+      : '✅ Done! On phone tap “Share / Save”; on desktop tap “Download”.'+(ext==='webm'?' (webm — IG prefers mp4)':'');
     logEvent('reel_recorded', { vibe, ext });
   };
   $('tapplay').classList.add('hidden'); playing=true;
-  mediaRecorder.start();
-  await runReel(null, ()=>{ playing=false; try{ mediaRecorder.stop(); }catch(e){} stream.getTracks().forEach(t=>t.stop()); $('tapplay').classList.remove('hidden'); });
+  try{ mediaRecorder.start(); }
+  catch(e){ recording=false; playing=false; $('recbtn').disabled=false; $('tapplay').classList.remove('hidden'); $('recnote').style.color='#b91c1c'; $('recnote').innerHTML=isZh?'⚠️ 無法開始錄製，請改用桌機 Chrome。':'⚠️ Could not start recording — use desktop Chrome.'; return; }
+  $('recbtn').textContent= isZh?'● 錄製中…約 30 秒，別關視窗':'● Recording… ~30s, keep open';
+  await runReel(null, ()=>{ playing=false; try{ mediaRecorder.stop(); }catch(e){} try{ stream.getTracks().forEach(t=>t.stop()); }catch(e){} $('tapplay').classList.remove('hidden'); });
 }
 
 function resetAll(){
