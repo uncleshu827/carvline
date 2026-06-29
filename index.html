@@ -120,7 +120,7 @@ details summary::after{margin-left:auto}
 
 <nav class="border-b border-gray-100 sticky top-0 bg-white/90 backdrop-blur-md z-50">
 <div class="max-w-6xl mx-auto px-6 py-3 sm:py-4 flex items-center justify-between">
-<div class="flex items-center gap-2"><div class="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center text-white font-bold text-sm">C</div><span class="font-semibold">Carvline</span></div>
+<div class="flex items-center gap-2"><svg class="w-8 h-8" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Carvline"><defs><linearGradient id="navTile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#123150"/><stop offset="1" stop-color="#091c30"/></linearGradient><linearGradient id="navCarve" x1="0.12" y1="0.08" x2="0.9" y2="0.95"><stop offset="0" stop-color="#6ee7d4"/><stop offset="0.5" stop-color="#22d3ee"/><stop offset="1" stop-color="#3b82f6"/></linearGradient></defs><rect width="512" height="512" rx="116" fill="url(#navTile)"/><g transform="translate(256,256) scale(1.1) translate(-256,-256)"><path d="M 344.9 165.4 A 112 112 0 1 0 344.9 346.6" fill="none" stroke="url(#navCarve)" stroke-width="54" stroke-linecap="round"/></g></svg><span class="font-semibold">Carvline</span></div>
 <div class="flex items-center gap-2">
 <div class="relative">
 <button onclick="toggleLangMenu(event)" class="btn-nav btn-secondary" id="lang-btn"><span id="lang-current-label">EN</span><span class="text-xs">▾</span></button>
@@ -624,9 +624,6 @@ const STR = {
     card3_bullets: ['· 3 takeaways in 30–45 seconds','· What’s working, what to fix','· Side-by-side with reference clips','· Two phones is all you need'],
     card3_cta: 'Try it now →',
     see_demo: 'See demo →',
-    trip_h2: 'A USD $1,500 ski trip,<br><span class="accent">and you have no idea if you got better.</span>',
-    trip_sub: 'Carvline shows you "this year’s you vs last year’s you."<br>Come home knowing exactly how the trip moved the needle.',
-    trip_geo: 'Used by snowboarders flying into Japan, Korea, the Alps, and the Rockies',
     pricing_h2: 'Pricing',
     pricing_sub: 'Try free first. Pay only if you like what you see — 30-day refund.',
     tier1_eyebrow: 'Try it', tier1_price: 'Free', tier1_desc: '3 takeaways per clip',
@@ -662,7 +659,6 @@ const STR = {
     footer: '© 2026 Carvline',
     footer_privacy: 'Privacy',
     footer_terms: 'Terms',
-    sticky_cta: 'Try it now →',
     // demo modal — record
     demo_record_title: 'Today’s ride',
     demo_record_date: '2026 / 04 / 30 · Niseko',
@@ -851,9 +847,6 @@ const STR = {
     card3_bullets: ['· 30-45 秒給你 3 個重點','· 哪裡做得好、哪裡要改','· 對比示範影片','· 兩支手機就夠'],
     card3_cta: '立即試用 →',
     see_demo: '看 demo →',
-    trip_h2: '飛一趟日本 USD $1,500,<br><span class="accent">回來不知道進步多少？</span>',
-    trip_sub: 'Carvline 幫你比對「今年的你 vs 去年的你」。<br>回家就知道這趟值不值得。',
-    trip_geo: '日本 · 韓國 · 阿爾卑斯 · 北美雪場常用',
     pricing_h2: '價格',
     pricing_sub: '先免費試，喜歡再付 — 不滿意 30 天退費',
     tier1_eyebrow: '先試試', tier1_price: '免費', tier1_desc: '每段影片 3 個重點',
@@ -889,7 +882,6 @@ const STR = {
     footer: '© 2026 Carvline',
     footer_privacy: '隱私',
     footer_terms: '條款',
-    sticky_cta: '立即試用 →',
     demo_record_title: '今日滑行紀錄',
     demo_record_date: '2026 / 04 / 30 · 二世谷',
     demo_record_duration: '滑了 1 小時 23 分',
@@ -1073,9 +1065,6 @@ const STR = {
     card3_bullets: ['· 30-45 秒给你 3 个重点','· 哪里做得好、哪里要改','· 对比示范视频','· 两支手机就够'],
     card3_cta: '立即试用 →',
     see_demo: '看 demo →',
-    trip_h2: '飞一趟日本 USD $1,500,<br><span class="accent">回来不知道进步多少？</span>',
-    trip_sub: 'Carvline 帮你对比「今年的你 vs 去年的你」。<br>回家就知道这趟值不值得。',
-    trip_geo: '日本 · 韩国 · 阿尔卑斯 · 北美雪场常用',
     pricing_h2: '价格',
     pricing_sub: '先免费试，喜欢再付 — 不满意 30 天退款',
     tier1_eyebrow: '先试试', tier1_price: '免费', tier1_desc: '每段视频 3 个重点',
@@ -1111,7 +1100,6 @@ const STR = {
     footer: '© 2026 Carvline',
     footer_privacy: '隐私',
     footer_terms: '条款',
-    sticky_cta: '立即试用 →',
     demo_record_title: '今日滑行记录',
     demo_record_date: '2026 / 04 / 30 · 二世谷',
     demo_record_duration: '滑了 1 小时 23 分',
