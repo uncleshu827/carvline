@@ -144,7 +144,7 @@ details summary::after{margin-left:auto}
 <div class="font-bold text-lg" data-i18n="history_title">📊 My Analyses</div>
 <div class="text-xs text-gray-500" id="history-meta" data-i18n="history_meta">Past 30 days for this device</div>
 </div>
-<button onclick="toggleHistory()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xl">×</button>
+<button onclick="toggleHistory()" aria-label="Close" data-i18n-aria="aria_close" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xl">×</button>
 </div>
 <div class="flex-1 overflow-y-auto p-5" id="history-list">
 <div class="text-center text-gray-400 text-sm py-12" data-i18n="loading">Loading…</div>
@@ -162,7 +162,7 @@ visitor_id: <code id="history-vid" class="text-[10px]"></code>
 <div class="font-bold text-lg" id="demo-title">Demo</div>
 <div class="text-xs text-gray-500" id="demo-meta" data-i18n="demo_meta">Preview only — coming soon</div>
 </div>
-<button onclick="closeDemo()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xl">×</button>
+<button onclick="closeDemo()" aria-label="Close" data-i18n-aria="aria_close" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xl">×</button>
 </div>
 <div class="flex-1 overflow-y-auto" id="demo-body"></div>
 <div class="p-4 border-t border-gray-100 flex-shrink-0">
@@ -603,6 +603,7 @@ const STR = {
     locked_btn: 'Unlock full analysis — USD $1',
     locked_pay_note: 'Secure card payment via Stripe · 30-day refund',
     reset_btn: '↻ Try another clip',
+    aria_close: 'Close',
     privacy_note: 'Clips auto-delete after 24 hours · never shared with third parties',
     annotated_download: 'Download image',
     annotated_save_alt: 'AI marked these spots on your clip',
@@ -826,6 +827,7 @@ const STR = {
     locked_btn: '解鎖完整分析 — USD $1',
     locked_pay_note: '透過 Stripe 信用卡安全付款 · 30 天退費',
     reset_btn: '↻ 試另一段影片',
+    aria_close: '關閉',
     privacy_note: '影片 24 小時內自動刪除，不分享給第三方',
     annotated_download: '下載圖片',
     annotated_save_alt: 'AI 在你的影片上標出這些位置',
@@ -1044,6 +1046,7 @@ const STR = {
     locked_btn: '解锁完整分析 — USD $1',
     locked_pay_note: '通过 Stripe 信用卡安全支付 · 30 天退款',
     reset_btn: '↻ 试另一段视频',
+    aria_close: '关闭',
     privacy_note: '视频 24 小时内自动删除，不分享给第三方',
     annotated_download: '下载图片',
     annotated_save_alt: 'AI 在你的视频上标出这些位置',
@@ -1262,6 +1265,7 @@ const STR = {
     locked_btn: '完全分析を解除 — USD $1',
     locked_pay_note: 'Stripeで安全にカード決済 · 30日返金保証',
     reset_btn: '↻ 別のクリップを試す',
+    aria_close: '閉じる',
     privacy_note: 'クリップは24時間で自動削除 · 第三者と共有しません',
     annotated_download: '画像をダウンロード',
     annotated_save_alt: 'AIがあなたのクリップ上にマーキング',
@@ -1480,6 +1484,7 @@ const STR = {
     locked_btn: '전체 분석 잠금 해제 — USD $1',
     locked_pay_note: 'Stripe 카드 안전 결제 · 30일 환불',
     reset_btn: '↻ 다른 클립 시도',
+    aria_close: '닫기',
     privacy_note: '클립은 24시간 후 자동 삭제 · 제3자와 공유하지 않음',
     annotated_download: '이미지 다운로드',
     annotated_save_alt: 'AI가 클립에 표시한 위치',
@@ -1703,6 +1708,11 @@ function applyI18n() {
     if (Array.isArray(v)) {
       el.innerHTML = v.map(item => `<li>${escapeHtml(item)}</li>`).join('');
     }
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+    const key = el.getAttribute('data-i18n-aria');
+    const v = t(key);
+    if (typeof v === 'string') el.setAttribute('aria-label', v);
   });
   // Special-cased
   const emailInput = document.getElementById('waitlist-email-input');
