@@ -64,6 +64,7 @@ html{scroll-behavior:smooth}
 .draw-anim{stroke-dasharray:1000;stroke-dashoffset:1000;animation:draw 1.6s ease-out forwards}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 .pulse{animation:pulse 2.5s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}.draw-anim{animation:none;stroke-dashoffset:0}.pulse,.animate-pulse{animation:none !important}*,*::before,*::after{transition-duration:.01ms !important}}
 details>summary{list-style:none;cursor:pointer}
 details>summary::-webkit-details-marker{display:none}
 details>summary::after{content:'+';float:right;font-size:1.5rem;line-height:1;color:#737373}
