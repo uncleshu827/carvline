@@ -251,7 +251,7 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 </div></section>
 
 <!-- SAMPLE ANALYSIS — show a real output before asking for upload -->
-<section class="section py-20 bg-white"><div class="max-w-4xl mx-auto px-6">
+<section id="sample" class="section py-20 bg-white"><div class="max-w-4xl mx-auto px-6">
 <div class="text-center mb-10">
 <div class="inline-block text-xs font-semibold accent uppercase tracking-wider mb-3" data-i18n="sample_eyebrow">Real output, not a mockup</div>
 <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-3" data-i18n="sample_h2">Here's what you actually get</h2>
@@ -368,6 +368,7 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 
 <button onclick="unlockDeep()" class="w-full py-3 rounded-lg btn-accent font-semibold" data-i18n="locked_btn">Unlock full analysis — USD $1</button>
 <p class="text-[11px] sm:text-xs text-gray-500 text-center mt-3" data-i18n="locked_pay_note">Secure card payment via Stripe · 30-day refund</p>
+<p class="text-xs text-center mt-2"><a href="#sample" onclick="track('sample_link_clicked')" class="accent underline underline-offset-2" data-i18n="locked_see_sample">Want to see it first? View a sample full breakdown</a></p>
 </div>
 
 <button onclick="resetTry()" class="w-full mt-6 py-2.5 rounded-lg text-sm text-gray-500 hover:text-gray-900" data-i18n="reset_btn">↻ Try another clip</button>
@@ -602,6 +603,7 @@ const STR = {
     locked_price_unit: 'USD · one-time',
     locked_btn: 'Unlock full analysis — USD $1',
     locked_pay_note: 'Secure card payment via Stripe · 30-day refund',
+    locked_see_sample: 'Want to see it first? View a sample full breakdown',
     reset_btn: '↻ Try another clip',
     aria_close: 'Close',
     aria_email: 'Email address',
@@ -827,6 +829,7 @@ const STR = {
     locked_price_unit: 'USD 一次性',
     locked_btn: '解鎖完整分析 — USD $1',
     locked_pay_note: '透過 Stripe 信用卡安全付款 · 30 天退費',
+    locked_see_sample: '想先看看內容？看一份完整範例分析',
     reset_btn: '↻ 試另一段影片',
     aria_close: '關閉',
     aria_email: '電子郵件地址',
@@ -1047,6 +1050,7 @@ const STR = {
     locked_price_unit: 'USD 一次性',
     locked_btn: '解锁完整分析 — USD $1',
     locked_pay_note: '通过 Stripe 信用卡安全支付 · 30 天退款',
+    locked_see_sample: '想先看看内容？看一份完整示例分析',
     reset_btn: '↻ 试另一段视频',
     aria_close: '关闭',
     aria_email: '电子邮件地址',
@@ -1267,6 +1271,7 @@ const STR = {
     locked_price_unit: 'USD · 一回限り',
     locked_btn: '完全分析を解除 — USD $1',
     locked_pay_note: 'Stripeで安全にカード決済 · 30日返金保証',
+    locked_see_sample: '先に中身を見たい？フル分析のサンプルを見る',
     reset_btn: '↻ 別のクリップを試す',
     aria_close: '閉じる',
     aria_email: 'メールアドレス',
@@ -1487,6 +1492,7 @@ const STR = {
     locked_price_unit: 'USD · 1회 결제',
     locked_btn: '전체 분석 잠금 해제 — USD $1',
     locked_pay_note: 'Stripe 카드 안전 결제 · 30일 환불',
+    locked_see_sample: '먼저 보고 싶다면? 전체 분석 샘플 보기',
     reset_btn: '↻ 다른 클립 시도',
     aria_close: '닫기',
     aria_email: '이메일 주소',
