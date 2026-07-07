@@ -186,7 +186,7 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 
 <div class="flex flex-col sm:flex-row gap-3 justify-center mb-10 sm:mb-12 max-w-md mx-auto sm:max-w-none">
 <a href="#try" class="px-7 py-4 sm:py-3.5 rounded-lg btn-primary font-semibold" data-i18n="hero_cta_primary">Upload your clip →</a>
-<a href="#how" class="px-7 py-4 sm:py-3.5 rounded-lg btn-secondary font-semibold" data-i18n="hero_cta_secondary">See a sample analysis</a>
+<a href="#try" onclick="runDemo(event)" class="px-7 py-4 sm:py-3.5 rounded-lg btn-secondary font-semibold" data-i18n="hero_cta_demo">▶ Try a sample — no upload needed</a>
 </div>
 
 <!-- Hero phone mockup: shows what the deep analysis result actually looks like -->
@@ -565,6 +565,13 @@ const STR = {
     hero_subnote: 'Free preview · USD $1 to unlock the full breakdown',
     hero_cta_primary: 'Upload your clip →',
     hero_cta_secondary: 'See a sample',
+    hero_cta_demo: '▶ Try a sample — no upload needed',
+    demo_processing: 'Loading a sample run…',
+    demo_banner: '🎬 Sample analysis — real output from an intermediate rider at Niseko. Your clip gets this in ~30 seconds.',
+    demo_good: 'Strong, centered stance — your shoulders stay quiet and level through both turns.',
+    demo_ok: 'Toe-side turns hold ~40° edge angle — drive the big-toe ball to reach 45°+ and the carve stops washing out.',
+    demo_fix: 'Hips drift behind the rear heel mid-turn — move your pelvis over the front ankle as you start each turn.',
+    demo_upload_cta: 'Upload your own clip →',
     hero_trust: 'No sign-up · Clips auto-delete after 24h · 30-day refund',
     phone_overall: 'Overall · level / terrain',
     phone_dim_edge: 'Edge engagement',
@@ -791,6 +798,13 @@ const STR = {
     hero_subnote: '免費試用 · USD $1 解鎖完整分析',
     hero_cta_primary: '上傳影片 →',
     hero_cta_secondary: '看樣本',
+    hero_cta_demo: '▶ 先看範例分析（免上傳）',
+    demo_processing: '載入範例影片中…',
+    demo_banner: '🎬 範例分析 —— 二世谷中級雪友的真實輸出。你的影片約 30 秒就能拿到同樣的分析。',
+    demo_good: '站姿穩定置中——兩個彎肩膀都保持安靜水平。',
+    demo_ok: '腳尖側雪刃約 40°——用大拇趾球加壓推到 45°+，刻滑就不會滑掉。',
+    demo_fix: '轉彎中段臀部掉到後腳跟後面——起彎時把骨盆移到前腳踝正上方。',
+    demo_upload_cta: '上傳你自己的影片 →',
     hero_trust: '不用註冊 · 影片 24 小時自動刪除 · 30 天退費',
     phone_overall: '整體分數 · 等級 / 地形',
     phone_dim_edge: '雪刃使用',
@@ -1012,6 +1026,13 @@ const STR = {
     hero_subnote: '免费试用 · USD $1 解锁完整分析',
     hero_cta_primary: '上传视频 →',
     hero_cta_secondary: '看样本',
+    hero_cta_demo: '▶ 先看示例分析（免上传）',
+    demo_processing: '加载示例视频中…',
+    demo_banner: '🎬 示例分析 —— 二世谷中级雪友的真实输出。你的视频约 30 秒就能拿到同样的分析。',
+    demo_good: '站姿稳定居中——两个弯肩膀都保持安静水平。',
+    demo_ok: '脚尖侧雪刃约 40°——用大拇趾球加压推到 45°+，刻滑就不会滑掉。',
+    demo_fix: '转弯中段臀部掉到后脚跟后面——起弯时把骨盆移到前脚踝正上方。',
+    demo_upload_cta: '上传你自己的视频 →',
     hero_trust: '不用注册 · 视频 24 小时自动删除 · 30 天退款',
     phone_overall: '整体分数 · 等级 / 地形',
     phone_dim_edge: '雪刃使用',
@@ -1233,6 +1254,13 @@ const STR = {
     hero_subnote: '無料プレビュー · USD $1で完全分析',
     hero_cta_primary: 'クリップをアップロード →',
     hero_cta_secondary: 'サンプルを見る',
+    hero_cta_demo: '▶ まずサンプルを見る（アップロード不要）',
+    demo_processing: 'サンプルを読み込み中…',
+    demo_banner: '🎬 サンプル分析 — ニセコの中級ライダーの実際の出力です。あなたのクリップも約30秒でこの分析が届きます。',
+    demo_good: '重心が中央で安定——ターン中も肩が静かで水平です。',
+    demo_ok: 'トゥーサイドのエッジ角は約40°——母趾球で圧をかけて45°以上にするとカービングが流れません。',
+    demo_fix: 'ターン中盤で腰が後ろに残ります——ターン開始時に骨盤を前足首の真上へ。',
+    demo_upload_cta: '自分のクリップをアップロード →',
     hero_trust: '登録不要 · 動画は24時間で自動削除 · 30日返金保証',
     phone_overall: '総合スコア · レベル / 地形',
     phone_dim_edge: 'エッジング',
@@ -1454,6 +1482,13 @@ const STR = {
     hero_subnote: '무료 미리보기 · USD $1로 완전 분석 잠금 해제',
     hero_cta_primary: '클립 업로드 →',
     hero_cta_secondary: '샘플 보기',
+    hero_cta_demo: '▶ 샘플 먼저 보기 (업로드 불필요)',
+    demo_processing: '샘플 불러오는 중…',
+    demo_banner: '🎬 샘플 분석 — 니세코 중급 라이더의 실제 결과입니다. 내 클립도 약 30초면 이런 분석을 받습니다.',
+    demo_good: '중심이 잘 잡힌 안정된 자세 — 턴 내내 어깨가 조용하고 수평입니다.',
+    demo_ok: '토사이드 엣지 각도가 약 40° — 엄지발가락 볼로 압력을 줘 45° 이상으로 올리면 카빙이 밀리지 않습니다.',
+    demo_fix: '턴 중반에 엉덩이가 뒤로 빠집니다 — 턴 시작 시 골반을 앞발목 위로 옮기세요.',
+    demo_upload_cta: '내 클립 업로드 →',
     hero_trust: '가입 불필요 · 24시간 후 자동 삭제 · 30일 환불',
     phone_overall: '종합 점수 · 레벨 / 지형',
     phone_dim_edge: '엣지 사용',
@@ -2861,7 +2896,66 @@ async function redeemPendingUnlock(sessionId) {
 // ==========================================================================
 // RESULT RENDERING
 // ==========================================================================
+
+// === Sample-clip instant demo (zero-friction path for cold ad traffic) ===
+const DEMO_RESULT_KEYS = { good: 'demo_good', ok: 'demo_ok', fix: 'demo_fix' };
+function runDemo(e) {
+  if (e) e.preventDefault();
+  try { track('demo_clicked'); } catch (_) {}
+  const trySec = document.getElementById('try');
+  if (trySec) trySec.scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('upload-zone').classList.add('hidden');
+  document.getElementById('result').classList.add('hidden');
+  const proc = document.getElementById('processing');
+  proc.classList.remove('hidden');
+  const pt = document.getElementById('processing-text');
+  if (pt) pt.textContent = t('demo_processing');
+  setTimeout(() => {
+    proc.classList.add('hidden');
+    renderResult({ good: t('demo_good'), ok: t('demo_ok'), fix: t('demo_fix') }, 'free');
+    // demo-specific chrome: hide monetization + feedback + annotated card (not applicable to a canned sample)
+    document.getElementById('locked-prompt')?.classList.add('hidden');
+    document.getElementById('feedback-widget')?.classList.add('hidden');
+    document.getElementById('annotated-card')?.classList.add('hidden');
+    const res = document.getElementById('result');
+    // banner at top
+    let b = document.getElementById('demo-banner');
+    if (!b) {
+      b = document.createElement('div');
+      b.id = 'demo-banner';
+      b.className = 'mb-4 p-3 rounded-xl bg-blue-50 border border-blue-200 text-sm text-blue-900 leading-relaxed';
+      res.insertBefore(b, res.firstChild);
+    }
+    b.textContent = t('demo_banner');
+    // upload CTA at bottom
+    let c = document.getElementById('demo-upload-cta');
+    if (!c) {
+      c = document.createElement('button');
+      c.id = 'demo-upload-cta';
+      c.className = 'w-full mt-6 py-4 rounded-lg btn-accent font-semibold text-base';
+      c.onclick = exitDemoToUpload;
+      res.appendChild(c);
+    }
+    c.textContent = t('demo_upload_cta');
+    res.classList.remove('hidden');
+    res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    try { track('demo_completed'); } catch (_) {}
+  }, 1600);
+}
+function exitDemoToUpload() {
+  try { track('demo_to_upload_clicked'); } catch (_) {}
+  document.getElementById('demo-banner')?.remove();
+  document.getElementById('demo-upload-cta')?.remove();
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('feedback-widget')?.classList.remove('hidden');
+  const uz = document.getElementById('upload-zone');
+  uz.classList.remove('hidden');
+  uz.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
 function renderResult(result, mode) {
+  document.getElementById('demo-banner')?.remove();
+  document.getElementById('demo-upload-cta')?.remove();
   // Show feedback widget + reset its state on every new render
   const fbw = document.getElementById('feedback-widget');
   if (fbw) {
