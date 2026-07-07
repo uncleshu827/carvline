@@ -147,7 +147,7 @@ details summary::after{margin-left:auto}
 <button onclick="toggleHistory()" aria-label="Close" data-i18n-aria="aria_close" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xl">×</button>
 </div>
 <div class="flex-1 overflow-y-auto p-5" id="history-list">
-<div class="text-center text-gray-400 text-sm py-12" data-i18n="loading">Loading…</div>
+<div class="text-center text-gray-500 text-sm py-12" data-i18n="loading">Loading…</div>
 </div>
 <div class="px-5 py-3 border-t border-gray-100 bg-gray-50 text-xs text-gray-500 flex-shrink-0">
 visitor_id: <code id="history-vid" class="text-[10px]"></code>
@@ -246,7 +246,7 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 </div>
 
 <div class="text-center mt-6">
-<p class="text-[11px] text-gray-400" data-i18n="showcase_disclaimer">Example output — illustrated rider. Your own clip will get the same treatment in 30 seconds.</p>
+<p class="text-[11px] text-gray-500" data-i18n="showcase_disclaimer">Example output — illustrated rider. Your own clip will get the same treatment in 30 seconds.</p>
 </div>
 </div></section>
 
@@ -526,7 +526,7 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3" data-i18n="waitlist_h2">Drop your email — we'll notify you when Season + Lifetime open</h2>
 <p class="text-gray-600 mb-8 text-sm sm:text-base" data-i18n="waitlist_sub">No spam · max 2 emails/month · unsubscribe anytime</p>
 <form id="waitlist-form" onsubmit="submitWaitlist(event)" class="flex flex-col sm:flex-row gap-2">
-<input type="email" name="email" id="waitlist-email-input" placeholder="your@email.com" class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-600 focus:outline-none text-sm" required>
+<input type="email" name="email" id="waitlist-email-input" aria-label="Email address" data-i18n-aria="aria_email" placeholder="your@email.com" class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-600 focus:outline-none text-sm" required>
 <button class="px-5 py-3 rounded-lg btn-primary font-semibold text-sm whitespace-nowrap" data-i18n="waitlist_btn">Join waitlist</button>
 </form>
 </div></section>
@@ -604,6 +604,7 @@ const STR = {
     locked_pay_note: 'Secure card payment via Stripe · 30-day refund',
     reset_btn: '↻ Try another clip',
     aria_close: 'Close',
+    aria_email: 'Email address',
     privacy_note: 'Clips auto-delete after 24 hours · never shared with third parties',
     annotated_download: 'Download image',
     annotated_save_alt: 'AI marked these spots on your clip',
@@ -828,6 +829,7 @@ const STR = {
     locked_pay_note: '透過 Stripe 信用卡安全付款 · 30 天退費',
     reset_btn: '↻ 試另一段影片',
     aria_close: '關閉',
+    aria_email: '電子郵件地址',
     privacy_note: '影片 24 小時內自動刪除，不分享給第三方',
     annotated_download: '下載圖片',
     annotated_save_alt: 'AI 在你的影片上標出這些位置',
@@ -1047,6 +1049,7 @@ const STR = {
     locked_pay_note: '通过 Stripe 信用卡安全支付 · 30 天退款',
     reset_btn: '↻ 试另一段视频',
     aria_close: '关闭',
+    aria_email: '电子邮件地址',
     privacy_note: '视频 24 小时内自动删除，不分享给第三方',
     annotated_download: '下载图片',
     annotated_save_alt: 'AI 在你的视频上标出这些位置',
@@ -1266,6 +1269,7 @@ const STR = {
     locked_pay_note: 'Stripeで安全にカード決済 · 30日返金保証',
     reset_btn: '↻ 別のクリップを試す',
     aria_close: '閉じる',
+    aria_email: 'メールアドレス',
     privacy_note: 'クリップは24時間で自動削除 · 第三者と共有しません',
     annotated_download: '画像をダウンロード',
     annotated_save_alt: 'AIがあなたのクリップ上にマーキング',
@@ -1485,6 +1489,7 @@ const STR = {
     locked_pay_note: 'Stripe 카드 안전 결제 · 30일 환불',
     reset_btn: '↻ 다른 클립 시도',
     aria_close: '닫기',
+    aria_email: '이메일 주소',
     privacy_note: '클립은 24시간 후 자동 삭제 · 제3자와 공유하지 않음',
     annotated_download: '이미지 다운로드',
     annotated_save_alt: 'AI가 클립에 표시한 위치',
@@ -3233,7 +3238,7 @@ if (typeof requestIdleCallback === 'function') {
 .cls-chip:hover{border-color:#93c5fd}
 .cls-chip.on{background:#2563eb;border-color:#2563eb;color:#fff}
 .cls-go{display:block;width:100%;text-align:center;background:#2563eb;color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:8px}
-.cls-skip{display:block;width:100%;text-align:center;background:none;border:none;color:#94a3b8;font-size:13px;padding:11px 0 2px;cursor:pointer;font-family:inherit}
+.cls-skip{display:block;width:100%;text-align:center;background:none;border:none;color:#64748b;font-size:13px;padding:11px 0 2px;cursor:pointer;font-family:inherit}
 </style>
 <div id="cl-survey"><div class="cls-card" id="cls-card"></div></div>
 <script>
