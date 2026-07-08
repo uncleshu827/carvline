@@ -1820,9 +1820,11 @@ function toggleHistory() {
   const m = document.getElementById('history-modal');
   if (m.classList.contains('hidden')) {
     m.classList.remove('hidden');
+    modalFocusIn(m);
     loadHistory();
   } else {
     m.classList.add('hidden');
+    modalFocusOut();
   }
 }
 
@@ -2051,6 +2053,7 @@ async function preloadHistoryCount() {
 let lastDemoKind = null;
 function closeDemo() {
   document.getElementById('demo-modal').classList.add('hidden');
+  modalFocusOut();
 }
 function openDemo(kind) {
   lastDemoKind = kind;
@@ -2143,7 +2146,9 @@ function openDemo(kind) {
   </div>
 </div>`;
   }
-  document.getElementById('demo-modal').classList.remove('hidden');
+  const dm = document.getElementById('demo-modal');
+  dm.classList.remove('hidden');
+  modalFocusIn(dm);
 }
 
 function joinWaitlist() {
@@ -3204,6 +3209,31 @@ function resetTry(){
   if (aw) aw.innerHTML = '';
   currentFrames = null;
 }
+
+// --- modal focus management (WCAG 2.4.3 / D-a11y-6): focus in on open, restore on close, trap Tab ---
+let _modalPrevFocus = null;
+function modalFocusIn(m) {
+  _modalPrevFocus = document.activeElement;
+  const p = m.querySelector('[role="dialog"]') || m;
+  if (!p.hasAttribute('tabindex')) p.setAttribute('tabindex', '-1');
+  p.style.outline = 'none';
+  p.focus();
+}
+function modalFocusOut() {
+  if (_modalPrevFocus && typeof _modalPrevFocus.focus === 'function') _modalPrevFocus.focus();
+  _modalPrevFocus = null;
+}
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Tab') return;
+  const m = ['history-modal', 'demo-modal'].map(id => document.getElementById(id)).find(x => x && !x.classList.contains('hidden'));
+  if (!m) return;
+  const f = m.querySelectorAll('button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (!f.length) return;
+  const panel = m.querySelector('[role="dialog"]') || m;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && (document.activeElement === first || document.activeElement === panel)) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && (document.activeElement === last || !m.contains(document.activeElement))) { e.preventDefault(); first.focus(); }
+});
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
