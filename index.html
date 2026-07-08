@@ -139,10 +139,10 @@ details summary::after{margin-left:auto}
 </div></nav>
 
 <div id="history-modal" class="hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" onclick="if(event.target===this)toggleHistory()">
-<div class="absolute inset-x-0 bottom-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl w-full sm:max-w-lg max-h-[85vh] overflow-hidden flex flex-col">
+<div role="dialog" aria-modal="true" aria-labelledby="history-title" class="absolute inset-x-0 bottom-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl w-full sm:max-w-lg max-h-[85vh] overflow-hidden flex flex-col">
 <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
 <div>
-<div class="font-bold text-lg" data-i18n="history_title">📊 My Analyses</div>
+<div class="font-bold text-lg" id="history-title" data-i18n="history_title">📊 My Analyses</div>
 <div class="text-xs text-gray-500" id="history-meta" data-i18n="history_meta">Past 30 days for this device</div>
 </div>
 <button onclick="toggleHistory()" aria-label="Close" data-i18n-aria="aria_close" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xl">×</button>
@@ -157,7 +157,7 @@ visitor_id: <code id="history-vid" class="text-[10px]"></code>
 </div>
 
 <div id="demo-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" onclick="if(event.target===this)closeDemo()">
-<div class="absolute inset-x-0 bottom-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl w-full sm:max-w-md max-h-[92vh] overflow-hidden flex flex-col">
+<div role="dialog" aria-modal="true" aria-labelledby="demo-title" class="absolute inset-x-0 bottom-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl w-full sm:max-w-md max-h-[92vh] overflow-hidden flex flex-col">
 <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
 <div>
 <div class="font-bold text-lg" id="demo-title">Demo</div>
@@ -310,7 +310,7 @@ Upload a 30-second clip. See exactly what improved this trip,<br>and what to fix
 </div>
 </div>
 
-<div id="processing" class="hidden mt-6 bg-white rounded-2xl p-8 text-center">
+<div id="processing" role="status" aria-live="polite" class="hidden mt-6 bg-white rounded-2xl p-8 text-center">
 <div class="inline-block w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
 <div class="font-semibold mb-1" data-i18n="processing_title">Analyzing…</div>
 <div id="processing-text" class="text-sm text-gray-500" data-i18n="processing_default">Reading your clip…</div>
