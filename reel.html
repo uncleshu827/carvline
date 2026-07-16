@@ -51,7 +51,7 @@ canvas#reel{width:100%;height:100%;border-radius:23px;display:block;background:#
 .statrow .ed{display:flex;align-items:center;gap:4px}
 .statrow input{width:64px;text-align:right;border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-size:14px;font-weight:700;font-family:inherit;color:var(--ink)}
 .statrow .u{font-size:12px;color:var(--mut);width:34px}
-.est{font-size:11px;color:#94a3b8;margin-top:8px}
+.est{font-size:11px;color:#64748b;margin-top:8px}
 .vibe{display:flex;gap:6px;flex-wrap:wrap}
 .vibe button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--ink)}
 .vibe button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
@@ -93,11 +93,11 @@ canvas#reel{width:100%;height:100%;border-radius:23px;display:block;background:#
     <span class="tip">🔒 Nothing uploaded</span>
     <span class="tip">📲 Vertical, IG-ready</span>
   </div>
-  <div id="err" class="err hidden"></div>
+  <div id="err" class="err hidden" role="alert"></div>
 </section>
 
 <!-- ===== ANALYZING ===== -->
-<section id="screen-analyze" class="analyze hidden">
+<section id="screen-analyze" class="analyze hidden" role="status" aria-live="polite">
   <div class="ring"></div>
   <div class="msg" id="analyze-msg">Reading your clip…</div>
   <div class="bar"><i id="analyze-bar"></i></div>
@@ -118,9 +118,9 @@ canvas#reel{width:100%;height:100%;border-radius:23px;display:block;background:#
 
       <div class="panel">
         <div class="lbl">Overlay stats</div>
-        <div class="statrow"><span class="nm">🔥 Top speed</span><span class="ed"><input id="st-speed" type="number" min="0" max="120"><span class="u">km/h</span></span></div>
-        <div class="statrow"><span class="nm">🦅 Best air</span><span class="ed"><input id="st-air" type="number" min="0" max="9" step="0.1"><span class="u">sec</span></span></div>
-        <div class="statrow"><span class="nm">🏂 Turns</span><span class="ed"><input id="st-turns" type="number" min="0" max="200"><span class="u"></span></span></div>
+        <div class="statrow"><span class="nm">🔥 Top speed</span><span class="ed"><input id="st-speed" aria-label="Top speed (km/h)" type="number" min="0" max="120"><span class="u">km/h</span></span></div>
+        <div class="statrow"><span class="nm">🦅 Best air</span><span class="ed"><input id="st-air" aria-label="Best air (seconds)" type="number" min="0" max="9" step="0.1"><span class="u">sec</span></span></div>
+        <div class="statrow"><span class="nm">🏂 Turns</span><span class="ed"><input id="st-turns" aria-label="Turns" type="number" min="0" max="200"><span class="u"></span></span></div>
         <div class="est">Auto-estimated from your footage — tap any number to edit. (Real GPS/airtime from GoPro telemetry is coming.)</div>
       </div>
 
@@ -132,7 +132,7 @@ canvas#reel{width:100%;height:100%;border-radius:23px;display:block;background:#
           <button data-v="chill">Chill ❄️</button>
         </div>
         <div class="lbl" style="margin-top:12px">Title card</div>
-        <input class="titlein" id="title" maxlength="28" value="MY DAY ON THE MOUNTAIN">
+        <input class="titlein" id="title" aria-label="Reel title card" maxlength="28" value="MY DAY ON THE MOUNTAIN">
       </div>
 
       <button class="btn btn-primary" id="recbtn" onclick="recordReel()">● Record &amp; download</button>
