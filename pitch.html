@@ -101,9 +101,8 @@
   .foot{padding:44px 22px 56px;text-align:center;color:#8a94a6;font-size:13px}
   .foot a{color:var(--accent);text-decoration:none;font-weight:700}
   /* i18n + mobile */
-  [data-zh]{display:none}
-  html[lang="zh"] [data-en]{display:none}
-  html[lang="zh"] [data-zh]{display:revert}
+  html[lang="en"] [data-zh]{display:none !important}
+  html[lang="zh"] [data-en]{display:none !important}
   @media(max-width:600px){
     h1{font-size:29px} h2{font-size:21.5px}
     section{padding:44px 18px}
