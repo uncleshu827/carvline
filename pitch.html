@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Carvline — Investor Overview</title>
+<meta name="description" content="Carvline — the AI snowboard coach that lives in your phone.">
+<meta property="og:title" content="Carvline — Your iPhone is a Snowboard Coach">
+<meta property="og:description" content="The AI snowboard coach that lives in your phone. Investor overview.">
+<meta property="og:image" content="https://carvlineai.com/og-image.png">
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#101828; --body:#475467; --line:#e8ecf2; --bg:#ffffff; --soft:#f6f8fb;
+    --accent:#2563eb; --good:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",Inter,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:700px;margin:0 auto}
+  section{padding:52px 22px}
+  section.alt{background:var(--soft)}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7a8aa6}
+  html[lang="zh"] .eyebrow{text-transform:none;letter-spacing:.03em}
+  h1{font-size:34px;line-height:1.15;font-weight:800;letter-spacing:-.02em;margin:12px 0 0}
+  h2{font-size:24px;line-height:1.25;font-weight:800;letter-spacing:-.015em;margin:8px 0 6px}
+  p.lead{font-size:16.5px;line-height:1.55;color:var(--body);margin-top:10px}
+  .muted{color:var(--body);font-size:14.5px;line-height:1.6}
+  .src{color:#8a94a6;font-size:11.5px;margin-top:12px;line-height:1.5}
+  /* top bar */
+  .bar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+    padding:8px 16px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800}
+  .brand svg{width:26px;height:26px;display:block}
+  .toggle{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;font-size:14px;font-weight:700}
+  .toggle button{border:0;background:transparent;padding:9px 16px;min-height:42px;cursor:pointer;color:var(--body)}
+  .toggle button.on{background:var(--ink);color:#fff}
+  /* hero */
+  .hero{text-align:center;padding-top:52px;padding-bottom:56px}
+  .hero .logo{width:84px;height:84px;margin:0 auto 18px;filter:drop-shadow(0 10px 24px rgba(37,99,235,.25))}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;font-weight:700;font-size:15px;
+    padding:14px 22px;border-radius:12px;text-decoration:none;margin-top:20px;min-height:48px}
+  .btn.sub{background:transparent;color:var(--ink);border:1.5px solid var(--line);margin-left:8px}
+  /* grids/cards */
+  .grid{display:grid;gap:12px;margin-top:18px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr 1fr}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+  .stat{font-size:27px;font-weight:800;letter-spacing:-.02em;overflow-wrap:anywhere}
+  .stat.a{color:var(--accent)} .stat.g{color:var(--good)}
+  .k{font-size:12.5px;color:var(--body);font-weight:600;margin-top:4px;line-height:1.45}
+  .chartbox{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 12px 10px}
+  .chartbox h3{font-size:14px;font-weight:700;margin:2px 4px 8px}
+  .cv{position:relative;height:170px}
+  /* competitor intro cards */
+  .co{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px}
+  .co .logo2{flex:0 0 46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff}
+  .co h4{font-size:16px;font-weight:800;margin-bottom:3px}
+  .co p{font-size:13.5px;color:var(--body);line-height:1.55}
+  /* table */
+  .cmp{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px;background:#fff;border-radius:14px;overflow:hidden}
+  .cmp th,.cmp td{padding:11px 6px;text-align:center;border-bottom:1px solid var(--line)}
+  .cmp th{font-size:12px;color:var(--body);font-weight:700;background:var(--soft)}
+  .cmp td:first-child,.cmp th:first-child{text-align:left;padding-left:12px}
+  .cmp th.us,.cmp td.us{background:#eef4ff;font-weight:700}
+  .cmp .yes{color:var(--good);font-weight:800}
+  .cmp .no{color:var(--bad);font-weight:800}
+  .rowlbl{font-weight:700;color:var(--ink)}
+  /* use cases */
+  .uc{display:flex;gap:13px;align-items:flex-start;padding:15px 0;border-bottom:1px solid var(--line)}
+  .uc:last-of-type{border-bottom:0}
+  .uc .ic{flex:0 0 44px;height:44px;border-radius:13px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:22px}
+  .uc .star{background:var(--ink)}
+  .uc h4{font-size:16px;font-weight:800}
+  .uc p{font-size:13.5px;color:var(--body);line-height:1.5;margin-top:2px}
+  .note{background:#fff;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 14px 14px 0;padding:14px 16px;margin-top:16px}
+  .note p{font-size:14px;line-height:1.6;color:var(--body)}
+  .note b{color:var(--ink)}
+  /* pricing */
+  .price{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .pr{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+  .pr.core{border-color:var(--accent);box-shadow:0 4px 18px rgba(37,99,235,.10)}
+  .pr .p{font-size:22px;font-weight:800}
+  .pr .p span{font-size:12px;color:var(--body);font-weight:600}
+  .pr .d{font-size:12px;color:var(--body);line-height:1.45;margin-top:4px}
+  /* stages / plan */
+  .timeline{margin-top:18px;display:grid;gap:14px}
+  .tl{display:flex;gap:13px;align-items:flex-start}
+  .tl .dot{flex:0 0 auto;width:12px;height:12px;border-radius:50%;background:var(--ink);margin-top:5px}
+  .tl .dot.a{background:var(--accent)} .tl .dot.g{background:var(--good)}
+  .tl b{font-size:15px} .tl span{display:block;font-size:13.5px;color:var(--body);line-height:1.55;margin-top:2px}
+  /* funds table */
+  .funds{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px;background:#fff;border-radius:14px;overflow:hidden}
+  .funds td{padding:11px 12px;border-bottom:1px solid var(--line)}
+  .funds td:last-child{text-align:right;font-weight:700;white-space:nowrap}
+  .funds tr:last-child td{border-bottom:0}
+  .ask{background:var(--ink);color:#fff;border-radius:20px;padding:26px 22px;margin-top:20px;text-align:center}
+  .ask .big{font-size:44px;font-weight:800;letter-spacing:-.02em}
+  .ask .k2{font-size:14px;color:#b9c3d4;margin-top:6px;line-height:1.5}
+  .foot{padding:44px 22px 56px;text-align:center;color:#8a94a6;font-size:13px}
+  .foot a{color:var(--accent);text-decoration:none;font-weight:700}
+  /* i18n + mobile */
+  [data-zh]{display:none}
+  html[lang="zh"] [data-en]{display:none}
+  html[lang="zh"] [data-zh]{display:revert}
+  @media(max-width:600px){
+    h1{font-size:29px} h2{font-size:21.5px}
+    section{padding:44px 18px}
+    .g3{grid-template-columns:1fr}
+    .stat{font-size:24px}
+    .btn.sub{margin-left:0;margin-top:10px}
+    .price{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="brand">
+    <svg viewBox="0 0 240 240"><defs><linearGradient id="t1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset=".55" stop-color="#2563eb"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient><linearGradient id="c1" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#e0f2fe"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><rect x="10" y="10" width="220" height="220" rx="54" fill="url(#t1)"/><path d="M52 205 C 96 205, 106 148, 150 148 S 196 96, 214 88" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="14" stroke-linecap="round"/><path d="M46 214 C 100 214, 108 156, 152 156 S 196 80, 204 70" fill="none" stroke="url(#c1)" stroke-width="22" stroke-linecap="round"/><circle cx="196" cy="66" r="7" fill="#fff"/><circle cx="212" cy="80" r="4.6" fill="#fff" fill-opacity=".85"/><circle cx="206" cy="54" r="4" fill="#fff" fill-opacity=".7"/></svg>
+    Carvline
+  </div>
+  <div class="toggle" id="lang">
+    <button data-l="en" class="on">EN</button>
+    <button data-l="zh">中文</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- 1 · HERO -->
+<section class="hero">
+  <svg class="logo" viewBox="0 0 240 240"><defs><linearGradient id="t2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset=".55" stop-color="#2563eb"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient><linearGradient id="c2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#e0f2fe"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><rect x="10" y="10" width="220" height="220" rx="54" fill="url(#t2)"/><path d="M52 205 C 96 205, 106 148, 150 148 S 196 96, 214 88" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="14" stroke-linecap="round"/><path d="M46 214 C 100 214, 108 156, 152 156 S 196 80, 204 70" fill="none" stroke="url(#c2)" stroke-width="22" stroke-linecap="round"/><circle cx="196" cy="66" r="7" fill="#fff"/><circle cx="212" cy="80" r="4.6" fill="#fff" fill-opacity=".85"/><circle cx="206" cy="54" r="4" fill="#fff" fill-opacity=".7"/></svg>
+  <div class="eyebrow" data-en>Investor Overview · 2026</div>
+  <div class="eyebrow" data-zh>投資人簡介 · 2026</div>
+  <h1 data-en>Your iPhone is a<br>snowboard coach.</h1>
+  <h1 data-zh>你的 iPhone，<br>就是單板教練。</h1>
+  <p class="lead" data-en>Film 30 seconds of riding, upload it, and get coach-level feedback before your next run. No sensors, no hardware — just a phone.</p>
+  <p class="lead" data-zh>拍 30 秒、上傳，下一趟纜車前就拿到教練級的回饋。不用感測器、不用硬體，一支手機就夠。</p>
+  <div>
+    <a class="btn" href="https://carvlineai.com" target="_blank" rel="noopener" data-en>Try the live product ↗</a>
+    <a class="btn" href="https://carvlineai.com" target="_blank" rel="noopener" data-zh>打開產品試試 ↗</a>
+  </div>
+</section>
+
+<!-- 2 · PROBLEM -->
+<section class="alt">
+  <div class="eyebrow" data-en>The Problem</div>
+  <div class="eyebrow" data-zh>問題</div>
+  <h2 data-en>Most riders never hear what they're doing wrong.</h2>
+  <h2 data-zh>大多數雪友，從來沒人告訴他們哪裡做錯。</h2>
+  <div class="grid g3">
+    <div class="card"><div class="stat">US$80–300</div><div class="k" data-en>an hour for a human coach — and abroad, you often can't even talk to them</div><div class="k" data-zh>請真人教練的時薪——出了國，還常常語言不通</div></div>
+    <div class="card"><div class="stat">US$200+</div><div class="k" data-en>of hardware for Carv, the only AI option — and it doesn't work for snowboards</div><div class="k" data-zh>唯一的 AI 選項 Carv 要買硬體——而且不支援單板</div></div>
+    <div class="card"><div class="stat">0</div><div class="k" data-en>tools for the everyday rider who films their runs but has no idea how to improve</div><div class="k" data-zh>給一般雪友的工具——影片拍了一堆，卻不知道怎麼進步</div></div>
+  </div>
+</section>
+
+<!-- 3 · PRODUCT -->
+<section>
+  <div class="eyebrow" data-en>The Product</div>
+  <div class="eyebrow" data-zh>產品</div>
+  <h2 data-en>The AI coach is the core. The rest keeps you coming back.</h2>
+  <h2 data-zh>AI 教練是核心，其他功能讓你一直回來。</h2>
+  <div class="uc"><div class="ic star"><span style="color:#fff">🎯</span></div><div><h4 data-en>AI technique coach — the core</h4><h4 data-zh>AI 技術教練——核心</h4><p data-en>Upload a 15–30s clip. The AI scores 8 parts of your technique, circles the problems right on your video, and gives you one drill to work on next run. Built on the standards of the four major coaching bodies — not made-up advice.</p><p data-zh>上傳 15–30 秒影片，AI 針對 8 個技術面向評分，直接在你的影片上圈出問題，並給你下一趟該練的一個動作。依據四大教練組織的標準，不是隨口亂給建議。</p></div></div>
+  <div class="uc"><div class="ic">🏂</div><div><h4 data-en>Day tracking — the habit</h4><h4 data-zh>雪日記錄——養成習慣</h4><p data-en>Phone in your pocket, and your speed, turns, vertical and airtime get logged automatically. A reason to open the app every single day on snow.</p><p data-zh>手機放口袋，速度、轉彎、落差、滯空自動記錄。讓你每個雪日都有理由打開 App。</p></div></div>
+  <div class="uc"><div class="ic">🎬</div><div><h4 data-en>Auto-highlights — the growth engine</h4><h4 data-zh>自動精華——成長引擎</h4><p data-en>The AI cuts your best moments into a short vertical reel, ready for Instagram. Every share puts Carvline in front of the next rider — growth that costs us almost nothing.</p><p data-zh>AI 幫你把最精彩的片段剪成直式短片，直接發 IG。每一次分享，都把 Carvline 帶到下一個雪友面前——幾乎零成本的成長。</p></div></div>
+</section>
+
+<!-- 4 · WHY NOW -->
+<section class="alt">
+  <div class="eyebrow" data-en>Why Now</div>
+  <div class="eyebrow" data-zh>為什麼是現在</div>
+  <h2 data-en>The sport just hit a record. The technology just arrived.</h2>
+  <h2 data-zh>這項運動剛創新高，技術也剛好到位。</h2>
+  <div class="chartbox">
+    <h3 data-en>Global ski &amp; snowboard visits, millions per season</h3>
+    <h3 data-zh>全球滑雪造訪人次（百萬／每季）</h3>
+    <div class="cv"><canvas id="c_visits"></canvas></div>
+  </div>
+  <div class="chartbox">
+    <h3 data-en>AI coaching market, US$ billions</h3>
+    <h3 data-zh>AI 教練市場規模（十億美元）</h3>
+    <div class="cv"><canvas id="c_ai"></canvas></div>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><div class="stat g">+9%</div><div class="k" data-en>US snowboarding growth in 2023/24 — the fastest of any snow sport</div><div class="k" data-zh>美國單板 2023/24 年成長——所有雪上運動裡最快</div></div>
+    <div class="card"><div class="stat">399M</div><div class="k" data-en>visits worldwide in 2024/25 — an all-time record</div><div class="k" data-zh>2024/25 全球造訪人次——歷史新高</div></div>
+  </div>
+  <p class="src" data-en>Sources: FIS &amp; industry reports (visits) · Grand View Research (AI coaching) · SIA 2023-24 participation study.</p>
+  <p class="src" data-zh>來源：FIS 與產業報告（人次）· Grand View Research（AI 教練市場）· SIA 2023-24 參與研究。</p>
+</section>
+
+<!-- 5 · COMPETITORS -->
+<section>
+  <div class="eyebrow" data-en>The Competition</div>
+  <div class="eyebrow" data-zh>競爭對手</div>
+  <h2 data-en>Two companies proved the demand. Neither can do what we do.</h2>
+  <h2 data-zh>兩家公司證明了需求存在，但都做不到我們做的事。</h2>
+
+  <div class="co">
+    <div class="logo2" style="background:#0ea5e9">S</div>
+    <div>
+      <h4>Slopes</h4>
+      <p data-en>The "Strava of skiing." Built by one independent developer with zero venture money, it records your ski day beautifully — 4M+ downloads, roughly US$5M a year in revenue as of 2025. What it proves: riders happily pay for snow software. What it lacks: it never tells you how to get better.</p>
+      <p data-zh>滑雪界的 Strava。一位獨立開發者做的，沒拿過創投的錢，把「記錄雪日」做到極致——超過 400 萬下載，2025 年營收約 US$5M。它證明了：雪友很願意為滑雪軟體付錢。它缺的是：從不告訴你怎麼變強。</p>
+    </div>
+  </div>
+  <div class="co">
+    <div class="logo2" style="background:#101828">C</div>
+    <div>
+      <h4>Carv</h4>
+      <p data-en>The AI ski coach. Raised US$20.8M and proved skiers will pay for AI coaching. The catch: it needs a US$200+ sensor clipped into your ski boot — and a decade in, it still doesn't work for snowboards at all.</p>
+      <p data-zh>AI 滑雪教練。募了 US$20.8M，證明雪友願意為 AI 教練付費。但它得在雪靴裡裝一個 US$200+ 的感測器——而且做了十年，到今天完全不支援單板。</p>
+    </div>
+  </div>
+
+  <table class="cmp">
+    <tr>
+      <th></th>
+      <th data-en>Slopes</th><th data-zh>Slopes</th>
+      <th data-en>Carv</th><th data-zh>Carv</th>
+      <th class="us">Carvline</th>
+    </tr>
+    <tr><td class="rowlbl" data-en>Coaches your technique</td><td class="rowlbl" data-zh>教你技術</td><td class="no">✕</td><td class="yes">✓</td><td class="us yes">✓</td></tr>
+    <tr><td class="rowlbl" data-en>Works for snowboarding</td><td class="rowlbl" data-zh>支援單板</td><td class="yes">✓</td><td class="no">✕</td><td class="us yes">✓</td></tr>
+    <tr><td class="rowlbl" data-en>Needs extra hardware</td><td class="rowlbl" data-zh>需要額外硬體</td><td class="yes">✕</td><td class="no">US$200+</td><td class="us yes">✕</td></tr>
+    <tr><td class="rowlbl" data-en>Tracks your day</td><td class="rowlbl" data-zh>記錄雪日</td><td class="yes">✓</td><td>~</td><td class="us yes">✓</td></tr>
+  </table>
+
+  <div class="note">
+    <p data-en><b>Why this gap stays ours:</b> every clip uploaded to Carvline trains a snowboard-specific model that neither a ski-hardware company nor a tracking app has any way to build. Phone cameras plus modern AI can now read technique from video alone — the barrier that forced Carv into hardware is gone.</p>
+    <p data-zh><b>為什麼這個缺口會是我們的：</b>每一支上傳到 Carvline 的影片，都在訓練一個「單板專用」的模型——這是滑雪硬體公司和記錄型 App 都沒辦法累積的資料。手機鏡頭加上現在的 AI，已經能單靠影片讀出技術動作——當年逼 Carv 去做硬體的門檻，已經不存在了。</p>
+  </div>
+  <p class="src" data-en>Slopes revenue: founder's public blog, Jun 2025. Carv funding: Dealroom, 2024. Carv ski-only: verified via product listings &amp; user communities, 2024.</p>
+  <p class="src" data-zh>Slopes 營收：創辦人公開部落格（2025-06）。Carv 募資：Dealroom（2024）。Carv 僅支援雙板：經產品頁與用戶社群查證（2024）。</p>
+</section>
+
+<!-- 6 · TRACTION -->
+<section class="alt">
+  <div class="eyebrow" data-en>Early Signal</div>
+  <div class="eyebrow" data-zh>早期驗證</div>
+  <h2 data-en>US$180 of ads answered one question: do riders want this? Yes.</h2>
+  <h2 data-zh>US$180 的廣告，回答了一個問題：雪友想要這個嗎？想。</h2>
+  <p class="lead" data-en>We ran a small Instagram test in July across Taiwan, Hong Kong and a global audience. The product is live at carvlineai.com and the numbers came back loud:</p>
+  <p class="lead" data-zh>七月我們在 IG 上跑了一波小測試（台灣、香港＋全球受眾）。產品已上線 carvlineai.com，數字回來得很清楚：</p>
+  <div class="grid g2">
+    <div class="card"><div class="stat a">NT$3–5</div><div class="k" data-en>to bring one visitor to the site (≈US$0.10–0.16) — a fraction of what Instagram clicks normally cost (US$0.50–1.80)</div><div class="k" data-zh>帶一個人進站的成本（約 US$0.10–0.16）——遠低於 IG 一般連結點擊行情（US$0.50–1.80）</div></div>
+    <div class="card"><div class="stat a">5.8–6.7%</div><div class="k" data-en>of viewers clicked through — a strong rate for a cold audience</div><div class="k" data-zh>看到廣告的人裡有 5.8–6.7% 點進來——對陌生受眾來說很不錯</div></div>
+    <div class="card"><div class="stat">2,100+</div><div class="k" data-en>visitors from that one small test</div><div class="k" data-zh>訪客，來自這一次小測試</div></div>
+    <div class="card"><div class="stat g">93%</div><div class="k" data-en>of surveyed visitors (n=14) have never had a single lesson — exactly who we built this for</div><div class="k" data-zh>填問卷的訪客中（n=14），93% 從沒上過課——正是我們要服務的人</div></div>
+  </div>
+  <div class="note">
+    <p data-en><b>Worth knowing:</b> we ran this test in July — northern-hemisphere summer, so most visitors had no fresh footage to upload and nobody paid yet. That was expected. The telling part: Australia, the one audience actually in ski season, was also the only one that uploaded clips and completed analyses. Interest is proven; winter is when it converts.</p>
+    <p data-zh><b>要說清楚的是：</b>這波測試在七月跑——北半球夏天，多數訪客手上沒有新影片能傳，所以還沒有人付費，這在預期內。但有個關鍵訊號：澳洲——唯一正處雪季的受眾——也正是唯一真的上傳影片、跑完分析的市場。興趣已經驗證了，雪季才是轉換的時候。</p>
+  </div>
+  <p class="src" data-en>Data: Instagram Ads Manager + Carvline's own analytics, July 2026. Site-visit cost blends all five ad sets (best NT$2.88, blended NT$4.22).</p>
+  <p class="src" data-zh>數據：IG 廣告後台 + Carvline 自建分析，2026 年 7 月。進站成本為五檔廣告混合值（最佳 NT$2.88、混合 NT$4.22）。</p>
+</section>
+
+<!-- 7 · BUSINESS MODEL -->
+<section>
+  <div class="eyebrow" data-en>Business Model</div>
+  <div class="eyebrow" data-zh>商業模式</div>
+  <h2 data-en>Try free, pay to unlock — priced like a season pass.</h2>
+  <h2 data-zh>免費試用、付費解鎖——用「季票」的邏輯定價。</h2>
+  <p class="lead" data-en>Anyone can upload a clip and get 3 quick takeaways free. The full 8-point analysis and drill plan is what you pay for. It's US$1 per unlock today as a test price; at winter launch it becomes a season pass:</p>
+  <p class="lead" data-zh>任何人都能免費上傳影片、拿到 3 個重點回饋。完整的 8 項分析＋訓練計畫才需要付費。現在是 US$1 解鎖的測試價；雪季正式上線後改成季票制：</p>
+  <div class="price">
+    <div class="pr"><div class="p">US$0</div><div class="d" data-en>Free — 3 takeaways per clip. The funnel.</div><div class="d" data-zh>免費——每支影片 3 個重點。入口。</div></div>
+    <div class="pr"><div class="p">US$10<span> /trip</span></div><div class="d" data-en>One trip, fully analyzed.</div><div class="d" data-zh>單趟旅程完整分析。</div></div>
+    <div class="pr core"><div class="p">US$25<span> /season</span></div><div class="d" data-en>Unlimited analyses all winter. The core plan.</div><div class="d" data-zh>整個雪季無限分析。主力方案。</div></div>
+    <div class="pr"><div class="p">US$60<span> /year</span></div><div class="d" data-en>Everything, year-round, for the obsessed.</div><div class="d" data-zh>全年全功能，給重度玩家。</div></div>
+  </div>
+  <p class="muted" style="margin-top:14px" data-en>Why it works: riders already spend hundreds on lift passes and gear every season — US$25 is less than 20 minutes with a human coach. No hardware means ~85% gross margin, and shared highlight reels keep bringing in new riders for free.</p>
+  <p class="muted" style="margin-top:14px" data-zh>為什麼行得通：雪友每季本來就花好幾百美元買雪票和裝備——US$25 還不到真人教練 20 分鐘的價錢。零硬體代表約 85% 毛利，而用戶分享的精華短片會持續免費帶進新雪友。</p>
+  <div class="note">
+    <p data-en><b>And the off-season?</b> Snow apps flatline April–November — even Slopes does. Our long-term answer is indoor snow: China alone logged 5.6M indoor ski visits in 2024/25 (+15%), has 7 of the world's 10 biggest indoor slopes, and runs year-round. That's the roadmap to a four-season business.</p>
+    <p data-zh><b>那淡季怎麼辦？</b>雪類 App 每年 4–11 月都是平的——連 Slopes 也一樣。我們的長期解法是室內雪場：光中國 2024/25 就有 560 萬室內滑雪人次（年增 15%），全球前十大室內雪場有 7 座在中國，而且全年營業。這是把生意做成四季的路線圖。</p>
+  </div>
+  <p class="src" data-en>Freemium conversion benchmarks: RevenueCat 2025 (2–5% typical). Indoor snow: I Love Ski / industry reports, 2025. Margins are targets.</p>
+  <p class="src" data-zh>免費轉付費行情：RevenueCat 2025（一般 2–5%）。室內雪場：I Love Ski／產業報告，2025。毛利為目標值。</p>
+</section>
+
+<!-- 8 · GROWTH STAGES + ASK -->
+<section class="alt">
+  <div class="eyebrow" data-en>The Plan &amp; The Ask</div>
+  <div class="eyebrow" data-zh>計畫與募資</div>
+  <h2 data-en>Raising US$500K to get through our first real winter.</h2>
+  <h2 data-zh>募 US$500K，打完第一個真正的雪季。</h2>
+
+  <div class="timeline">
+    <div class="tl"><span class="dot"></span><div><b data-en>Stage 1 · Now → October</b><b data-zh>第一階段 · 現在 → 10 月</b><span data-en>Demand is proven and cheap. Use the off-season to sharpen the product: conversion flow, coaching accuracy, day tracking and reels.</span><span data-zh>需求已用低成本驗證。趁淡季把產品磨利：轉換流程、分析準確度、雪日記錄與精華短片。</span></div></div>
+    <div class="tl"><span class="dot a"></span><div><b data-en>Stage 2 · November → March (winter)</b><b data-zh>第二階段 · 11 月 → 3 月（雪季）</b><span data-en>Push hard in Taiwan, Hong Kong, Singapore and Japan-bound travelers, plus Australia/NZ. Goal: ~8,000 season passes ≈ US$200K in annual revenue (that's ~2% of the winter traffic our ad costs project — ambitious but arithmetic, not fantasy).</span><span data-zh>主攻台灣、香港、新加坡與赴日雪客，加上澳紐。目標：約 8,000 張季票 ≈ 年營收 US$200K（大約是廣告成本推算的雪季流量的 2%——有企圖心，但是算得出來的數字，不是幻想）。</span></div></div>
+    <div class="tl"><span class="dot g"></span><div><b data-en>Stage 3 · Next year</b><b data-zh>第三階段 · 明年</b><span data-en>Take winter retention data + China's year-round indoor snow market to raise a proper Series A and scale across Asia.</span><span data-zh>帶著雪季留存數據＋中國全年室內雪場市場，去募正式的 Series A，規模化整個亞洲。</span></div></div>
+  </div>
+
+  <div class="ask">
+    <div class="eyebrow" style="color:#93b4f5" data-en>The Ask</div>
+    <div class="eyebrow" style="color:#93b4f5" data-zh>本輪募資</div>
+    <div class="big">US$500K</div>
+    <div class="k2" data-en>12 months of runway (~US$42K/month) to turn proven interest into paying riders</div>
+    <div class="k2" data-zh>12 個月的資金（每月約 US$42K），把「已驗證的興趣」變成「付費用戶」</div>
+  </div>
+
+  <table class="funds">
+    <tr><td data-en>Engineering — 2 engineers, 12 months</td><td data-zh>工程——2 位工程師 × 12 個月</td><td>US$250K</td></tr>
+    <tr><td data-en>Growth — winter ad push + creators</td><td data-zh>成長——雪季廣告投放＋創作者合作</td><td>US$100K</td></tr>
+    <tr><td data-en>Founder &amp; operations</td><td data-zh>創辦人與營運</td><td>US$75K</td></tr>
+    <tr><td data-en>Cloud &amp; AI compute</td><td data-zh>雲端與 AI 運算</td><td>US$50K</td></tr>
+    <tr><td data-en>Buffer</td><td data-zh>預備金</td><td>US$25K</td></tr>
+  </table>
+  <p class="src" data-en>Terms indicative and open to discussion. Revenue goals are targets tied to the winter test, not guarantees.</p>
+  <p class="src" data-zh>條件為初步規劃，可再討論。營收目標綁定雪季驗證，屬目標值而非保證。</p>
+</section>
+
+<div class="foot">
+  <p data-en>Carvline · The AI snowboard coach in your phone</p>
+  <p data-zh>Carvline · 住在你手機裡的 AI 單板教練</p>
+  <p style="margin-top:6px"><a href="https://carvlineai.com" target="_blank" rel="noopener">carvlineai.com ↗</a></p>
+</div>
+
+</div>
+
+<script>
+var langBtns = document.querySelectorAll('#lang button');
+function setLang(l){
+  document.documentElement.lang = l;
+  langBtns.forEach(function(b){ b.classList.toggle('on', b.dataset.l===l); });
+  try{ localStorage.setItem('cv_deck_lang', l);}catch(e){}
+  renderCharts();
+}
+langBtns.forEach(function(b){ b.addEventListener('click', function(){ setLang(b.dataset.l); }); });
+
+var chartVisits=null, chartAI=null;
+function isZh(){ return document.documentElement.lang==='zh'; }
+Chart.defaults.font.family = "-apple-system,Segoe UI,Noto Sans TC,Inter,sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = "#7a8aa6";
+
+function renderCharts(){
+  var zh=isZh();
+  var v = document.getElementById('c_visits').getContext('2d');
+  if(chartVisits) chartVisits.destroy();
+  var gv=v.createLinearGradient(0,0,0,170); gv.addColorStop(0,'rgba(16,24,40,.14)'); gv.addColorStop(1,'rgba(16,24,40,0)');
+  chartVisits = new Chart(v,{type:'line',
+    data:{labels:['18/19','20/21','22/23','23/24','24/25'],
+      datasets:[{data:[392,201,370,366,399],
+        borderColor:'#101828',borderWidth:2.5,tension:.35,fill:true,backgroundColor:gv,
+        pointBackgroundColor:'#101828',pointRadius:[3,4,3,3,6],pointHoverRadius:7}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y+'M '+(zh?'人次':'visits');}}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:function(x){return x+'M';}},grid:{color:'#eef1f6'}},x:{grid:{display:false}}}}});
+  var a = document.getElementById('c_ai').getContext('2d');
+  if(chartAI) chartAI.destroy();
+  var ga=a.createLinearGradient(0,0,0,170); ga.addColorStop(0,'#3b82f6'); ga.addColorStop(1,'#1e40af');
+  chartAI = new Chart(a,{type:'bar',
+    data:{labels:['2025','2027','2029','2031','2033'],
+      datasets:[{data:[16.9,23.8,33.4,46.9,65.7],
+        backgroundColor:ga,borderRadius:7,maxBarThickness:38}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return 'US$'+c.parsed.y+'B';}}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:function(x){return '$'+x+'B';}},grid:{color:'#eef1f6'}},x:{grid:{display:false}}}}});
+}
+
+(function(){
+  var saved='en'; try{ saved=localStorage.getItem('cv_deck_lang')||'en'; }catch(e){}
+  setLang(saved);
+})();
+</script>
+</body>
+</html>
