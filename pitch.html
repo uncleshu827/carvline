@@ -55,8 +55,10 @@
   .cv{position:relative;height:170px}
   /* competitor intro cards */
   .co{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px}
-  .co .logo2{flex:0 0 46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff}
+  .co img.logo2{flex:0 0 46px;width:46px;height:46px;border-radius:12px;border:1px solid var(--line);background:#fff;padding:5px;object-fit:contain}
   .co h4{font-size:16px;font-weight:800;margin-bottom:3px}
+  .co h4 a{color:var(--ink);text-decoration:none}
+  .co h4 a:hover{color:var(--accent)}
   .co p{font-size:13.5px;color:var(--body);line-height:1.55}
   /* table */
   .cmp{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px;background:#fff;border-radius:14px;overflow:hidden}
@@ -71,7 +73,7 @@
   .uc{display:flex;gap:13px;align-items:flex-start;padding:15px 0;border-bottom:1px solid var(--line)}
   .uc:last-of-type{border-bottom:0}
   .uc .ic{flex:0 0 44px;height:44px;border-radius:13px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:22px}
-  .uc .star{background:var(--ink)}
+  .uc .star{background:linear-gradient(135deg,#3b82f6,#1e3a8a)}
   .uc h4{font-size:16px;font-weight:800}
   .uc p{font-size:13.5px;color:var(--body);line-height:1.5;margin-top:2px}
   .note{background:#fff;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 14px 14px 0;padding:14px 16px;margin-top:16px}
@@ -199,19 +201,19 @@
   <h2 data-zh>兩家公司證明了需求存在，但都做不到我們做的事。</h2>
 
   <div class="co">
-    <div class="logo2" style="background:#0ea5e9">S</div>
+    <img class="logo2" src="https://www.google.com/s2/favicons?domain=getslopes.com&amp;sz=64" alt="Slopes logo">
     <div>
-      <h4>Slopes</h4>
-      <p data-en>The "Strava of skiing." Built by one independent developer with zero venture money, it records your ski day beautifully — 4M+ downloads, roughly US$5M a year in revenue as of 2025. What it proves: riders happily pay for snow software. What it lacks: it never tells you how to get better.</p>
-      <p data-zh>滑雪界的 Strava。一位獨立開發者做的，沒拿過創投的錢，把「記錄雪日」做到極致——超過 400 萬下載，2025 年營收約 US$5M。它證明了：雪友很願意為滑雪軟體付錢。它缺的是：從不告訴你怎麼變強。</p>
+      <h4><a href="https://getslopes.com" target="_blank" rel="noopener">Slopes ↗</a></h4>
+      <p data-en>The "Strava of skiing." One independent developer, no venture money — and by 2025, roughly US$5M a year in revenue with 4M+ downloads. Why does simple day-recording make that much money? Because it's a habit: riders check their speed and vertical on every lift, then share the stats card with friends. Slopes proves two things we build on — riders pay for snow software, and tracking is the hook that opens the app daily. What it still can't do: tell you how to ride better.</p>
+      <p data-zh>滑雪界的 Strava。一位獨立開發者、沒拿創投，到 2025 年做到年營收約 US$5M、超過 400 萬下載。為什麼「純記錄」能賺這麼多？因為它是習慣——雪友每趟纜車都打開看速度和落差，再把成績卡分享給朋友。Slopes 證明了我們踩在上面的兩件事：雪友願意為滑雪軟體付錢，而「記錄」正是讓人每天打開 App 的鉤子。但它到今天還做不到：告訴你怎麼滑得更好。</p>
     </div>
   </div>
   <div class="co">
-    <div class="logo2" style="background:#101828">C</div>
+    <img class="logo2" src="https://www.google.com/s2/favicons?domain=getcarv.com&amp;sz=64" alt="Carv logo">
     <div>
-      <h4>Carv</h4>
-      <p data-en>The AI ski coach. Raised US$20.8M and proved skiers will pay for AI coaching. The catch: it needs a US$200+ sensor clipped into your ski boot — and a decade in, it still doesn't work for snowboards at all.</p>
-      <p data-zh>AI 滑雪教練。募了 US$20.8M，證明雪友願意為 AI 教練付費。但它得在雪靴裡裝一個 US$200+ 的感測器——而且做了十年，到今天完全不支援單板。</p>
+      <h4><a href="https://getcarv.com" target="_blank" rel="noopener">Carv ↗</a></h4>
+      <p data-en>The AI ski coach. Raised US$20.8M and proved skiers will pay for AI coaching. The catch: you have to buy a US$200+ sensor for your ski boots — and ten years in, it still doesn't work for snowboards at all.</p>
+      <p data-zh>AI 滑雪教練。募了 US$20.8M，證明雪友願意為 AI 教練付費。但你得先買一個 US$200+ 的雪靴感測器——而且做了十年，到今天完全不支援單板。</p>
     </div>
   </div>
 
@@ -304,14 +306,14 @@
   </div>
 
   <table class="funds">
-    <tr><td data-en>Engineering — 2 engineers, 12 months</td><td data-zh>工程——2 位工程師 × 12 個月</td><td>US$250K</td></tr>
+    <tr><td data-en>Engineering — 3 engineers (mobile, backend, AI) × 12 months</td><td data-zh>工程——3 位工程師（前端／後端／AI）× 12 個月</td><td>US$260K</td></tr>
     <tr><td data-en>Growth — winter ad push + creators</td><td data-zh>成長——雪季廣告投放＋創作者合作</td><td>US$100K</td></tr>
-    <tr><td data-en>Founder &amp; operations</td><td data-zh>創辦人與營運</td><td>US$75K</td></tr>
-    <tr><td data-en>Cloud &amp; AI compute</td><td data-zh>雲端與 AI 運算</td><td>US$50K</td></tr>
+    <tr><td data-en>Operations</td><td data-zh>營運</td><td>US$60K</td></tr>
+    <tr><td data-en>Cloud &amp; AI compute</td><td data-zh>雲端與 AI 運算</td><td>US$55K</td></tr>
     <tr><td data-en>Buffer</td><td data-zh>預備金</td><td>US$25K</td></tr>
   </table>
-  <p class="src" data-en>Terms indicative and open to discussion. Revenue goals are targets tied to the winter test, not guarantees.</p>
-  <p class="src" data-zh>條件為初步規劃，可再討論。營收目標綁定雪季驗證，屬目標值而非保證。</p>
+  <p class="src" data-en>Engineering assumes senior Asia-based rates (~US$85K/yr loaded). AI inference runs ≈ US$0.05 per analysis — the cloud line covers ~1M analyses plus storage and delivery. Terms indicative; revenue goals are targets, not guarantees.</p>
+  <p class="src" data-zh>工程以亞洲資深工程師行情估算（含稅約 US$85K／年）。AI 推論每次分析約 US$0.05——雲端預算足以支應約 100 萬次分析加上儲存與流量。條件為初步規劃；營收目標屬目標值而非保證。</p>
 </section>
 
 <div class="foot">
