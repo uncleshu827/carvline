@@ -80,6 +80,32 @@
   .note{background:#fff;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 14px 14px 0;padding:14px 16px;margin-top:16px}
   .note p{font-size:14px;line-height:1.6;color:var(--body)}
   .note b{color:var(--ink)}
+  /* expandable data */
+  details.xd{margin-top:16px;border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden}
+  details.xd summary{cursor:pointer;padding:15px 16px;font-weight:700;font-size:14.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  details.xd summary::-webkit-details-marker{display:none}
+  details.xd .chev{flex:0 0 auto;transition:transform .2s;color:var(--accent);font-weight:800}
+  details.xd[open] .chev{transform:rotate(180deg)}
+  details.xd .inner{padding:2px 16px 18px;border-top:1px solid var(--line)}
+  .xh{font-size:13px;font-weight:800;margin:16px 0 4px}
+  .mini{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+  .mini th{font-size:10.5px;color:#8a94a6;font-weight:700;text-align:right;padding:6px 4px;border-bottom:1px solid var(--line)}
+  .mini td{padding:7px 4px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+  .mini th:first-child,.mini td:first-child{text-align:left;white-space:normal}
+  .mini tr.tot td{font-weight:800;background:var(--soft)}
+  .fnl{margin-top:8px}
+  .fr{display:flex;align-items:center;gap:8px;margin:7px 0}
+  .fr .fl{flex:0 0 118px;font-size:11.5px;color:var(--body);font-weight:600;text-align:right;line-height:1.25}
+  .fr .fb{height:20px;border-radius:5px;background:linear-gradient(90deg,#3b82f6,#2563eb);flex:0 0 auto}
+  .fr .fb.z{background:transparent;border:1.5px dashed #cbd5e1}
+  .fr .fv{font-size:11.5px;font-weight:800;white-space:nowrap}
+  .fr .fv small{font-weight:600;color:#8a94a6}
+  .sv{margin-top:6px}
+  .sr{display:flex;align-items:center;gap:8px;margin:6px 0}
+  .sr .sl{flex:0 0 96px;font-size:11.5px;color:var(--body);font-weight:600;text-align:right}
+  .sr .st{flex:1;height:16px;background:var(--soft);border-radius:5px;overflow:hidden}
+  .sr .sf{height:100%;background:linear-gradient(90deg,#3b82f6,#2563eb);border-radius:5px}
+  .sr .sp{flex:0 0 74px;font-size:11.5px;font-weight:700}
   /* pricing */
   .price{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
   .pr{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
@@ -259,6 +285,62 @@
     <p data-en><b>Worth knowing:</b> we ran this test in July, northern-hemisphere summer, so most visitors had no fresh footage to upload and no one has paid yet. That was expected. The telling part: Australia, the only market actually in ski season, was also the only one that uploaded clips and completed analyses (a handful of visitors, so a signal, not a sample). Interest is proven; winter is when it converts.</p>
     <p data-zh><b>要說清楚的是：</b>這波測試在七月跑，正值北半球夏天，多數訪客手上沒有新影片能傳，所以還沒有人付費，這在預期內。但有個關鍵訊號：澳洲是唯一正處雪季的市場，也正是唯一真的上傳影片、跑完分析的市場（訪客數很少，是訊號、不是樣本）。興趣已經驗證了，雪季才是轉換的時候。</p>
   </div>
+  <details class="xd">
+    <summary>
+      <span data-en>See the full test data: 5 ad sets, funnel, and survey</span>
+      <span data-zh>展開完整測試數據：五檔投放、轉化漏斗與問卷</span>
+      <span class="chev">▾</span>
+    </summary>
+    <div class="inner">
+
+      <div class="xh" data-en>All five ad sets</div>
+      <div class="xh" data-zh>五檔投放明細</div>
+      <table class="mini">
+        <tr><th data-en>Ad set</th><th data-zh>檔次</th><th data-en>Spend</th><th data-zh>花費</th><th data-en>Plays</th><th data-zh>播放</th><th data-en>Site visits</th><th data-zh>到站</th><th data-en>Cost/visit</th><th data-zh>每次到站</th></tr>
+        <tr><td data-en>Taiwan (best)</td><td data-zh>台灣場（最佳）</td><td>NT$1,556</td><td>16,000</td><td>540</td><td>NT$2.88</td></tr>
+        <tr><td data-en>Global</td><td data-zh>全球場</td><td>NT$3,334</td><td>15,000</td><td>629</td><td>NT$5.30</td></tr>
+        <tr><td data-en>Test A</td><td data-zh>測試 A</td><td>NT$370</td><td>3,436</td><td>61</td><td>NT$6.07</td></tr>
+        <tr><td data-en>Test B</td><td data-zh>測試 B</td><td>NT$371</td><td>3,685</td><td>106</td><td>NT$3.50</td></tr>
+        <tr><td data-en>Early stop</td><td data-zh>提早停</td><td>NT$48</td><td>813</td><td>9</td><td>NT$5.33</td></tr>
+        <tr class="tot"><td data-en>Total</td><td data-zh>合計</td><td>NT$5,679</td><td>~39,000</td><td>1,345</td><td>NT$4.22</td></tr>
+      </table>
+
+      <div class="xh" data-en>The funnel, click to payment</div>
+      <div class="xh" data-zh>轉化漏斗：從點擊到付費</div>
+      <div class="fnl">
+        <div class="fr"><span class="fl" data-en>IG link clicks</span><span class="fl" data-zh>IG 連結點擊</span><span class="fb" style="width:52%"></span><span class="fv">1,554</span></div>
+        <div class="fr"><span class="fl" data-en>Landed on site</span><span class="fl" data-zh>實際到站</span><span class="fb" style="width:45%"></span><span class="fv">1,345 <small data-en>87%</small><small data-zh>87%</small></span></div>
+        <div class="fr"><span class="fl" data-en>Started an upload</span><span class="fl" data-zh>進入上傳流程</span><span class="fb" style="width:7%"></span><span class="fv">15 <small data-en>1.1%</small><small data-zh>1.1%</small></span></div>
+        <div class="fr"><span class="fl" data-en>Finished the survey</span><span class="fl" data-zh>完成問卷</span><span class="fb" style="width:6.5%"></span><span class="fv">14 <small data-en>93%</small><small data-zh>93%</small></span></div>
+        <div class="fr"><span class="fl" data-en>Paid</span><span class="fl" data-zh>付費</span><span class="fb z" style="width:3%"></span><span class="fv">0 <small data-en>no snow in July</small><small data-zh>七月無雪</small></span></div>
+      </div>
+      <p class="src" data-en>The click-to-site rate of 87% means IG numbers and our own analytics agree; the tracking chain is trustworthy. The drop at upload is the seasonality story: visitors had no fresh footage in July. Winter flips that stage.</p>
+      <p class="src" data-zh>點擊到站率 87%，代表 IG 數據和自建後台對得起來，追蹤鏈可信。斷點發生在上傳，原因是季節：七月訪客手上沒有新影片。雪季會翻轉這一層。</p>
+
+      <div class="xh" data-en>Who showed up (survey, n=14)</div>
+      <div class="xh" data-zh>來的是誰（問卷，n=14）</div>
+      <div class="sv">
+        <div class="sr"><span class="sl" data-en>Intermediate</span><span class="sl" data-zh>中階程度</span><span class="st"><span class="sf" style="width:64%"></span></span><span class="sp">64%</span></div>
+        <div class="sr"><span class="sl" data-en>Goal: posture</span><span class="sl" data-zh>目標：姿勢</span><span class="st"><span class="sf" style="width:57%"></span></span><span class="sp">57%</span></div>
+        <div class="sr"><span class="sl" data-en>Goal: carving</span><span class="sl" data-zh>目標：carving</span><span class="st"><span class="sf" style="width:43%"></span></span><span class="sp">43%</span></div>
+        <div class="sr"><span class="sl" data-en>Little/no coaching</span><span class="sl" data-zh>幾乎沒被教過</span><span class="st"><span class="sf" style="width:93%"></span></span><span class="sp">93%</span></div>
+        <div class="sr"><span class="sl" data-en>Ride in Japan</span><span class="sl" data-zh>去日本滑</span><span class="st"><span class="sf" style="width:64%"></span></span><span class="sp">64%</span></div>
+      </div>
+      <p class="src" data-en>Read together: intermediate riders who fly to Japan, want help with posture and carving, and have never been coached. That is the exact customer this product was built for, and the ads found them on the first try.</p>
+      <p class="src" data-zh>合起來讀：中階、冬天飛日本、想修姿勢和 carving、幾乎沒被教過。這正是產品鎖定的用戶，而且第一波廣告就找到了他們。</p>
+
+      <div class="xh" data-en>What A/B testing found</div>
+      <div class="xh" data-zh>A/B 測試發現</div>
+      <p class="src" style="margin-top:6px" data-en>Two creatives, same budget (NT$370 each), same audience, 2 days. B beat A on every metric: 74% more site visits (106 vs 61), a 53% vs 22% three-second hold rate, and roughly half the cost per visit. B's hook now leads the winter creative plan. We do not guess; we test, then scale winners.</p>
+      <p class="src" style="margin-top:6px" data-zh>兩支素材、相同預算（各 NT$370）、相同受眾、跑 2 天。B 全面勝出：到站多 74%（106 vs 61）、前三秒留存 53% vs 22%、每次到站成本約一半。B 的開場 hook 將主導雪季素材。我們不猜，測完放大贏家。</p>
+
+      <div class="xh" data-en>Audience profile</div>
+      <div class="xh" data-zh>受眾輪廓</div>
+      <p class="src" style="margin-top:6px" data-en>Global campaign viewers: 44% aged 25 to 34, 62% under 35, roughly 73% male. That is the core snowboarding demographic, reached without any interest-targeting tricks.</p>
+      <p class="src" style="margin-top:6px" data-zh>全球場觀看者：25 到 34 歲佔 44%，35 歲以下佔 62%，男性約 73%。正是單板的核心族群，而且沒有靠任何進階受眾設定就打中了。</p>
+
+    </div>
+  </details>
   <p class="src" data-en>Data: Instagram Ads Manager + Carvline's own analytics, July 2026. Average across five ad sets; best NT$2.88, worst NT$6.07.</p>
   <p class="src" data-zh>數據：IG 廣告後台 + Carvline 自建分析，2026 年 7 月。進站成本為五檔廣告平均值；最佳 NT$2.88、最差 NT$6.07。</p>
 </section>
