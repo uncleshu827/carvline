@@ -73,7 +73,7 @@
   .uc{display:flex;gap:13px;align-items:flex-start;padding:15px 0;border-bottom:1px solid var(--line)}
   .uc:last-of-type{border-bottom:0}
   .uc .ic{flex:0 0 44px;height:44px;border-radius:13px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:22px}
-  .uc .star{background:linear-gradient(135deg,#3b82f6,#1e3a8a)}
+  .hl{background:linear-gradient(transparent 58%, #dbeafe 58%);padding:0 3px;border-radius:3px}
   .uc h4{font-size:16px;font-weight:800}
   .uc p{font-size:13.5px;color:var(--body);line-height:1.5;margin-top:2px}
   .note{background:#fff;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 14px 14px 0;padding:14px 16px;margin-top:16px}
@@ -135,8 +135,8 @@
   <svg class="logo" viewBox="0 0 240 240"><defs><linearGradient id="t2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset=".55" stop-color="#2563eb"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient><linearGradient id="c2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#e0f2fe"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><rect x="10" y="10" width="220" height="220" rx="54" fill="url(#t2)"/><path d="M52 205 C 96 205, 106 148, 150 148 S 196 96, 214 88" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="14" stroke-linecap="round"/><path d="M46 214 C 100 214, 108 156, 152 156 S 196 80, 204 70" fill="none" stroke="url(#c2)" stroke-width="22" stroke-linecap="round"/><circle cx="196" cy="66" r="7" fill="#fff"/><circle cx="212" cy="80" r="4.6" fill="#fff" fill-opacity=".85"/><circle cx="206" cy="54" r="4" fill="#fff" fill-opacity=".7"/></svg>
   <div class="eyebrow" data-en>Investor Overview · 2026</div>
   <div class="eyebrow" data-zh>投資人簡介 · 2026</div>
-  <h1 data-en>Your iPhone is a<br>snowboard coach.</h1>
-  <h1 data-zh>你的 iPhone，<br>就是單板教練。</h1>
+  <h1 data-en>Your iPhone is a<br><span class="hl">snowboard coach</span>.</h1>
+  <h1 data-zh>你的 iPhone，<br>就是<span class="hl">單板教練</span>。</h1>
   <p class="lead" data-en>Film 30 seconds of riding, upload it, and get coach-level feedback before your next run. No sensors, no hardware — just a phone.</p>
   <p class="lead" data-zh>拍 30 秒、上傳，下一趟纜車前就拿到教練級的回饋。不用感測器、不用硬體，一支手機就夠。</p>
   <div>
@@ -149,8 +149,8 @@
 <section class="alt">
   <div class="eyebrow" data-en>The Problem</div>
   <div class="eyebrow" data-zh>問題</div>
-  <h2 data-en>Most riders never hear what they're doing wrong.</h2>
-  <h2 data-zh>大多數雪友，從來沒人告訴他們哪裡做錯。</h2>
+  <h2 data-en>Most riders <span class="hl">ride blind</span> — real feedback costs US$300 an hour, or doesn't exist.</h2>
+  <h2 data-zh>大多數雪友都在<span class="hl">盲滑</span>——真正的回饋要價一小時 US$300，或者根本不存在。</h2>
   <div class="grid g3">
     <div class="card"><div class="stat">US$80–300</div><div class="k" data-en>an hour for a human coach — and abroad, you often can't even talk to them</div><div class="k" data-zh>請真人教練的時薪——出了國，還常常語言不通</div></div>
     <div class="card"><div class="stat">US$200+</div><div class="k" data-en>of hardware for Carv, the only AI option — and it doesn't work for snowboards</div><div class="k" data-zh>唯一的 AI 選項 Carv 要買硬體——而且不支援單板</div></div>
@@ -162,9 +162,11 @@
 <section>
   <div class="eyebrow" data-en>The Product</div>
   <div class="eyebrow" data-zh>產品</div>
-  <h2 data-en>The AI coach is the core. The rest keeps you coming back.</h2>
-  <h2 data-zh>AI 教練是核心，其他功能讓你一直回來。</h2>
-  <div class="uc"><div class="ic star"><span style="color:#fff">🎯</span></div><div><h4 data-en>AI technique coach — the core</h4><h4 data-zh>AI 技術教練——核心</h4><p data-en>Upload a 15–30s clip. The AI scores 8 parts of your technique, circles the problems right on your video, and gives you one drill to work on next run. Built on the standards of the four major coaching bodies — not made-up advice.</p><p data-zh>上傳 15–30 秒影片，AI 針對 8 個技術面向評分，直接在你的影片上圈出問題，並給你下一趟該練的一個動作。依據四大教練組織的標準，不是隨口亂給建議。</p></div></div>
+  <h2 data-en>30 seconds of video in. A <span class="hl">coach's diagnosis</span> out.</h2>
+  <h2 data-zh>30 秒影片進去，<span class="hl">教練級診斷</span>出來。</h2>
+  <p class="lead" data-en>The AI coach is the core — tracking and highlights are the habits that keep riders coming back.</p>
+  <p class="lead" data-zh>AI 教練是核心；雪日記錄和自動精華，是讓人一直回來的習慣。</p>
+  <div class="uc"><div class="ic">🎯</div><div><h4 data-en>AI technique coach — the core</h4><h4 data-zh>AI 技術教練——核心</h4><p data-en>Upload a 15–30s clip. The AI scores 8 parts of your technique, circles the problems right on your video, and gives you one drill to work on next run. Built on the standards of the four major coaching bodies — not made-up advice.</p><p data-zh>上傳 15–30 秒影片，AI 針對 8 個技術面向評分，直接在你的影片上圈出問題，並給你下一趟該練的一個動作。依據四大教練組織的標準，不是隨口亂給建議。</p></div></div>
   <div class="uc"><div class="ic">🏂</div><div><h4 data-en>Day tracking — the habit</h4><h4 data-zh>雪日記錄——養成習慣</h4><p data-en>Phone in your pocket, and your speed, turns, vertical and airtime get logged automatically. A reason to open the app every single day on snow.</p><p data-zh>手機放口袋，速度、轉彎、落差、滯空自動記錄。讓你每個雪日都有理由打開 App。</p></div></div>
   <div class="uc"><div class="ic">🎬</div><div><h4 data-en>Auto-highlights — the growth engine</h4><h4 data-zh>自動精華——成長引擎</h4><p data-en>The AI cuts your best moments into a short vertical reel, ready for Instagram. Every share puts Carvline in front of the next rider — growth that costs us almost nothing.</p><p data-zh>AI 幫你把最精彩的片段剪成直式短片，直接發 IG。每一次分享，都把 Carvline 帶到下一個雪友面前——幾乎零成本的成長。</p></div></div>
 </section>
@@ -197,8 +199,8 @@
 <section>
   <div class="eyebrow" data-en>The Competition</div>
   <div class="eyebrow" data-zh>競爭對手</div>
-  <h2 data-en>Two companies proved the demand. Neither can do what we do.</h2>
-  <h2 data-zh>兩家公司證明了需求存在，但都做不到我們做的事。</h2>
+  <h2 data-en>Investors already put <span class="hl">US$20.8M</span> behind this idea — on the other board.</h2>
+  <h2 data-zh>這個想法已經被投過 <span class="hl">US$20.8M</span>——只是投在另一塊板子上。</h2>
 
   <div class="co">
     <img class="logo2" src="https://www.google.com/s2/favicons?domain=getslopes.com&amp;sz=64" alt="Slopes logo">
@@ -242,8 +244,8 @@
 <section class="alt">
   <div class="eyebrow" data-en>Early Signal</div>
   <div class="eyebrow" data-zh>早期驗證</div>
-  <h2 data-en>US$180 of ads answered one question: do riders want this? Yes.</h2>
-  <h2 data-zh>US$180 的廣告，回答了一個問題：雪友想要這個嗎？想。</h2>
+  <h2 data-en>US$180 of ads answered one question: do riders want this? <span class="hl">Yes.</span></h2>
+  <h2 data-zh>US$180 的廣告，回答了一個問題：雪友想要這個嗎？<span class="hl">想。</span></h2>
   <p class="lead" data-en>We ran a small Instagram test in July across Taiwan, Hong Kong and a global audience. The product is live at carvlineai.com and the numbers came back loud:</p>
   <p class="lead" data-zh>七月我們在 IG 上跑了一波小測試（台灣、香港＋全球受眾）。產品已上線 carvlineai.com，數字回來得很清楚：</p>
   <div class="grid g2">
@@ -264,8 +266,8 @@
 <section>
   <div class="eyebrow" data-en>Business Model</div>
   <div class="eyebrow" data-zh>商業模式</div>
-  <h2 data-en>Try free, pay to unlock — priced like a season pass.</h2>
-  <h2 data-zh>免費試用、付費解鎖——用「季票」的邏輯定價。</h2>
+  <h2 data-en>Priced like a season pass — <span class="hl">US$25 a winter</span>, ~85% gross margin.</h2>
+  <h2 data-zh>像季票一樣收費——<span class="hl">一季 US$25</span>，毛利約 85%。</h2>
   <p class="lead" data-en>Anyone can upload a clip and get 3 quick takeaways free. The full 8-point analysis and drill plan is what you pay for. It's US$1 per unlock today as a test price; at winter launch it becomes a season pass:</p>
   <p class="lead" data-zh>任何人都能免費上傳影片、拿到 3 個重點回饋。完整的 8 項分析＋訓練計畫才需要付費。現在是 US$1 解鎖的測試價；雪季正式上線後改成季票制：</p>
   <div class="price">
@@ -288,8 +290,8 @@
 <section class="alt">
   <div class="eyebrow" data-en>The Plan &amp; The Ask</div>
   <div class="eyebrow" data-zh>計畫與募資</div>
-  <h2 data-en>Raising US$500K to get through our first real winter.</h2>
-  <h2 data-zh>募 US$500K，打完第一個真正的雪季。</h2>
+  <h2 data-en>Raising <span class="hl">US$500K</span> to get through our first real winter.</h2>
+  <h2 data-zh>募 <span class="hl">US$500K</span>，打完第一個真正的雪季。</h2>
 
   <div class="timeline">
     <div class="tl"><span class="dot"></span><div><b data-en>Stage 1 · Now → October</b><b data-zh>第一階段 · 現在 → 10 月</b><span data-en>Demand is proven and cheap. Use the off-season to sharpen the product: conversion flow, coaching accuracy, day tracking and reels.</span><span data-zh>需求已用低成本驗證。趁淡季把產品磨利：轉換流程、分析準確度、雪日記錄與精華短片。</span></div></div>
