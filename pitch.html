@@ -106,6 +106,23 @@
   .sr .st{flex:1;height:16px;background:var(--soft);border-radius:5px;overflow:hidden}
   .sr .sf{height:100%;background:linear-gradient(90deg,#3b82f6,#2563eb);border-radius:5px}
   .sr .sp{flex:0 0 74px;font-size:11.5px;font-weight:700}
+  .src a{color:var(--accent);text-decoration:none;font-weight:700}
+  .funds tr.tot td{font-weight:800;background:var(--soft)}
+  /* calculator */
+  .cr{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .cr .cl{flex:0 0 96px;font-size:12px;font-weight:600;color:var(--body);text-align:right}
+  .cr input[type=range]{flex:1;accent-color:var(--accent);min-width:0}
+  .cr .cvv{flex:0 0 82px;font-size:12.5px;font-weight:800;text-align:right;white-space:nowrap}
+  .pbrow{display:flex;gap:8px;margin-top:14px}
+  .pb{flex:1;border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 4px;font-size:12.5px;font-weight:700;color:var(--body);cursor:pointer}
+  .pb.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .cout{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .cob{background:var(--soft);border-radius:12px;padding:12px}
+  .cob .n{font-size:20px;font-weight:800;overflow-wrap:anywhere}
+  .cob .n.warn{color:var(--bad)}
+  .cob .t{font-size:11px;color:var(--body);font-weight:600;margin-top:2px}
+  .roas{margin-top:12px;font-size:13.5px;font-weight:800}
+  .roas.good{color:var(--good)} .roas.bad{color:var(--bad)}
   /* pricing */
   .price{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
   .pr{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
@@ -305,6 +322,11 @@
         <tr class="tot"><td data-en>Total</td><td data-zh>合計</td><td>NT$5,679</td><td>~39,000</td><td>1,345</td><td>NT$4.22</td></tr>
       </table>
 
+      <div class="xh" data-en>Why so cheap, and how to check us</div>
+      <div class="xh" data-zh>為什麼這麼便宜，以及怎麼查證</div>
+      <p class="src" style="margin-top:6px" data-en>Three reasons the cost is low: Taiwan and Hong Kong are among the cheapest quality ad markets on Meta; boosted Reels are the cheapest format; and a 5.8 to 6.7% click rate pushes cost down further. Three ways to verify: the benchmark is public, see <a href="https://www.webfx.com/blog/social-media/meta-benchmarks/" target="_blank" rel="noopener">WebFX</a> and <a href="https://topgrowthmarketing.com/instagram-ads-cost/" target="_blank" rel="noopener">Top Growth Marketing</a> (2026); IG reported 1,554 clicks while our own analytics logged 1,345 landings, an 87% match across two independent systems; and the raw Ads Manager exports are available on request. Even if winter costs triple to about US$0.40, we stay under the benchmark's low end.</p>
+      <p class="src" style="margin-top:6px" data-zh>便宜的三個原因：台灣和香港是 Meta 上數一數二便宜的優質廣告市場；加速 Reels 是最便宜的版位；5.8 到 6.7% 的點擊率又把成本再壓低。查證的三個方法：行情是公開數據，見 <a href="https://www.webfx.com/blog/social-media/meta-benchmarks/" target="_blank" rel="noopener">WebFX</a> 與 <a href="https://topgrowthmarketing.com/instagram-ads-cost/" target="_blank" rel="noopener">Top Growth Marketing</a>（2026）；IG 回報 1,554 次點擊、自建後台收到 1,345 次到站，兩套獨立系統對出 87% 吻合；原始廣告後台報表可隨時提供查驗。就算雪季成本漲三倍到約 US$0.40，仍低於行情下緣。</p>
+
       <div class="xh" data-en>The funnel, click to payment</div>
       <div class="xh" data-zh>轉化漏斗：從點擊到付費</div>
       <div class="fnl">
@@ -361,6 +383,31 @@
   </div>
   <p class="muted" style="margin-top:14px" data-en>Why it works: riders already spend hundreds on lift passes and gear every season. US$25 is less than 20 minutes with a human coach. No hardware means ~85% gross margin, and shared highlight reels keep bringing in new riders for free.</p>
   <p class="muted" style="margin-top:14px" data-zh>為什麼行得通：雪友每季本來就花好幾百美元買雪票和裝備，US$25 還不到真人教練 20 分鐘的價錢。零硬體代表約 85% 毛利，而用戶分享的精華短片會持續免費帶進新雪友。</p>
+
+  <div class="card" style="margin-top:16px">
+    <div class="xh" style="margin-top:2px" data-en>Run the numbers yourself</div>
+    <div class="xh" style="margin-top:2px" data-zh>自己拉拉看：廣告變多少收入</div>
+    <p class="src" style="margin-top:4px" data-en>Drag the sliders. Season pass fixed at US$25. First-season revenue only; renewals and shared reels come on top.</p>
+    <p class="src" style="margin-top:4px" data-zh>拖動滑桿試算。季票固定 US$25。僅計首季收入，續訂與分享短片帶來的成長另計。</p>
+    <div class="cr"><span class="cl" data-en>Ad budget</span><span class="cl" data-zh>廣告預算</span><input type="range" id="c_bud" min="10000" max="150000" step="5000" value="50000"><span class="cvv" id="v_bud">US$50K</span></div>
+    <div class="cr"><span class="cl" data-en>Cost per visitor</span><span class="cl" data-zh>每訪客成本</span><input type="range" id="c_cpv" min="0.10" max="1.00" step="0.01" value="0.15"><span class="cvv" id="v_cpv">US$0.15</span></div>
+    <div class="cr"><span class="cl" data-en>Visitor to paid</span><span class="cl" data-zh>訪客轉付費</span><input type="range" id="c_cnv" min="0.2" max="5" step="0.1" value="1.5"><span class="cvv" id="v_cnv">1.5%</span></div>
+    <div class="pbrow">
+      <button class="pb" data-cpv="0.50" data-cnv="0.8"><span data-en>Conservative</span><span data-zh>保守</span></button>
+      <button class="pb on" data-cpv="0.15" data-cnv="1.5"><span data-en>Test-level</span><span data-zh>測試水準</span></button>
+      <button class="pb" data-cpv="0.13" data-cnv="2.5"><span data-en>Optimistic</span><span data-zh>樂觀</span></button>
+    </div>
+    <div class="cout">
+      <div class="cob"><div class="n" id="o_vis">333,333</div><div class="t" data-en>visitors</div><div class="t" data-zh>到站訪客</div></div>
+      <div class="cob"><div class="n" id="o_paid">5,000</div><div class="t" data-en>paying riders</div><div class="t" data-zh>付費用戶</div></div>
+      <div class="cob"><div class="n" id="o_rev">US$125,000</div><div class="t" data-en>first-season revenue</div><div class="t" data-zh>首季收入</div></div>
+      <div class="cob"><div class="n" id="o_cac">US$10.0</div><div class="t" data-en>cost per paying rider (price US$25)</div><div class="t" data-zh>每個付費用戶的獲客成本（票價 US$25）</div></div>
+    </div>
+    <div class="roas good" id="o_ro">ROAS 2.5×</div>
+    <p class="src" data-en>ROAS is revenue divided by ad spend. Under 1× means the first season loses money on ads, which is exactly why the cheap acquisition proof above matters.</p>
+    <p class="src" data-zh>ROAS 是收入除以廣告花費。低於 1× 代表首季廣告是虧的，這正是上面那段「便宜獲客證據」重要的原因。</p>
+  </div>
+
   <div class="note">
     <p data-en><b>And the off-season?</b> Snow apps flatline from April to November. Even Slopes does. Our long-term answer is indoor snow: China alone logged 5.6M indoor ski visits in 2024/25 (+15%), has 7 of the world's 10 biggest indoor slopes, and they run year-round. That's the roadmap to a four-season business.</p>
     <p data-zh><b>那淡季怎麼辦？</b>雪類 App 每年 4–11 月都是平的，連 Slopes 也一樣。我們的長期解法是室內雪場：光中國 2024/25 就有 560 萬室內滑雪人次（年增 15%），全球前十大室內雪場有 7 座在中國，而且全年營業。這是把生意做成四季的路線圖。</p>
@@ -371,10 +418,12 @@
 
 <!-- 8 · GROWTH STAGES + ASK -->
 <section class="alt">
-  <div class="eyebrow" data-en>The Plan &amp; The Ask</div>
-  <div class="eyebrow" data-zh>計畫與募資</div>
-  <h2 data-en>Raising <span class="hl">US$500K</span> to win our first real winter.</h2>
-  <h2 data-zh>募 <span class="hl">US$500K</span>，打完第一個真正的雪季。</h2>
+  <div class="eyebrow" data-en>What It Takes</div>
+  <div class="eyebrow" data-zh>需要投入什麼</div>
+  <h2 data-en>Two resources decide this: <span class="hl">people</span>, and a winter of ads.</h2>
+  <p class="lead" data-en>Instead of a pitch, here is the build sheet: what it costs to ship this and put it in front of riders.</p>
+  <h2 data-zh>成不成，就看兩種資源：<span class="hl">人</span>，和一個雪季的廣告。</h2>
+  <p class="lead" data-zh>不講募資話術，直接攤開成本表：把產品做完、推到雪友面前，需要的就是這些。</p>
 
   <div class="timeline">
     <div class="tl"><span class="dot"></span><div><b data-en>Stage 1 · Now → October</b><b data-zh>第一階段 · 現在 → 10 月</b><span data-en>Demand is proven, and reaching riders is cheap. We use the off-season to sharpen the product: conversion flow, coaching accuracy, tracking, and reels.</span><span data-zh>需求已驗證，觸及用戶的成本也低。趁淡季把產品磨利：轉換流程、分析準確度、雪日記錄與精華短片。</span></div></div>
@@ -382,23 +431,38 @@
     <div class="tl"><span class="dot g"></span><div><b data-en>Stage 3 · Next year</b><b data-zh>第三階段 · 明年</b><span data-en>Take winter retention data and China's year-round indoor-snow story into a proper Series A, then scale across Asia.</span><span data-zh>帶著雪季留存數據＋中國全年室內雪場市場，去募正式的 Series A，再擴張到整個亞洲。</span></div></div>
   </div>
 
-  <div class="ask">
-    <div class="eyebrow" style="color:#93b4f5" data-en>The Ask</div>
-    <div class="eyebrow" style="color:#93b4f5" data-zh>本輪募資</div>
-    <div class="big">US$500K</div>
-    <div class="k2" data-en>12 months of runway (~US$42K/month) to turn proven interest into paying riders</div>
-    <div class="k2" data-zh>12 個月的資金（每月約 US$42K），把「已驗證的興趣」變成「付費用戶」</div>
-  </div>
-
+  <div class="xh" style="font-size:14px" data-en>Resource one: people</div>
+  <div class="xh" style="font-size:14px" data-zh>資源一：人</div>
+  <p class="muted" data-en>Three engineers ship tracking and reels before November, then keep coaching accuracy climbing through the season. Operations stays minimal.</p>
+  <p class="muted" data-zh>三位工程師在 11 月前把雪日記錄和精華短片做出來，雪季中持續拉高分析準確度。營運維持最小編制。</p>
   <table class="funds">
-    <tr><td data-en>Engineering: 3 engineers (app, backend, AI) × 12 months</td><td data-zh>工程：3 位工程師（App／後端／AI）× 12 個月</td><td>US$260K</td></tr>
-    <tr><td data-en>Growth: winter ads and creator partnerships</td><td data-zh>成長：雪季廣告投放＋創作者合作</td><td>US$100K</td></tr>
+    <tr><td data-en>3 engineers (app, backend, AI) × 12 months</td><td data-zh>3 位工程師（App／後端／AI）× 12 個月</td><td>US$260K</td></tr>
     <tr><td data-en>Operations</td><td data-zh>營運</td><td>US$60K</td></tr>
+    <tr class="tot"><td data-en>People subtotal</td><td data-zh>人力小計</td><td>US$320K</td></tr>
+  </table>
+
+  <div class="xh" style="font-size:14px" data-en>Resource two: a winter of ads</div>
+  <div class="xh" style="font-size:14px" data-zh>資源二：一個雪季的廣告</div>
+  <p class="muted" data-en>At anywhere near test-level costs, US$100K puts the product in front of several hundred thousand riders in season. The calculator above shows what that converts to. Cloud covers roughly one million analyses.</p>
+  <p class="muted" data-zh>只要成本落在測試水準附近，US$100K 就能在雪季把產品推到幾十萬雪友眼前，轉換出多少收入，上面的試算器可以直接拉。雲端預算足以支應約 100 萬次分析。</p>
+  <table class="funds">
+    <tr><td data-en>Winter ads and creator partnerships</td><td data-zh>雪季廣告投放＋創作者合作</td><td>US$100K</td></tr>
     <tr><td data-en>Cloud &amp; AI compute</td><td data-zh>雲端與 AI 運算</td><td>US$55K</td></tr>
     <tr><td data-en>Buffer</td><td data-zh>預備金</td><td>US$25K</td></tr>
+    <tr class="tot"><td data-en>Growth subtotal</td><td data-zh>成長小計</td><td>US$180K</td></tr>
   </table>
-  <p class="src" data-en>Engineering assumes senior Asia-based rates (~US$85–90K per year, fully loaded). AI inference runs ≈ US$0.05 per analysis, so the cloud line covers roughly 1M analyses. Terms indicative; revenue goals are targets, not guarantees.</p>
-  <p class="src" data-zh>工程以亞洲資深工程師行情估算（總雇用成本約 US$85–90K／年）。AI 推論每次分析約 US$0.05，雲端預算足以支應約 100 萬次分析。條件為初步規劃；營收目標屬目標值而非保證。</p>
+
+  <div class="ask">
+    <div class="eyebrow" style="color:#93b4f5" data-en>Adds up to</div>
+    <div class="eyebrow" style="color:#93b4f5" data-zh>加總</div>
+    <div class="big">US$500K</div>
+    <div class="k2" data-en>12 months, covering one full winter. This is what we are putting together now.</div>
+    <div class="k2" data-zh>12 個月，涵蓋一整個雪季。這就是我們現在在湊的資源。</div>
+    <div class="k2" data-en>The season starts in November. Time is the only part that does not negotiate.</div>
+    <div class="k2" data-zh>11 月開季，時間是唯一不談判的部分。</div>
+  </div>
+  <p class="src" data-en>Engineering assumes senior Asia-based rates (~US$85–90K per year, fully loaded). AI inference runs ≈ US$0.05 per analysis, so the cloud line covers roughly 1M analyses. Figures are 12-month estimates. Revenue goals are targets, not guarantees.</p>
+  <p class="src" data-zh>工程以亞洲資深工程師行情估算（總雇用成本約 US$85–90K／年）。AI 推論每次分析約 US$0.05，雲端預算足以支應約 100 萬次分析。以上為 12 個月的估算。營收目標屬目標值，非保證。</p>
 </section>
 
 <div class="foot">
@@ -454,6 +518,45 @@ function renderCharts(){
       plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return 'US$'+c.parsed.y+'B';}}}},
       scales:{y:{beginAtZero:true,ticks:{callback:function(x){return '$'+x+'B';}},grid:{color:'#eef1f6'}},x:{grid:{display:false}}}}});
 }
+
+// ---- revenue calculator ----
+var PRICE=25;
+function fmtMoney(x){ return 'US$'+Math.round(x).toLocaleString('en-US'); }
+function calc(){
+  var bud=+document.getElementById('c_bud').value;
+  var cpv=+document.getElementById('c_cpv').value;
+  var cnv=+document.getElementById('c_cnv').value;
+  document.getElementById('v_bud').textContent='US$'+(bud/1000)+'K';
+  document.getElementById('v_cpv').textContent='US$'+cpv.toFixed(2);
+  document.getElementById('v_cnv').textContent=cnv.toFixed(1)+'%';
+  var vis=bud/cpv, paid=vis*cnv/100, rev=paid*PRICE, cac=cpv/(cnv/100), roas=rev/bud;
+  document.getElementById('o_vis').textContent=Math.round(vis).toLocaleString('en-US');
+  document.getElementById('o_paid').textContent=Math.round(paid).toLocaleString('en-US');
+  document.getElementById('o_rev').textContent=fmtMoney(rev);
+  var cacEl=document.getElementById('o_cac');
+  cacEl.textContent='US$'+cac.toFixed(1);
+  cacEl.classList.toggle('warn', cac>PRICE);
+  var ro=document.getElementById('o_ro');
+  ro.textContent='ROAS '+roas.toFixed(1)+'\u00d7';
+  ro.className='roas '+(roas>=2?'good':(roas<1?'bad':''));
+}
+['c_bud','c_cpv','c_cnv'].forEach(function(id){
+  var el=document.getElementById(id);
+  if(el) el.addEventListener('input', function(){
+    document.querySelectorAll('.pb').forEach(function(b){ b.classList.remove('on'); });
+    calc();
+  });
+});
+document.querySelectorAll('.pb').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.getElementById('c_cpv').value=b.dataset.cpv;
+    document.getElementById('c_cnv').value=b.dataset.cnv;
+    document.querySelectorAll('.pb').forEach(function(x){ x.classList.remove('on'); });
+    b.classList.add('on');
+    calc();
+  });
+});
+if(document.getElementById('c_bud')) calc();
 
 (function(){
   var saved='en'; try{ saved=localStorage.getItem('cv_deck_lang')||'en'; }catch(e){}
